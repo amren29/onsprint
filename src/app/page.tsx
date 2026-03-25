@@ -96,7 +96,7 @@ export default function LandingPage() {
           {/* Right — bullets */}
           <div>
             <div style={{ display: 'inline-block', background: '#f5f0ff', borderRadius: 20, padding: '5px 14px', fontSize: 12, fontWeight: 600, color: '#7c3aed', marginBottom: 20 }}>
-              🚀 Built for Print Shops
+              Built for Print Shops
             </div>
             <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 14 }}>
               {['Replace spreadsheets & WhatsApp', 'Manage orders, production & payments', 'Launch your online store instantly'].map(b => (
@@ -143,7 +143,26 @@ export default function LandingPage() {
               </div>
               {/* Main content */}
               <div style={{ padding: '24px 28px' }}>
-                <div style={{ fontSize: 18, fontWeight: 600, color: '#1a1a1a', marginBottom: 20 }}>Dashboard</div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                  <div>
+                    <div style={{ fontSize: 16, fontWeight: 600, color: '#1a1a1a' }}>Dashboard</div>
+                    <div style={{ fontSize: 10, color: '#999', fontWeight: 400 }}>Welcome back — 48 orders · 8 active</div>
+                  </div>
+                  <div style={{ fontSize: 9, color: '#999', fontWeight: 500, background: '#f5f5f5', padding: '4px 10px', borderRadius: 6 }}>Last 30 days</div>
+                </div>
+
+                {/* Hero revenue card */}
+                <div style={{ padding: '16px 20px', borderRadius: 12, marginBottom: 16, background: 'linear-gradient(135deg, #0a1a3a, #122a1c)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div>
+                    <div style={{ fontSize: 9, fontWeight: 500, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Revenue</div>
+                    <div style={{ fontSize: 22, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>RM 12,450 <span style={{ fontSize: 9, color: '#22c55e', fontWeight: 500 }}>↑ live</span></div>
+                  </div>
+                  <div style={{ display: 'flex', gap: 6 }}>
+                    <div style={{ padding: '5px 10px', borderRadius: 6, fontSize: 9, fontWeight: 600, background: '#006AFF', color: '#fff' }}>+ New Order</div>
+                    <div style={{ padding: '5px 10px', borderRadius: 6, fontSize: 9, fontWeight: 500, background: 'rgba(255,255,255,0.1)', color: '#fff' }}>View Orders</div>
+                  </div>
+                </div>
+
                 {/* Stat cards */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 24 }}>
                   {[
@@ -158,6 +177,22 @@ export default function LandingPage() {
                     </div>
                   ))}
                 </div>
+                {/* Mini chart */}
+                <div style={{ marginBottom: 16, padding: '12px 16px', borderRadius: 10, border: '1px solid #f0f0f0' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                    <span style={{ fontSize: 11, fontWeight: 600, color: '#555' }}>Revenue & Expenses</span>
+                    <div style={{ display: 'flex', gap: 4 }}>
+                      <span style={{ fontSize: 9, padding: '2px 8px', borderRadius: 4, background: '#1a1a1a', color: '#fff', fontWeight: 500 }}>Weekly</span>
+                      <span style={{ fontSize: 9, padding: '2px 8px', borderRadius: 4, color: '#888', fontWeight: 500 }}>Daily</span>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'end', gap: 3, height: 48 }}>
+                    {[30, 45, 35, 55, 40, 65, 50, 70, 45, 80, 60, 75, 55, 85, 65, 50].map((h, i) => (
+                      <div key={i} style={{ flex: 1, height: `${h}%`, borderRadius: 2, background: i % 2 === 0 ? '#006AFF' : '#e2e8f0' }} />
+                    ))}
+                  </div>
+                </div>
+
                 {/* Orders table */}
                 <div style={{ border: '1px solid #f0f0f0', borderRadius: 10, overflow: 'hidden' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11 }}>
