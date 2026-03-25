@@ -101,6 +101,32 @@ export async function updateSession(request: NextRequest) {
             path: '/', maxAge: 60 * 60 * 24, httpOnly: false, sameSite: 'lax',
           })
         }
+
+        // Check plan expiry — block access after 7-day grace period
+        // Skip for settings (so they can renew) and API routes
+        if (!path.startsWith('/settings') && !path.startsWith('/api/')) {
+          const { data: shop } = await supabase
+            .from('shops')
+            .select('plan, plan_expires_at, stripe_subscription_id')
+            .eq('id', membership.shop_id)
+            .maybeSingle()
+
+          if (shop?.plan_expires_at) {
+            const expiresAt = new Date(shop.plan_expires_at)
+            const graceEnd = new Date(expiresAt)
+            graceEnd.setDate(graceEnd.getDate() + 7)
+            const now = new Date()
+
+            if (now > graceEnd && !shop.stripe_subscription_id) {
+              // Plan expired + 7-day grace period over + no active subscription
+              const url = request.nextUrl.clone()
+              url.pathname = '/settings'
+              url.searchParams.set('section', 'billing')
+              url.searchParams.set('expired', '1')
+              return NextResponse.redirect(url)
+            }
+          }
+        }
       } else if (cookieShopId) {
         // User has no shop membership — clear stale cookie
         supabaseResponse.cookies.set('x-shop-id', '', { path: '/', maxAge: 0 })

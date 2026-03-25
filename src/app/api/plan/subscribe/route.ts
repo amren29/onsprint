@@ -74,18 +74,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ url: portalSession.url })
     }
 
-    // Create Stripe Checkout Session
+    // Create Stripe Checkout Session with 14-day free trial
     const priceId = getPriceId(plan, billing)
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       mode: 'subscription',
       line_items: [{ price: priceId, quantity: 1 }],
       subscription_data: {
+        trial_period_days: 14,
         metadata: { shopId, plan, billing },
       },
       success_url: `${baseUrl}/settings?section=billing&stripe_session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/settings?section=billing`,
-      currency: 'myr',
     })
 
     return NextResponse.json({ url: session.url })
