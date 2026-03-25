@@ -698,6 +698,8 @@ function BillingSection({ onSave, shopId }: { onSave: (msg: string) => void; sho
   const [loading, setLoading] = useState(true)
   const [managingSubscription, setManagingSubscription] = useState(false)
   const [invoices, setInvoices] = useState<{ id: string; amount_paid: number; status: string; created: number; hosted_invoice_url: string | null; invoice_pdf: string | null; lines?: { data?: { description?: string }[] } }[]>([])
+  const [showPricing, setShowPricing] = useState(false)
+  const [subscribing, setSubscribing] = useState('')
 
   useEffect(() => {
     fetchCurrentPlan()
@@ -755,9 +757,95 @@ function BillingSection({ onSave, shopId }: { onSave: (msg: string) => void; sho
 
   const feeLabel = ({ starter: 'RM 1.00', growth: 'RM 0.60', pro: 'RM 0.20' } as Record<string, string>)[currentPlan?.plan || ''] || '—'
 
+  async function handleSubscribe(plan: string, billing: string) {
+    setSubscribing(`${plan}-${billing}`)
+    try {
+      const res = await fetch('/api/plan/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ shopId, plan, billing }),
+      })
+      const data = await res.json()
+      if (data.url) window.location.href = data.url
+    } catch (err) { console.error('Subscribe error:', err) }
+    finally { setSubscribing('') }
+  }
+
+  const PLANS = [
+    { id: 'starter', name: 'Starter', monthly: 99, annual: 990, fee: 'RM 1.00', features: ['1 team member', 'Standard products only', 'Basic online store', 'Email support'] },
+    { id: 'growth', name: 'Growth', monthly: 249, annual: 2490, fee: 'RM 0.60', features: ['5 team members', 'All product groups', 'Simple online store', 'Priority support', 'Agent & membership system'] },
+    { id: 'pro', name: 'Pro', monthly: 499, annual: 4990, fee: 'RM 0.20', features: ['Unlimited team members', 'All product groups', 'Full website + builder', 'Custom domain', 'Priority support', 'Agent & membership', 'Advanced analytics'] },
+  ]
+
   return (
     <div>
       <SectionHeader title="Billing & Plan" subtitle="Manage your subscription and view billing history" />
+
+      {/* Pricing Drawer */}
+      {showPricing && (
+        <>
+          <div onClick={() => setShowPricing(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 999 }} />
+          <div style={{
+            position: 'fixed', top: 0, right: 0, bottom: 0, width: 520, maxWidth: '90vw',
+            background: 'var(--bg-card)', boxShadow: '-8px 0 32px rgba(0,0,0,0.15)',
+            zIndex: 1000, overflow: 'auto', padding: '32px 24px',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+              <h2 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Choose a Plan</h2>
+              <button onClick={() => setShowPricing(false)} style={{ background: 'none', border: 'none', fontSize: 18, cursor: 'pointer', color: 'var(--text-muted)', padding: 4 }}>✕</button>
+            </div>
+            <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 24 }}>14-day free trial on all plans. Cancel anytime.</p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {PLANS.map(p => {
+                const isCurrent = currentPlan?.plan === p.id
+                const isUpgrade = !isCurrent && (PLANS.findIndex(x => x.id === currentPlan?.plan) < PLANS.findIndex(x => x.id === p.id))
+                return (
+                  <div key={p.id} style={{
+                    border: `2px solid ${isCurrent ? 'var(--accent)' : 'var(--border)'}`,
+                    borderRadius: 12, padding: 20, position: 'relative',
+                    background: isCurrent ? 'rgba(0,106,255,0.04)' : 'var(--bg-card)',
+                  }}>
+                    {isCurrent && (
+                      <span style={{ position: 'absolute', top: -10, left: 16, background: 'var(--accent)', color: '#fff', fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 4, textTransform: 'uppercase' }}>Current</span>
+                    )}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                      <div>
+                        <div style={{ fontSize: 16, fontWeight: 700 }}>{p.name}</div>
+                        <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Platform fee: {p.fee}/transaction</div>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ fontSize: 22, fontWeight: 800 }}>RM {p.monthly}</div>
+                        <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>/month</div>
+                      </div>
+                    </div>
+                    <ul style={{ margin: '0 0 16px', padding: '0 0 0 16px', fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
+                      {p.features.map(f => <li key={f}>{f}</li>)}
+                    </ul>
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      {!isCurrent && (
+                        <>
+                          <button onClick={() => handleSubscribe(p.id, 'monthly')} disabled={!!subscribing}
+                            style={{ flex: 1, padding: '8px', borderRadius: 8, border: 'none', background: isUpgrade ? '#006AFF' : 'var(--bg-hover)', color: isUpgrade ? '#fff' : 'var(--text-primary)', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+                            {subscribing === `${p.id}-monthly` ? 'Redirecting...' : `RM ${p.monthly}/mo`}
+                          </button>
+                          <button onClick={() => handleSubscribe(p.id, 'annually')} disabled={!!subscribing}
+                            style={{ flex: 1, padding: '8px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg-card)', color: 'var(--text-primary)', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+                            {subscribing === `${p.id}-annually` ? 'Redirecting...' : `RM ${p.annual}/yr (save 17%)`}
+                          </button>
+                        </>
+                      )}
+                      {isCurrent && (
+                        <div style={{ flex: 1, textAlign: 'center', padding: '8px', fontSize: 12, color: 'var(--text-muted)' }}>Your current plan</div>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Current plan info bar */}
       {!loading && currentPlan?.plan ? (
@@ -778,7 +866,7 @@ function BillingSection({ onSave, shopId }: { onSave: (msg: string) => void; sho
                 Platform fee: {feeLabel} per transaction
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)' }}>
                   Billed {currentPlan.billing === 'annually' ? 'annually' : 'monthly'}
@@ -789,6 +877,12 @@ function BillingSection({ onSave, shopId }: { onSave: (msg: string) => void; sho
                   </div>
                 )}
               </div>
+              {currentPlan.plan !== 'pro' && (
+                <button onClick={() => setShowPricing(true)}
+                  style={{ fontSize: 12, fontWeight: 600, padding: '8px 16px', borderRadius: 8, border: 'none', background: '#006AFF', color: '#fff', cursor: 'pointer', fontFamily: 'var(--font)', whiteSpace: 'nowrap' }}>
+                  Upgrade
+                </button>
+              )}
               <button onClick={handleManageSubscription} disabled={managingSubscription}
                 style={{ fontSize: 12, fontWeight: 600, padding: '8px 16px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.1)', color: '#fff', cursor: 'pointer', fontFamily: 'var(--font)', transition: 'all 0.15s ease', whiteSpace: 'nowrap' }}>
                 {managingSubscription ? 'Opening...' : 'Manage Subscription'}
@@ -797,8 +891,12 @@ function BillingSection({ onSave, shopId }: { onSave: (msg: string) => void; sho
           </div>
         </div>
       ) : !loading ? (
-        <div style={{ padding: '20px', borderRadius: 12, marginBottom: 24, background: 'var(--bg)', border: '1px solid var(--border)', textAlign: 'center' }}>
-          <div style={{ fontSize: 13, color: 'var(--text-muted)' }}>No active plan. Contact support to get started.</div>
+        <div style={{ padding: '24px', borderRadius: 12, marginBottom: 24, background: 'var(--bg)', border: '1px solid var(--border)', textAlign: 'center' }}>
+          <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>No active plan</div>
+          <div style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 16 }}>Start your 14-day free trial today.</div>
+          <button onClick={() => setShowPricing(true)} style={{ padding: '10px 24px', borderRadius: 8, border: 'none', background: '#006AFF', color: '#fff', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
+            View Plans
+          </button>
         </div>
       ) : null}
 
