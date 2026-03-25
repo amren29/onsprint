@@ -228,7 +228,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ FEATURE GRID — ClickUp style ═══ */}
+      {/* ═══ FEATURE GRID — 5x5 with Onsprint logo center ═══ */}
       <section id="features" style={{ padding: '80px 24px 100px', background: '#fff' }}>
         <div style={mx}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
@@ -238,33 +238,76 @@ export default function LandingPage() {
             <p style={{ fontSize: 16, color: '#888', fontWeight: 400 }}>12+ features to run your entire business.</p>
           </div>
 
-          <motion.div {...fadeUp} style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid #e8e8e8' }}>
-            {/* Row 1 — 7 items */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)' }}>
-              {GRID.slice(0, 7).map(g => (
-                <div key={g.label} style={{ padding: '28px 12px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, borderRight: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0' }}>
-                  <div style={{ color: '#444' }}>{g.icon}</div>
-                  <span style={{ fontSize: 12, fontWeight: 500, color: '#374151' }}>{g.label}</span>
-                </div>
-              ))}
-            </div>
-            {/* Row 2 — 5 items + 2 featured cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)' }}>
-              {GRID.slice(7).map(g => (
-                <div key={g.label} style={{ padding: '28px 12px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, borderRight: '1px solid #f0f0f0' }}>
-                  <div style={{ color: '#444' }}>{g.icon}</div>
-                  <span style={{ fontSize: 12, fontWeight: 500, color: '#374151' }}>{g.label}</span>
-                </div>
-              ))}
-              {/* Featured card spanning 2 columns */}
-              <div style={{ gridColumn: 'span 2', background: '#f5f5f5', borderRadius: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-                <div style={{ textAlign: 'center' }}>
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                  <div style={{ fontSize: 14, fontWeight: 600, marginTop: 8, color: '#1a1a1a' }}>Coming Soon</div>
-                  <div style={{ fontSize: 12, color: '#999', fontWeight: 400, marginTop: 2 }}>WhatsApp Integration, Invoicing & more</div>
-                </div>
+          <motion.div {...fadeUp} style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid #e8e8e8', background: '#f8f8f8' }}>
+            {/* 5-column grid layout */}
+            {[
+              /* Row 1 */ [
+                { icon: I.orders, label: 'Orders' },
+                { icon: I.production, label: 'Production' },
+                { icon: I.store, label: 'Online Store' },
+                { icon: I.payments, label: 'Payments' },
+                { icon: I.customers, label: 'Customers' },
+              ],
+              /* Row 2 */ [
+                { icon: I.reports, label: 'Reports' },
+                { type: 'featured', label: 'Order Management', desc: 'Track every order from quotation to delivery', bg: '#f0ebff' },
+                null, /* merged */
+                { type: 'featured', label: 'Production Board', desc: 'Kanban workflow with 12 stages', bg: '#e8f5e9' },
+                { icon: I.stock, label: 'Stock' },
+              ],
+              /* Row 3 — Onsprint logo center */ [
+                { icon: I.agents, label: 'Agents' },
+                null, /* merged into logo */
+                { type: 'logo' },
+                null, /* merged into logo */
+                { icon: I.membership, label: 'Membership' },
+              ],
+              /* Row 4 */ [
+                { icon: I.upload, label: 'File Upload' },
+                { type: 'featured', label: 'Online Store', desc: 'Customers order & pay online 24/7', bg: '#e3f2fd' },
+                null, /* merged */
+                { type: 'featured', label: 'Artwork Proofing', desc: 'Upload, review, approve designs', bg: '#fce4ec' },
+                { icon: I.proofing, label: 'Proofing' },
+              ],
+              /* Row 5 */ [
+                { icon: I.realtime, label: 'Real-time' },
+                { icon: I.customers, label: 'Wallet' },
+                { icon: I.reports, label: 'Analytics' },
+                { icon: I.membership, label: 'Discounts' },
+                { icon: I.agents, label: 'Affiliates' },
+              ],
+            ].map((row, ri) => (
+              <div key={ri} style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)' }}>
+                {row.map((cell, ci) => {
+                  if (!cell) return null
+                  // Logo cell — spans 3 columns
+                  if (cell.type === 'logo') return (
+                    <div key={`logo-${ri}`} style={{ gridColumn: 'span 3', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, background: '#fff', borderRight: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <div style={{ width: 44, height: 44, background: '#7c3aed', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="white" opacity="0.7"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="white" opacity="0.7"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="white" opacity="0.4"/></svg>
+                        </div>
+                        <span style={{ fontSize: 36, fontWeight: 700, color: '#7c3aed', letterSpacing: '-1px' }}>Onsprint</span>
+                      </div>
+                    </div>
+                  )
+                  // Featured card — spans 2 columns
+                  if (cell.type === 'featured') return (
+                    <div key={`feat-${ri}-${ci}`} style={{ gridColumn: 'span 2', padding: 24, background: cell.bg || '#f5f5f5', borderRight: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 100 }}>
+                      <div style={{ fontSize: 16, fontWeight: 600, color: '#1a1a1a', marginBottom: 4 }}>{cell.label}</div>
+                      <div style={{ fontSize: 13, color: '#666', fontWeight: 400 }}>{cell.desc}</div>
+                    </div>
+                  )
+                  // Regular icon cell
+                  return (
+                    <div key={`${ri}-${ci}`} style={{ padding: '24px 12px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, borderRight: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', background: '#fff' }}>
+                      <div style={{ color: '#555' }}>{cell.icon}</div>
+                      <span style={{ fontSize: 12, fontWeight: 500, color: '#374151' }}>{cell.label}</span>
+                    </div>
+                  )
+                })}
               </div>
-            </div>
+            ))}
           </motion.div>
         </div>
       </section>
