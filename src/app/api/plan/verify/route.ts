@@ -42,19 +42,16 @@ export async function GET(req: NextRequest) {
       })
     }
 
-    const { getStripe } = await import('@/lib/stripe')
-    const stripe = getStripe()
+    const { getCheckoutSession } = await import('@/lib/stripe')
 
-    // Retrieve Checkout Session with subscription expanded
-    const session = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ['subscription'],
-    })
+    // Retrieve Checkout Session (also fetches subscription)
+    const session = await getCheckoutSession(sessionId)
 
     if (session.payment_status !== 'paid') {
       return NextResponse.json({ verified: false, reason: 'Payment not completed' })
     }
 
-    const subscription = session.subscription as import('stripe').Stripe.Subscription | null
+    const subscription = session.subscription as any
     if (!subscription) {
       return NextResponse.json({ verified: false, reason: 'No subscription found' })
     }

@@ -10,8 +10,7 @@ const ONSPRINT_BILLPLZ_EMAIL = process.env.ONSPRINT_BILLPLZ_EMAIL || 'platform@o
 
 export async function POST(req: NextRequest) {
   try {
-    const { getStripe } = await import('@/lib/stripe')
-    const stripe = getStripe()
+    const { constructWebhookEvent } = await import('@/lib/stripe')
 
     const body = await req.text()
     const signature = req.headers.get('stripe-signature')
@@ -26,7 +25,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Webhook not configured' }, { status: 500 })
     }
 
-    const event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
+    const event = constructWebhookEvent(body, signature, webhookSecret)
     const { supabase } = await import('@/lib/supabase')
 
     if (event.type === 'customer.subscription.created' || event.type === 'customer.subscription.updated') {

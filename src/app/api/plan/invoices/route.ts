@@ -46,7 +46,7 @@ export async function GET(req: NextRequest) {
     }
 
     const { supabase } = await import('@/lib/supabase')
-    const { getStripe } = await import('@/lib/stripe')
+    const { listInvoices } = await import('@/lib/stripe')
 
     // Get shop's Stripe customer ID
     const { data: shop, error: shopError } = await supabase
@@ -59,11 +59,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ invoices: [] })
     }
 
-    const stripe = getStripe()
-    const invoices = await stripe.invoices.list({
-      customer: shop.stripe_customer_id,
-      limit: 20,
-    })
+    const invoices = await listInvoices(shop.stripe_customer_id, 20)
 
     return NextResponse.json({ invoices: invoices.data })
   } catch (err) {

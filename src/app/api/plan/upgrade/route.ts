@@ -42,10 +42,9 @@ export async function POST(req: NextRequest) {
 
     // If shop has a Stripe subscription, update it via Stripe
     if (shop.stripe_subscription_id) {
-      const { getStripe, getPriceId } = await import('@/lib/stripe')
-      const stripe = getStripe()
+      const { getSubscription, getPriceId } = await import('@/lib/stripe')
 
-      const subscription = await stripe.subscriptions.retrieve(shop.stripe_subscription_id)
+      const subscription = await getSubscription(shop.stripe_subscription_id)
       const currentItem = subscription.items.data[0]
 
       if (!currentItem) {
@@ -57,11 +56,23 @@ export async function POST(req: NextRequest) {
       const newPriceId = getPriceId(newPlan, billing)
 
       // Update Stripe subscription with new price and metadata
-      await stripe.subscriptions.update(shop.stripe_subscription_id, {
-        items: [{ id: currentItem.id, price: newPriceId }],
-        metadata: { shopId, plan: newPlan, billing },
-        proration_behavior: 'create_prorations',
+      const res = await fetch(`https://api.stripe.com/v1/subscriptions/${shop.stripe_subscription_id}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.STRIPE_SECRET_KEY}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          'items[0][id]': currentItem.id,
+          'items[0][price]': newPriceId,
+          'metadata[shopId]': shopId,
+          'metadata[plan]': newPlan,
+          'metadata[billing]': billing,
+          'proration_behavior': 'create_prorations',
+        }),
       })
+      const updated = await res.json() as any
+      if (updated.error) throw new Error(updated.error.message || 'Failed to update subscription')
 
       // The webhook will handle updating the shop in the DB
       return NextResponse.json({

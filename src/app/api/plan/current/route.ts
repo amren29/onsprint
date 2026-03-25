@@ -45,9 +45,8 @@ export async function GET(req: NextRequest) {
     let subscriptionStatus: string | null = null
     if (shop.stripe_subscription_id) {
       try {
-        const { getStripe } = await import('@/lib/stripe')
-        const stripe = getStripe()
-        const sub = await stripe.subscriptions.retrieve(shop.stripe_subscription_id)
+        const { getSubscription } = await import('@/lib/stripe')
+        const sub = await getSubscription(shop.stripe_subscription_id)
         subscriptionStatus = sub.status // active, past_due, canceled, etc.
       } catch {
         // Non-critical — proceed without status

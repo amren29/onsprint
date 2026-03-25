@@ -34,9 +34,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ url: redirectUrl })
     }
 
-    const { getStripe, getPriceId } = await import('@/lib/stripe')
+    const { createCustomer, createCheckoutSession, createBillingPortalSession, getPriceId } = await import('@/lib/stripe')
     const { supabase } = await import('@/lib/supabase')
-    const stripe = getStripe()
 
     // Get shop info
     const { data: shop, error: shopError } = await supabase
@@ -52,11 +51,11 @@ export async function POST(req: NextRequest) {
     // Get or create Stripe customer
     let customerId = shop.stripe_customer_id
     if (!customerId) {
-      const customer = await stripe.customers.create({
-        email: shop.billplz_email || undefined,
-        name: shop.bank_account_name || shop.name || shopId,
-        metadata: { shopId },
-      })
+      const customer = await createCustomer(
+        shop.billplz_email || undefined,
+        shop.bank_account_name || shop.name || shopId,
+        { shopId },
+      )
       customerId = customer.id
 
       await supabase
@@ -67,16 +66,13 @@ export async function POST(req: NextRequest) {
 
     // If shop already has an active subscription, redirect to Customer Portal instead
     if (shop.stripe_subscription_id) {
-      const portalSession = await stripe.billingPortal.sessions.create({
-        customer: customerId,
-        return_url: `${baseUrl}/settings?section=billing`,
-      })
+      const portalSession = await createBillingPortalSession(customerId, `${baseUrl}/settings?section=billing`)
       return NextResponse.json({ url: portalSession.url })
     }
 
     // Create Stripe Checkout Session with 14-day free trial
     const priceId = getPriceId(plan, billing)
-    const session = await stripe.checkout.sessions.create({
+    const session = await createCheckoutSession({
       customer: customerId,
       mode: 'subscription',
       line_items: [{ price: priceId, quantity: 1 }],

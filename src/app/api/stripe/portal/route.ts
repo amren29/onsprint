@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     }
 
     const { supabase } = await import('@/lib/supabase')
-    const { getStripe } = await import('@/lib/stripe')
+    const { createBillingPortalSession } = await import('@/lib/stripe')
 
     const { data: shop, error: shopError } = await supabase
       .from('shops')
@@ -31,11 +31,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No Stripe customer found for this shop' }, { status: 404 })
     }
 
-    const stripe = getStripe()
-    const portalSession = await stripe.billingPortal.sessions.create({
-      customer: shop.stripe_customer_id,
-      return_url: `${baseUrl}/settings?section=billing`,
-    })
+    const portalSession = await createBillingPortalSession(
+      shop.stripe_customer_id,
+      `${baseUrl}/settings?section=billing`,
+    )
 
     return NextResponse.json({ url: portalSession.url })
   } catch (err) {

@@ -2,6 +2,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { useRouter } from 'next/navigation'
 import AppShell from '@/components/AppShell'
 import RowMenu from '@/components/RowMenu'
@@ -781,14 +782,15 @@ function BillingSection({ onSave, shopId }: { onSave: (msg: string) => void; sho
     <div>
       <SectionHeader title="Billing & Plan" subtitle="Manage your subscription and view billing history" />
 
-      {/* Pricing Drawer */}
-      {showPricing && (
+      {/* Pricing Drawer — rendered via portal to cover entire page including sidebar */}
+      {showPricing && typeof document !== 'undefined' && createPortal(
         <>
-          <div onClick={() => setShowPricing(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 999 }} />
+          <div onClick={() => setShowPricing(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 99999 }} />
           <div style={{
-            position: 'fixed', top: 0, right: 0, bottom: 0, width: 520, maxWidth: '90vw',
-            background: 'var(--bg-card)', boxShadow: '-8px 0 32px rgba(0,0,0,0.15)',
-            zIndex: 1000, overflow: 'auto', padding: '32px 24px',
+            position: 'fixed', top: 0, right: 0, bottom: 0, width: 480, maxWidth: '92vw',
+            background: 'var(--bg-card, #fff)', boxShadow: '-8px 0 40px rgba(0,0,0,0.2)',
+            zIndex: 100000, overflow: 'auto', padding: '32px 24px',
+            animation: 'slideInRight 0.25s ease',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
               <h2 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Choose a Plan</h2>
@@ -844,7 +846,8 @@ function BillingSection({ onSave, shopId }: { onSave: (msg: string) => void; sho
               })}
             </div>
           </div>
-        </>
+        </>,
+        document.body
       )}
 
       {/* Current plan info bar */}

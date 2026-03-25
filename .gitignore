@@ -41,3 +41,4 @@ supabase/.temp/
 
 # cloudflare
 .open-next/
+wrangler.jsonc
