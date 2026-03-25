@@ -1,7 +1,12 @@
+// @ts-nocheck
 'use client'
 
 import Link from 'next/link'
 import { useState } from 'react'
+import { motion } from 'framer-motion'
+
+const fadeUp = { initial: { opacity: 0, y: 40 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, margin: '-80px' }, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
+const stagger = (i: number) => ({ ...fadeUp, transition: { ...fadeUp.transition, delay: i * 0.08 } })
 
 const ff = "'Fira Sans', -apple-system, sans-serif"
 
@@ -75,7 +80,7 @@ export default function LandingPage() {
 
       {/* ═══ HERO — white, split layout ═══ */}
       <section style={{ padding: '80px 24px 0' }}>
-        <div style={{ ...mx, display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 48, alignItems: 'center' }}>
+        <motion.div {...fadeUp} style={{ ...mx, display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 48, alignItems: 'center' }}>
           {/* Left — headline */}
           <div>
             <h1 style={{ fontSize: 'clamp(42px, 5.5vw, 68px)', fontWeight: 600, lineHeight: 1.05, letterSpacing: '-2px', margin: '0 0 28px', color: '#1a1a1a' }}>
@@ -101,15 +106,89 @@ export default function LandingPage() {
               ))}
             </ul>
           </div>
-        </div>
+        </motion.div>
 
         {/* Product screenshot */}
         <div style={{ ...mx, marginTop: 56 }}>
-          <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid #e5e7eb', boxShadow: '0 4px 40px rgba(0,0,0,0.06)' }}>
-            <div style={{ background: '#f8f9fb', height: 'clamp(200px, 30vw, 440px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ color: '#ccc', fontSize: 14, fontWeight: 500 }}>Dashboard Preview</span>
+          <motion.div {...fadeUp} style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid #e5e7eb', boxShadow: '0 4px 40px rgba(0,0,0,0.06)' }}>
+            {/* Browser chrome */}
+            <div style={{ background: '#f1f1f1', padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 8, borderBottom: '1px solid #e5e7eb' }}>
+              <div style={{ display: 'flex', gap: 6 }}>
+                <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#ff5f57' }} />
+                <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#febc2e' }} />
+                <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#28c840' }} />
+              </div>
+              <div style={{ flex: 1, background: '#fff', borderRadius: 6, padding: '4px 12px', fontSize: 11, color: '#999', fontWeight: 400, border: '1px solid #e5e7eb' }}>onsprint.my/dashboard</div>
             </div>
-          </div>
+            {/* Dashboard body */}
+            <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', background: '#fff' }}>
+              {/* Sidebar */}
+              <div style={{ background: '#fafafa', borderRight: '1px solid #f0f0f0', padding: '20px 0', display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <div style={{ padding: '0 16px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ width: 24, height: 24, background: '#7c3aed', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="white" opacity="0.7"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="white" opacity="0.7"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="white" opacity="0.4"/></svg>
+                  </div>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a' }}>Onsprint</span>
+                </div>
+                {[
+                  { label: 'Dashboard', active: true },
+                  { label: 'Orders', active: false },
+                  { label: 'Customers', active: false },
+                  { label: 'Payments', active: false },
+                  { label: 'Products', active: false },
+                  { label: 'Production', active: false },
+                ].map(nav => (
+                  <div key={nav.label} style={{ padding: '8px 16px', fontSize: 12, fontWeight: nav.active ? 600 : 400, color: nav.active ? '#7c3aed' : '#666', background: nav.active ? '#f3f0ff' : 'transparent', borderRight: nav.active ? '2px solid #7c3aed' : '2px solid transparent' }}>{nav.label}</div>
+                ))}
+              </div>
+              {/* Main content */}
+              <div style={{ padding: '24px 28px' }}>
+                <div style={{ fontSize: 18, fontWeight: 600, color: '#1a1a1a', marginBottom: 20 }}>Dashboard</div>
+                {/* Stat cards */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 24 }}>
+                  {[
+                    { label: 'Revenue', value: 'RM 12,450', color: '#22c55e', bg: '#f0fdf4' },
+                    { label: 'Orders', value: '48', color: '#3b82f6', bg: '#eff6ff' },
+                    { label: 'Pending', value: '12', color: '#f59e0b', bg: '#fffbeb' },
+                    { label: 'Active', value: '8', color: '#7c3aed', bg: '#f5f3ff' },
+                  ].map(s => (
+                    <div key={s.label} style={{ padding: '14px 16px', borderRadius: 10, background: s.bg, border: '1px solid #f0f0f0' }}>
+                      <div style={{ fontSize: 10, fontWeight: 500, color: '#888', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{s.label}</div>
+                      <div style={{ fontSize: 20, fontWeight: 700, color: s.color }}>{s.value}</div>
+                    </div>
+                  ))}
+                </div>
+                {/* Orders table */}
+                <div style={{ border: '1px solid #f0f0f0', borderRadius: 10, overflow: 'hidden' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11 }}>
+                    <thead>
+                      <tr style={{ background: '#fafafa' }}>
+                        {['Order', 'Customer', 'Total', 'Status', 'Production'].map(h => (
+                          <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontWeight: 600, color: '#888', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #f0f0f0' }}>{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
+                        { order: '#1042', customer: 'Restoran Ali', total: 'RM 450', status: 'Paid', statusColor: '#22c55e', statusBg: '#f0fdf4', prod: 'Printing', prodColor: '#3b82f6', prodBg: '#eff6ff' },
+                        { order: '#1041', customer: 'Kedai Kopi Lim', total: 'RM 280', status: 'Pending', statusColor: '#f59e0b', statusBg: '#fffbeb', prod: 'Designing', prodColor: '#7c3aed', prodBg: '#f5f3ff' },
+                        { order: '#1040', customer: 'SK Taman Ria', total: 'RM 1,200', status: 'Paid', statusColor: '#22c55e', statusBg: '#f0fdf4', prod: 'Ready to Print', prodColor: '#f59e0b', prodBg: '#fffbeb' },
+                        { order: '#1039', customer: 'Suria Printing', total: 'RM 680', status: 'Paid', statusColor: '#22c55e', statusBg: '#f0fdf4', prod: 'QC', prodColor: '#22c55e', prodBg: '#f0fdf4' },
+                      ].map(r => (
+                        <tr key={r.order} style={{ borderBottom: '1px solid #f7f7f7' }}>
+                          <td style={{ padding: '10px 14px', fontWeight: 600, color: '#1a1a1a' }}>{r.order}</td>
+                          <td style={{ padding: '10px 14px', color: '#555' }}>{r.customer}</td>
+                          <td style={{ padding: '10px 14px', fontWeight: 600, color: '#1a1a1a' }}>{r.total}</td>
+                          <td style={{ padding: '10px 14px' }}><span style={{ padding: '2px 8px', borderRadius: 6, fontSize: 10, fontWeight: 600, color: r.statusColor, background: r.statusBg }}>{r.status}</span></td>
+                          <td style={{ padding: '10px 14px' }}><span style={{ padding: '2px 8px', borderRadius: 6, fontSize: 10, fontWeight: 600, color: r.prodColor, background: r.prodBg }}>{r.prod}</span></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -126,22 +205,24 @@ export default function LandingPage() {
       {/* ═══ PROBLEM — big centered headline ═══ */}
       <section style={{ padding: '100px 24px', textAlign: 'center' }}>
         <div style={mx}>
-          <h2 style={{ fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 600, lineHeight: 1.1, letterSpacing: '-1.5px', margin: '0 0 16px' }}>
-            60% of print shop time is lost in <span style={{ color: '#bbb' }}>manual work</span>
-          </h2>
-          <p style={{ fontSize: 17, color: '#888', fontWeight: 400, maxWidth: 520, margin: '0 auto 56px' }}>WhatsApp orders, Excel tracking, and paper invoices are destroying your productivity.</p>
+          <motion.div {...fadeUp}>
+            <h2 style={{ fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 600, lineHeight: 1.1, letterSpacing: '-1.5px', margin: '0 0 16px' }}>
+              60% of print shop time is lost in <span style={{ color: '#bbb' }}>manual work</span>
+            </h2>
+            <p style={{ fontSize: 17, color: '#888', fontWeight: 400, maxWidth: 520, margin: '0 auto 56px' }}>WhatsApp orders, Excel tracking, and paper invoices are destroying your productivity.</p>
+          </motion.div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
             {[
               { title: 'Order Chaos', stat: '3+ hours daily', desc: 'wasted on WhatsApp order management' },
               { title: 'No Visibility', stat: '80% of shops', desc: 'can\'t track production in real-time' },
               { title: 'Lost Revenue', stat: 'RM 2,000+/mo', desc: 'lost to missed follow-ups and errors' },
-            ].map(p => (
-              <div key={p.title} style={{ textAlign: 'center', padding: '32px 24px' }}>
+            ].map((p, i) => (
+              <motion.div key={p.title} {...stagger(i)} style={{ textAlign: 'center', padding: '32px 24px' }}>
                 <h3 style={{ fontSize: 18, fontWeight: 600, margin: '0 0 8px' }}>{p.title}</h3>
                 <div style={{ fontSize: 15, fontWeight: 600, color: '#1a1a1a', marginBottom: 4 }}>{p.stat}</div>
                 <div style={{ fontSize: 14, color: '#999', fontWeight: 400 }}>{p.desc}</div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -157,7 +238,7 @@ export default function LandingPage() {
             <p style={{ fontSize: 16, color: '#888', fontWeight: 400 }}>12+ features to run your entire business.</p>
           </div>
 
-          <div style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid #e8e8e8' }}>
+          <motion.div {...fadeUp} style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid #e8e8e8' }}>
             {/* Row 1 — 7 items */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)' }}>
               {GRID.slice(0, 7).map(g => (
@@ -184,6 +265,64 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══ PLATFORM — Lark style ═══ */}
+      <section style={{ padding: '100px 24px', background: 'linear-gradient(135deg, #f5f0ff 0%, #fce4ec 50%, #fff3e0 100%)', borderRadius: 20, margin: '0 16px' }}>
+        <div style={mx}>
+          <motion.div {...fadeUp} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'center', marginBottom: 64 }}>
+            <div>
+              <h2 style={{ fontSize: 'clamp(32px, 4.5vw, 48px)', fontWeight: 600, letterSpacing: '-1.5px', lineHeight: 1.1, margin: '0 0 16px', color: '#1a1a1a' }}>
+                One platform.<br />Built for print shops.<br /><span style={{ color: '#7c3aed' }}>Web-to-print.</span>
+              </h2>
+              <p style={{ fontSize: 16, color: '#666', lineHeight: 1.7, fontWeight: 400, margin: '0 0 24px', maxWidth: 400 }}>Onsprint replaces scattered tools with one unified platform — from customer orders to finished products.</p>
+              <Link href="/register" style={{ fontSize: 14, fontWeight: 600, color: '#fff', background: '#7c3aed', padding: '12px 28px', borderRadius: 10, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                Get started for free
+              </Link>
+            </div>
+            <div style={{ position: 'relative', height: 280 }}>
+              {/* Floating icons */}
+              {[
+                { top: '5%', left: '20%', bg: '#7c3aed', icon: I.orders },
+                { top: '10%', right: '10%', bg: '#006AFF', icon: I.store },
+                { top: '40%', left: '5%', bg: '#22c55e', icon: I.payments },
+                { top: '35%', right: '25%', bg: '#f59e0b', icon: I.production },
+                { top: '65%', left: '25%', bg: '#ec4899', icon: I.customers },
+                { top: '70%', right: '5%', bg: '#06b6d4', icon: I.proofing },
+                { top: '25%', left: '45%', bg: '#1a1a1a', icon: I.reports },
+              ].map((item, i) => (
+                <motion.div key={i} initial={{ opacity: 0, scale: 0.5 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.1 + i * 0.08, duration: 0.4 }}
+                  style={{ position: 'absolute', ...item, width: 48, height: 48, borderRadius: 14, background: '#fff', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: item.bg }}>
+                  {item.icon}
+                </motion.div>
+              ))}
+              {/* Center circle */}
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 200, height: 200, borderRadius: '50%', border: '1px dashed rgba(124,58,237,0.2)' }} />
+            </div>
+          </motion.div>
+
+          {/* Feature cards grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
+            {[
+              { icon: I.store, title: 'Online Store', desc: 'Customers order and pay online 24/7' },
+              { icon: I.production, title: 'Production Board', desc: 'Kanban workflow with 12 stages' },
+              { icon: I.proofing, title: 'Artwork Proofing', desc: 'Upload, review, approve artwork' },
+              { icon: I.orders, title: 'Order Management', desc: 'Track every order from start to finish' },
+              { icon: I.upload, title: 'File Upload', desc: 'Customers upload files to R2 storage' },
+              { icon: I.payments, title: 'Online Payments', desc: 'FPX, cards, e-wallets via Billplz' },
+              { icon: I.agents, title: 'Agent System', desc: 'Resellers with prepaid wallets' },
+              { icon: I.membership, title: 'Membership', desc: 'Tiered pricing for loyal customers' },
+              { icon: I.realtime, title: 'Real-time Updates', desc: 'Instant order notifications' },
+              { icon: I.reports, title: 'Reports', desc: 'Revenue, orders, production metrics' },
+            ].map((c, i) => (
+              <motion.div key={c.title} {...stagger(i)} style={{ background: '#fff', borderRadius: 14, padding: '24px 20px', border: '1px solid rgba(0,0,0,0.04)' }}>
+                <div style={{ color: '#555', marginBottom: 10 }}>{c.icon}</div>
+                <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>{c.title}</div>
+                <div style={{ fontSize: 13, color: '#888', fontWeight: 400, lineHeight: 1.5 }}>{c.desc}</div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -207,7 +346,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div style={{ border: '1px solid #e8e8e8', borderRadius: 16, padding: 48, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48 }}>
+          <motion.div {...fadeUp} style={{ border: '1px solid #e8e8e8', borderRadius: 16, padding: 48, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48 }}>
             <div>
               <h3 style={{ fontSize: 32, fontWeight: 600, lineHeight: 1.2, letterSpacing: '-0.5px', margin: '0 0 8px', whiteSpace: 'pre-line' }}>
                 {sol.title},<br /><span style={{ color: '#bbb' }}>{sol.subtitle}</span>
@@ -228,7 +367,7 @@ export default function LandingPage() {
                 </div>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -243,8 +382,8 @@ export default function LandingPage() {
               { quote: 'Onsprint cut our order processing time by 60%. Finally a system built for print shops.', name: 'Ahmad Z.', role: 'Owner', company: 'Kinabalu Print' },
               { quote: 'The production board changed everything. We see exactly where every job is.', name: 'Sarah L.', role: 'Production Mgr', company: 'PrintWorks KL' },
               { quote: 'Our customers order online at 2am. We just process in the morning. Game changer.', name: 'Hafiz R.', role: 'Director', company: 'EastPrint' },
-            ].map(t => (
-              <div key={t.name} style={{ borderRadius: 14, overflow: 'hidden', background: '#1a1a1a', color: '#fff', padding: '0 0 24px', display: 'flex', flexDirection: 'column', minHeight: 320 }}>
+            ].map((t, i) => (
+              <motion.div key={t.name} {...stagger(i)} style={{ borderRadius: 14, overflow: 'hidden', background: '#1a1a1a', color: '#fff', padding: '0 0 24px', display: 'flex', flexDirection: 'column', minHeight: 320 }}>
                 <div style={{ flex: 1, background: '#2a2a2a', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 48, fontWeight: 700, color: '#333' }}>
                   {t.name.split(' ').map(w => w[0]).join('')}
                 </div>
@@ -258,7 +397,7 @@ export default function LandingPage() {
                     <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: '0.05em' }}>{t.company.toUpperCase()}</span>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -282,8 +421,8 @@ export default function LandingPage() {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
-            {PLANS.map(p => (
-              <div key={p.name} style={{ padding: '36px 28px', borderRadius: 16, border: p.popular ? '2px solid #1a1a1a' : '1px solid #e5e7eb', background: '#fff', position: 'relative' }}>
+            {PLANS.map((p, i) => (
+              <motion.div key={p.name} {...stagger(i)} style={{ padding: '36px 28px', borderRadius: 16, border: p.popular ? '2px solid #1a1a1a' : '1px solid #e5e7eb', background: '#fff', position: 'relative' }}>
                 {p.popular && <div style={{ position: 'absolute', top: -11, left: '50%', transform: 'translateX(-50%)', background: '#1a1a1a', color: '#fff', fontSize: 10, fontWeight: 600, padding: '3px 12px', borderRadius: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Most Popular</div>}
                 <h3 style={{ fontSize: 18, fontWeight: 600, margin: '0 0 4px' }}>{p.name}</h3>
                 <p style={{ fontSize: 12, color: '#999', margin: '0 0 20px', fontWeight: 400 }}>RM {p.fee} per transaction</p>
@@ -298,7 +437,7 @@ export default function LandingPage() {
                 <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {p.features.map(fe => <li key={fe} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: '#555', fontWeight: 400 }}><Chk />{fe}</li>)}
                 </ul>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -318,7 +457,7 @@ export default function LandingPage() {
 
       {/* ═══ CTA ═══ */}
       <section style={{ padding: '100px 24px', textAlign: 'center' }}>
-        <div style={mx}>
+        <motion.div {...fadeUp} style={mx}>
           <h2 style={{ fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 600, letterSpacing: '-1.5px', lineHeight: 1.1, margin: '0 0 16px' }}>
             Save 6-7 hours<br /><span style={{ color: '#bbb' }}>every week.</span>
           </h2>
@@ -326,7 +465,7 @@ export default function LandingPage() {
           <Link href="/register" style={{ fontSize: 16, fontWeight: 600, color: '#fff', background: '#1a1a1a', padding: '14px 32px', borderRadius: 10, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
             Get started FREE <Arrow />
           </Link>
-        </div>
+        </motion.div>
       </section>
 
       {/* ═══ FOOTER ═══ */}
