@@ -179,8 +179,8 @@ export default function MyStoreDashboard() {
                 <div style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', marginBottom: 14 }}>
                   <PaletteIcon />
                 </div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 4 }}>Design your store</div>
-                <div style={{ fontSize: 11.5, color: 'var(--text-muted)', lineHeight: 1.5 }}>Customise layout, branding and themes</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 4 }}>Store Settings</div>
+                <div style={{ fontSize: 11.5, color: 'var(--text-muted)', lineHeight: 1.5 }}>Update branding, contact info and payment</div>
               </div>
             </Link>
 
@@ -277,16 +277,15 @@ export default function MyStoreDashboard() {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', padding: '4px 0' }}>
               {[
-                { label: 'Store Settings', desc: 'Theme, branding Open the visual builder contact', href: '/storefront/settings', icon: <EditIcon /> },
+                { label: 'Store Settings', desc: 'Theme, branding, contact info', href: '/storefront/settings', icon: <EditIcon /> },
                 { label: 'Manage Products', desc: 'Add or toggle featured products', href: '/catalog', icon: <PackageIcon /> },
-                { label: 'Global Settings', desc: 'SEO, contact, design settings', href: '/storefront/settings', icon: <GearIcon /> },
                 { label: 'View Catalog', desc: 'Browse your full product catalog', href: '/catalog', icon: <CatalogIcon /> },
               ].map((action, i) => (
                 <Link key={i} href={action.href} style={{ textDecoration: 'none' }}>
                   <div style={{
                     display: 'flex', alignItems: 'center', gap: 12, padding: '11px 16px',
                     cursor: 'pointer', transition: 'background 0.12s',
-                    borderBottom: i < 3 ? '1px solid var(--border)' : 'none',
+                    borderBottom: i < 2 ? '1px solid var(--border)' : 'none',
                   }}
                     onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg)')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
