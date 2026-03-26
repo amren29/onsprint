@@ -147,7 +147,7 @@ export default function MyStoreDashboard() {
             </div>
           </div>
           <div className="hero-actions">
-            <Link href="/storefront/editor"><button className="btn-hero-primary"><EditIcon /> Edit Store</button></Link>
+            <Link href="/storefront/settings"><button className="btn-hero-primary"><EditIcon /> Edit Store</button></Link>
             <button className="btn-hero-secondary" onClick={copyLink}><LinkIcon /> {copied ? 'Copied!' : 'Copy Link'}</button>
           </div>
         </div>
@@ -171,7 +171,7 @@ export default function MyStoreDashboard() {
             </Link>
 
             {/* Design your store */}
-            <Link href="/storefront/editor" style={{ textDecoration: 'none' }}>
+            <Link href="/storefront/settings" style={{ textDecoration: 'none' }}>
               <div className="card" style={{ padding: '20px 18px', height: '100%', cursor: 'pointer', transition: 'border-color 0.15s, box-shadow 0.15s' }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,106,255,0.08)' }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.boxShadow = 'none' }}
@@ -277,9 +277,9 @@ export default function MyStoreDashboard() {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', padding: '4px 0' }}>
               {[
-                { label: 'Edit Store Page', desc: 'Open the visual builder', href: '/storefront/editor', icon: <EditIcon /> },
+                { label: 'Store Settings', desc: 'Theme, branding Open the visual builder contact', href: '/storefront/settings', icon: <EditIcon /> },
                 { label: 'Manage Products', desc: 'Add or toggle featured products', href: '/catalog', icon: <PackageIcon /> },
-                { label: 'Global Settings', desc: 'SEO, contact, design settings', href: '/storefront/editor', icon: <GearIcon /> },
+                { label: 'Global Settings', desc: 'SEO, contact, design settings', href: '/storefront/settings', icon: <GearIcon /> },
                 { label: 'View Catalog', desc: 'Browse your full product catalog', href: '/catalog', icon: <CatalogIcon /> },
               ].map((action, i) => (
                 <Link key={i} href={action.href} style={{ textDecoration: 'none' }}>
@@ -315,7 +315,7 @@ export default function MyStoreDashboard() {
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
                 Store Details
               </div>
-              <Link href="/storefront/editor" className="card-see-all">Edit <ChevronRight /></Link>
+              <Link href="/storefront/settings" className="card-see-all">Edit <ChevronRight /></Link>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', padding: '4px 16px 12px' }}>
               {[
