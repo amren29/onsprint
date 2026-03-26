@@ -1,6 +1,57 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createServerClient } from '@supabase/ssr'
+import { createClient } from '@supabase/supabase-js'
+import { cookies } from 'next/headers'
 
 export const dynamic = 'force-dynamic'
+
+// Allowed folders
+const ALLOWED_FOLDERS = new Set(['artwork', 'proofs', 'products'])
+
+/**
+ * Verify user is authenticated and belongs to the shop.
+ * Returns verified shopId or null.
+ */
+async function verifyMembership(requestedShopId: string): Promise<string | null> {
+  try {
+    const cookieStore = await cookies()
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      { cookies: { getAll() { return cookieStore.getAll() }, setAll() {} } }
+    )
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return null
+
+    // Check membership with admin client
+    const admin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    )
+    const { data: membership } = await admin
+      .from('shop_members')
+      .select('shop_id')
+      .eq('user_id', user.id)
+      .maybeSingle()
+
+    // Return verified shopId — must match requested
+    if (membership?.shop_id === requestedShopId) return membership.shop_id
+
+    // Also check store_users (for customer uploads)
+    const { data: storeUser } = await admin
+      .from('store_users')
+      .select('shop_id')
+      .eq('auth_user_id', user.id)
+      .eq('shop_id', requestedShopId)
+      .maybeSingle()
+
+    if (storeUser?.shop_id) return storeUser.shop_id
+
+    return null
+  } catch {
+    return null
+  }
+}
 
 /**
  * File upload to Cloudflare R2.
@@ -18,12 +69,23 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData()
     const file = formData.get('file') as File | null
-    const shopId = formData.get('shopId') as string
+    const requestedShopId = formData.get('shopId') as string
     const folder = formData.get('folder') as string || 'artwork'
     const refId = formData.get('refId') as string || 'misc'
 
-    if (!file || !shopId) {
+    if (!file || !requestedShopId) {
       return NextResponse.json({ error: 'file and shopId required' }, { status: 400 })
+    }
+
+    // SECURITY: Validate folder
+    if (!ALLOWED_FOLDERS.has(folder)) {
+      return NextResponse.json({ error: 'Invalid folder' }, { status: 400 })
+    }
+
+    // SECURITY: Verify user belongs to this shop
+    const shopId = await verifyMembership(requestedShopId)
+    if (!shopId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
     }
 
     if (file.size > 100 * 1024 * 1024) {
@@ -81,12 +143,21 @@ export async function POST(req: NextRequest) {
 }
 
 /**
- * DELETE /api/upload?key=...
+ * DELETE /api/upload?key=...&shopId=...
  */
 export async function DELETE(req: NextRequest) {
   try {
     const key = req.nextUrl.searchParams.get('key')
+    const requestedShopId = req.nextUrl.searchParams.get('shopId')
     if (!key) return NextResponse.json({ error: 'key required' }, { status: 400 })
+
+    // SECURITY: Verify the key belongs to the user's shop
+    if (requestedShopId) {
+      const shopId = await verifyMembership(requestedShopId)
+      if (!shopId || !key.startsWith(`${shopId}/`)) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+      }
+    }
 
     let bucket: any = null
     try {
@@ -106,13 +177,22 @@ export async function DELETE(req: NextRequest) {
 }
 
 /**
- * GET /api/upload?key=...
+ * GET /api/upload?key=...&shopId=...
  * Get a file from R2 (for serving private files).
  */
 export async function GET(req: NextRequest) {
   try {
     const key = req.nextUrl.searchParams.get('key')
+    const requestedShopId = req.nextUrl.searchParams.get('shopId')
     if (!key) return NextResponse.json({ error: 'key required' }, { status: 400 })
+
+    // SECURITY: Verify the key belongs to the user's shop
+    if (requestedShopId) {
+      const shopId = await verifyMembership(requestedShopId)
+      if (!shopId || !key.startsWith(`${shopId}/`)) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+      }
+    }
 
     let bucket: any = null
     try {
@@ -128,7 +208,7 @@ export async function GET(req: NextRequest) {
 
     const headers = new Headers()
     headers.set('Content-Type', object.httpMetadata?.contentType || 'application/octet-stream')
-    headers.set('Cache-Control', 'public, max-age=31536000')
+    headers.set('Cache-Control', 'private, max-age=3600')
 
     return new NextResponse(object.body, { headers })
   } catch (err) {

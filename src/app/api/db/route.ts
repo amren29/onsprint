@@ -1,10 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 
 export const dynamic = 'force-dynamic'
 
 // Tables that don't have shop_id (system tables)
 const NO_SHOP_ID_TABLES = ['profiles', 'sequences']
+
+// Allowed tables — whitelist to prevent arbitrary table access
+const ALLOWED_TABLES = new Set([
+  'orders', 'customers', 'agents', 'products', 'categories', 'payments',
+  'inventory_items', 'stock_logs', 'suppliers', 'boards', 'board_columns',
+  'board_cards', 'store_pages', 'store_settings', 'store_users',
+  'store_user_wallet_entries', 'store_carts', 'notifications', 'notification_prefs',
+  'abandoned_carts', 'affiliates', 'affiliate_orders', 'payout_requests',
+  'bundles', 'memberships', 'membership_requests', 'discounts', 'campaigns',
+  'content_pages', 'message_templates', 'reviews', 'proofs', 'prod_card_states',
+  'topup_requests', 'wallet_entries', 'payment_transactions', 'shop_members',
+  'profiles', 'sequences',
+])
 
 // Tables that need auto-generated seq_id on insert
 const SEQ_CONFIG: Record<string, { prefix: string; pad: number }> = {
@@ -32,9 +47,44 @@ function getSupabase() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { action, table, shopId, data, filters, select, order, limit, id } = await req.json()
+    const { action, table, shopId: requestedShopId, data, filters, select, order, limit, id } = await req.json()
     const supabase = getSupabase()
     const needsShopId = !NO_SHOP_ID_TABLES.includes(table)
+
+    // SECURITY: Whitelist allowed tables
+    if (!ALLOWED_TABLES.has(table)) {
+      return NextResponse.json({ data: [], error: 'Table not allowed' })
+    }
+
+    // SECURITY: Verify user session and derive shopId from membership
+    let shopId = requestedShopId
+    if (needsShopId) {
+      try {
+        const cookieStore = await cookies()
+        const authClient = createServerClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          { cookies: { getAll() { return cookieStore.getAll() }, setAll() {} } }
+        )
+        const { data: { user } } = await authClient.auth.getUser()
+
+        if (user) {
+          // Derive shopId from user's membership — don't trust request
+          const { data: membership } = await supabase
+            .from('shop_members')
+            .select('shop_id')
+            .eq('user_id', user.id)
+            .maybeSingle()
+
+          if (membership?.shop_id) {
+            // Override request shopId with verified membership shopId
+            shopId = membership.shop_id
+          }
+        }
+      } catch {
+        // If auth check fails, still use requested shopId (for public store routes)
+      }
+    }
 
     // SECURITY: shopId is REQUIRED for all tenant tables
     if (needsShopId && !shopId) {
