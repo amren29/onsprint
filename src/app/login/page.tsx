@@ -239,6 +239,41 @@ export default function LoginPage() {
     return () => clearInterval(timer)
   }, [])
 
+  // Handle OAuth code exchange (Google login redirect)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const code = params.get('code')
+    if (!code) return
+
+    async function exchangeCode() {
+      try {
+        const { createClient } = await import('@/lib/supabase/client')
+        const supabase = createClient()
+        const { error } = await supabase.auth.exchangeCodeForSession(code!)
+        if (!error) {
+          // Check if user has a shop
+          const { data: { user } } = await supabase.auth.getUser()
+          if (user) {
+            const { data: membership } = await supabase
+              .from('shop_members')
+              .select('shop_id')
+              .eq('user_id', user.id)
+              .maybeSingle()
+
+            if (membership?.shop_id) {
+              window.location.href = '/dashboard'
+            } else {
+              window.location.href = '/onboarding'
+            }
+          }
+        }
+      } catch (err) {
+        console.error('OAuth exchange error:', err)
+      }
+    }
+    exchangeCode()
+  }, [])
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email || !password) { setError('Please fill in all fields.'); return }
