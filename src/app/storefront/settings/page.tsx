@@ -57,9 +57,17 @@ const CameraIcon = () => (
   </svg>
 )
 
-type Tab = 'account' | 'info' | 'contact' | 'social' | 'payment'
+const PaletteIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12" r=".5" fill="currentColor"/>
+    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 011.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+  </svg>
+)
+
+type Tab = 'theme' | 'account' | 'info' | 'contact' | 'social' | 'payment'
 
 const NAV: { key: Tab; label: string; icon: () => React.ReactNode; desc: string }[] = [
+  { key: 'theme',    label: 'Theme',      icon: PaletteIcon,   desc: 'Colors, logo & fonts' },
   { key: 'account',  label: 'Account',    icon: UserIcon,      desc: 'Profile & personal info' },
   { key: 'info',     label: 'Store Info', icon: StoreIcon,     desc: 'Name, tagline & branding' },
   { key: 'contact',  label: 'Contact',    icon: PhoneIcon,     desc: 'Email, phone & address' },
@@ -264,6 +272,10 @@ export default function StoreSettingsPage() {
           </div>
 
           <div key={tab} style={{ animation: 'ssFadeIn 0.25s ease' }}>
+
+            {tab === 'theme' && (
+              <ThemeSection shopId={shopId} config={s} onSave={(c) => { setS(c); saveMut.mutate(c); showToast('Theme saved') }} />
+            )}
 
             {tab === 'account' && (
               <AccountSection onSave={showToast} />
@@ -600,6 +612,146 @@ function BankConnectionCard({ shopId }: { shopId: string }) {
           </div>
         </>
       )}
+    </div>
+  )
+}
+
+/* ── Theme Section ──────────────────────────────────────────── */
+
+const ACCENT_COLORS = [
+  { label: 'Blue', value: '#006AFF' },
+  { label: 'Purple', value: '#7c3aed' },
+  { label: 'Green', value: '#22c55e' },
+  { label: 'Red', value: '#ef4444' },
+  { label: 'Orange', value: '#f59e0b' },
+  { label: 'Pink', value: '#ec4899' },
+  { label: 'Teal', value: '#14b8a6' },
+  { label: 'Indigo', value: '#6366f1' },
+  { label: 'Black', value: '#1a1a1a' },
+]
+
+const FONTS = [
+  { label: 'Inter (Default)', value: 'Inter' },
+  { label: 'Fira Sans', value: 'Fira Sans' },
+  { label: 'DM Sans', value: 'DM Sans' },
+  { label: 'Plus Jakarta Sans', value: 'Plus Jakarta Sans' },
+]
+
+function ThemeSection({ shopId, config, onSave }: { shopId: string; config: Record<string, unknown>; onSave: (c: Record<string, unknown>) => void }) {
+  const [accentColor, setAccentColor] = useState((config.accentColor as string) || '#006AFF')
+  const [customColor, setCustomColor] = useState('')
+  const [font, setFont] = useState((config.font as string) || 'Inter')
+  const [headerStyle, setHeaderStyle] = useState((config.headerStyle as string) || 'light')
+  const [logoUrl, setLogoUrl] = useState((config.logoUrl as string) || '')
+  const [uploading, setUploading] = useState(false)
+
+  const handleLogoUpload = async (file: File) => {
+    if (!file.type.startsWith('image/')) return
+    if (file.size > 2 * 1024 * 1024) { alert('Max 2MB'); return }
+    setUploading(true)
+    try {
+      const { uploadFile } = await import('@/lib/upload')
+      const result = await uploadFile(file, shopId, 'products', 'logo')
+      setLogoUrl(result.url)
+    } catch (err) { console.error('Logo upload failed:', err) }
+    setUploading(false)
+  }
+
+  const handleSave = () => onSave({ ...config, accentColor, font, headerStyle, logoUrl })
+
+  return (
+    <div>
+      <SectionHeader title="Theme" sub="Customize your online store appearance" />
+
+      {/* Logo */}
+      <div style={{ marginBottom: 24 }}>
+        <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 8 }}>Shop Logo</label>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div style={{ width: 72, height: 72, borderRadius: 14, border: '2px dashed var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', background: 'var(--bg)', cursor: 'pointer', position: 'relative' }}
+            onClick={() => document.getElementById('logo-input')?.click()}>
+            {logoUrl ? <img src={logoUrl} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} /> :
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>}
+            {uploading && <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11 }}>Uploading...</div>}
+          </div>
+          <input id="logo-input" type="file" accept="image/*" style={{ display: 'none' }} onChange={e => { if (e.target.files?.[0]) handleLogoUpload(e.target.files[0]) }} />
+          <div>
+            <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>Click to upload your logo</div>
+            <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>PNG, JPG, SVG. Max 2MB.</div>
+            {logoUrl && <button onClick={() => setLogoUrl('')} style={{ fontSize: 11, color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer', marginTop: 4, padding: 0 }}>Remove</button>}
+          </div>
+        </div>
+      </div>
+
+      {/* Accent Color */}
+      <div style={{ marginBottom: 24 }}>
+        <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 8 }}>Accent Color</label>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
+          {ACCENT_COLORS.map(c => (
+            <button key={c.value} onClick={() => setAccentColor(c.value)} title={c.label}
+              style={{ width: 36, height: 36, borderRadius: 10, border: accentColor === c.value ? '3px solid var(--text-primary)' : '2px solid var(--border)', background: c.value, cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {accentColor === c.value && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
+            </button>
+          ))}
+          <input type="color" value={customColor || accentColor} onChange={e => { setCustomColor(e.target.value); setAccentColor(e.target.value) }}
+            style={{ width: 36, height: 36, borderRadius: 10, border: '2px solid var(--border)', cursor: 'pointer', padding: 0 }} />
+        </div>
+        <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Selected: <strong style={{ color: accentColor }}>{accentColor}</strong></div>
+      </div>
+
+      {/* Font */}
+      <div style={{ marginBottom: 24 }}>
+        <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 8 }}>Font</label>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {FONTS.map(f => (
+            <label key={f.value} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 10, border: font === f.value ? '2px solid var(--accent)' : '1px solid var(--border)', background: font === f.value ? 'rgba(0,106,255,0.04)' : 'var(--bg-card)', cursor: 'pointer' }}>
+              <input type="radio" name="font" value={f.value} checked={font === f.value} onChange={() => setFont(f.value)} style={{ accentColor: 'var(--accent)' }} />
+              <span style={{ fontSize: 14, fontWeight: 500, fontFamily: f.value }}>{f.label}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Header Style */}
+      <div style={{ marginBottom: 24 }}>
+        <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 8 }}>Header Style</label>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+          {[
+            { label: 'Light', value: 'light', desc: 'White background, dark text' },
+            { label: 'Dark', value: 'dark', desc: 'Dark background, light text' },
+          ].map(h => (
+            <label key={h.value} style={{ padding: 16, borderRadius: 12, cursor: 'pointer', textAlign: 'center', border: headerStyle === h.value ? '2px solid var(--accent)' : '1px solid var(--border)', background: h.value === 'dark' ? '#1a1a1a' : '#fff', color: h.value === 'dark' ? '#fff' : '#1a1a1a' }}>
+              <input type="radio" name="header" value={h.value} checked={headerStyle === h.value} onChange={() => setHeaderStyle(h.value)} style={{ display: 'none' }} />
+              <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 2 }}>{h.label}</div>
+              <div style={{ fontSize: 11, opacity: 0.6 }}>{h.desc}</div>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Preview */}
+      <div style={{ marginBottom: 20 }}>
+        <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 8 }}>Preview</label>
+        <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border)', background: headerStyle === 'dark' ? '#1a1a1a' : '#fff', padding: '16px 20px', fontFamily: font }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+            {logoUrl ? <img src={logoUrl} alt="" style={{ width: 28, height: 28, borderRadius: 6, objectFit: 'contain' }} /> :
+              <div style={{ width: 28, height: 28, borderRadius: 6, background: accentColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="white" opacity="0.7"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="white" opacity="0.7"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="white" opacity="0.4"/></svg>
+              </div>}
+            <span style={{ fontSize: 14, fontWeight: 600, color: headerStyle === 'dark' ? '#fff' : '#1a1a1a' }}>Your Shop Name</span>
+            <span style={{ marginLeft: 'auto', fontSize: 11, color: headerStyle === 'dark' ? 'rgba(255,255,255,0.5)' : '#888' }}>Products</span>
+            <span style={{ fontSize: 11, color: headerStyle === 'dark' ? 'rgba(255,255,255,0.5)' : '#888' }}>Track Order</span>
+          </div>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <button style={{ padding: '6px 16px', borderRadius: 8, fontSize: 12, fontWeight: 600, border: 'none', background: accentColor, color: '#fff', cursor: 'default' }}>Add to Cart</button>
+            <button style={{ padding: '6px 16px', borderRadius: 8, fontSize: 12, fontWeight: 500, border: '1px solid ' + accentColor, background: 'transparent', color: accentColor, cursor: 'default' }}>View Details</button>
+            <span style={{ fontSize: 12, fontWeight: 600, color: accentColor, marginLeft: 8 }}>RM 99.00</span>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '16px 0', borderTop: '1px solid var(--border)', marginTop: 20 }}>
+        <button className="btn-primary" onClick={handleSave}>Save Theme</button>
+      </div>
     </div>
   )
 }
