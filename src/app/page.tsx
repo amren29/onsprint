@@ -247,16 +247,17 @@ export default function LandingPage() {
             <p style={{ fontSize: 17, color: '#888', fontWeight: 400, maxWidth: 520, margin: '0 auto 56px' }}>WhatsApp orders, Excel tracking, and paper invoices are destroying your productivity.</p>
           </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
             {[
-              { title: 'Order Chaos', stat: '3+ hours daily', desc: 'wasted on WhatsApp order management' },
-              { title: 'No Visibility', stat: '80% of shops', desc: 'can\'t track production in real-time' },
-              { title: 'Lost Revenue', stat: 'RM 2,000+/mo', desc: 'lost to missed follow-ups and errors' },
+              { title: 'Order Chaos', stat: '3+ hours daily', desc: 'wasted on WhatsApp order management', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> },
+              { title: 'No Visibility', stat: '80% of shops', desc: 'can\'t track production in real-time', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/><line x1="1" y1="1" x2="23" y2="23"/></svg> },
+              { title: 'Lost Revenue', stat: 'RM 2,000+/mo', desc: 'lost to missed follow-ups and errors', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg> },
             ].map((p, i) => (
-              <motion.div key={p.title} {...stagger(i)} style={{ textAlign: 'center', padding: '32px 24px' }}>
-                <h3 style={{ fontSize: 18, fontWeight: 600, margin: '0 0 8px' }}>{p.title}</h3>
-                <div style={{ fontSize: 15, fontWeight: 600, color: '#1a1a1a', marginBottom: 4 }}>{p.stat}</div>
-                <div style={{ fontSize: 14, color: '#999', fontWeight: 400 }}>{p.desc}</div>
+              <motion.div key={p.title} {...stagger(i)} style={{ textAlign: 'center', padding: '36px 28px', borderRadius: 14, border: '1px solid #f0f0f0', background: '#fafafa' }}>
+                <div style={{ width: 48, height: 48, borderRadius: 12, background: '#fff', border: '1px solid #f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>{p.icon}</div>
+                <h3 style={{ fontSize: 17, fontWeight: 600, margin: '0 0 6px' }}>{p.title}</h3>
+                <div style={{ fontSize: 22, fontWeight: 700, color: '#1a1a1a', marginBottom: 4 }}>{p.stat}</div>
+                <div style={{ fontSize: 13, color: '#999', fontWeight: 400 }}>{p.desc}</div>
               </motion.div>
             ))}
           </div>
@@ -347,7 +348,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ PLATFORM — Lark style ═══ */}
+      {/* ═══ PLATFORM — Lark style (pink gradient) ═══ */}
       <section style={{ padding: '100px 24px', background: 'linear-gradient(135deg, #f5f0ff 0%, #fce4ec 50%, #fff3e0 100%)', borderRadius: 20, margin: '0 16px' }}>
         <div style={mx}>
           <motion.div {...fadeUp} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'center', marginBottom: 64 }}>
@@ -361,28 +362,25 @@ export default function LandingPage() {
               </Link>
             </div>
             <div style={{ position: 'relative', height: 280 }}>
-              {/* Floating icons */}
               {[
-                { top: '5%', left: '20%', bg: '#7c3aed', icon: I.orders },
-                { top: '10%', right: '10%', bg: '#006AFF', icon: I.store },
-                { top: '40%', left: '5%', bg: '#22c55e', icon: I.payments },
-                { top: '35%', right: '25%', bg: '#f59e0b', icon: I.production },
-                { top: '65%', left: '25%', bg: '#ec4899', icon: I.customers },
-                { top: '70%', right: '5%', bg: '#06b6d4', icon: I.proofing },
-                { top: '25%', left: '45%', bg: '#1a1a1a', icon: I.reports },
+                { top: '5%', left: '20%', color: '#7c3aed', icon: I.orders },
+                { top: '10%', right: '10%', color: '#006AFF', icon: I.store },
+                { top: '40%', left: '5%', color: '#22c55e', icon: I.payments },
+                { top: '35%', right: '25%', color: '#f59e0b', icon: I.production },
+                { top: '65%', left: '25%', color: '#ec4899', icon: I.customers },
+                { top: '70%', right: '5%', color: '#06b6d4', icon: I.proofing },
+                { top: '25%', left: '45%', color: '#555', icon: I.reports },
               ].map((item, i) => (
                 <motion.div key={i} initial={{ opacity: 0, scale: 0.5 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.1 + i * 0.08, duration: 0.4 }}
-                  style={{ position: 'absolute', ...item, width: 48, height: 48, borderRadius: 14, background: '#fff', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: item.bg }}>
+                  style={{ position: 'absolute', top: item.top, left: (item as any).left, right: (item as any).right, width: 48, height: 48, borderRadius: 14, background: '#fff', boxShadow: '0 4px 20px rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: item.color }}>
                   {item.icon}
                 </motion.div>
               ))}
-              {/* Center circle */}
-              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 200, height: 200, borderRadius: '50%', border: '1px dashed rgba(124,58,237,0.2)' }} />
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 200, height: 200, borderRadius: '50%', border: '1px dashed rgba(124,58,237,0.15)' }} />
             </div>
           </motion.div>
 
-          {/* Feature cards grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 12 }}>
             {[
               { icon: I.store, title: 'Online Store', desc: 'Customers order and pay online 24/7' },
               { icon: I.production, title: 'Production Board', desc: 'Kanban workflow with 12 stages' },
@@ -399,6 +397,89 @@ export default function LandingPage() {
                 <div style={{ color: '#555', marginBottom: 10 }}>{c.icon}</div>
                 <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>{c.title}</div>
                 <div style={{ fontSize: 13, color: '#888', fontWeight: 400, lineHeight: 1.5 }}>{c.desc}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ ONSPRINT BRAIN — ClickUp Brain style ═══ */}
+      <div style={{ height: 80 }} /> {/* spacing */}
+      <section style={{ background: '#0a0a0a', color: '#fff', borderRadius: 20, margin: '0 16px', overflow: 'hidden', position: 'relative' }}>
+        {/* Glow effect */}
+        <div style={{ position: 'absolute', top: '15%', left: '50%', transform: 'translateX(-50%)', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 60%)', pointerEvents: 'none', filter: 'blur(80px)' }} />
+
+        {/* Hero — Brain section */}
+        <div style={{ padding: '100px 24px 60px', textAlign: 'center', position: 'relative' }}>
+          {/* Floating labels */}
+          <span style={{ position: 'absolute', top: '18%', left: '15%', fontSize: 11, fontWeight: 500, color: 'rgba(255,255,255,0.15)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>UPDATE ORDER</span>
+          <span style={{ position: 'absolute', top: '12%', right: '12%', fontSize: 11, fontWeight: 500, color: 'rgba(255,255,255,0.15)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>SEND PROOF</span>
+          <span style={{ position: 'absolute', top: '35%', left: '8%', fontSize: 11, fontWeight: 500, color: 'rgba(255,255,255,0.15)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>CREATE INVOICE</span>
+          <span style={{ position: 'absolute', top: '30%', right: '8%', fontSize: 11, fontWeight: 500, color: 'rgba(255,255,255,0.15)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>TRACK PRODUCTION</span>
+
+          <motion.div {...fadeUp}>
+            {/* Logo */}
+            <div style={{ width: 64, height: 64, borderRadius: 16, background: '#7c3aed', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', boxShadow: '0 0 40px rgba(124,58,237,0.4)' }}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="white" opacity="0.7"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="white" opacity="0.7"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="white" opacity="0.4"/></svg>
+            </div>
+            <p style={{ fontSize: 14, fontWeight: 600, color: '#7c3aed', marginBottom: 16 }}>Onsprint Brain</p>
+            <h2 style={{ fontSize: 'clamp(36px, 6vw, 64px)', fontWeight: 600, letterSpacing: '-2px', lineHeight: 1.05, margin: '0 0 28px', color: '#fff' }}>
+              AI that built for<br />printshop
+            </h2>
+            <Link href="/register" style={{ fontSize: 15, fontWeight: 600, color: '#0a0a0a', background: '#fff', padding: '12px 28px', borderRadius: 10, textDecoration: 'none', display: 'inline-block' }}>
+              Try Onsprint today
+            </Link>
+          </motion.div>
+        </div>
+
+        {/* 3 dark glass feature cards */}
+        <div style={{ ...mx, padding: '0 24px 48px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+            {[
+              { label: 'ORDER AUTOMATION', title: 'Auto-process orders from your online store.', chat: { user: 'Customer', time: '2:30 pm', msg: 'I need 500 business cards, matte lamination.', reply: 'Order #1042 created. Production: Artwork Check. Estimated: 3 working days.' } },
+              { label: 'ARTWORK PROOFING', title: 'Send proofs and get approvals instantly.', chat: { user: 'Designer', time: '10:15 am', msg: 'Where is the artwork for order #1041?', reply: 'Proof v2 uploaded. Customer link generated. Awaiting approval.' } },
+              { label: 'PRODUCTION TRACKING', title: 'Never manually track jobs again.', chat: { user: 'Manager', time: '3:30 pm', msg: 'What\'s the status of the banner order?', reply: 'Order #1040 is in Printing stage. 2 of 5 units completed. ETA: tomorrow.' } },
+            ].map((c, i) => (
+              <motion.div key={c.label} {...stagger(i)} style={{ padding: 24, borderRadius: 16, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', minHeight: 280, display: 'flex', flexDirection: 'column' }}>
+                <div style={{ fontSize: 10, fontWeight: 600, color: '#7c3aed', letterSpacing: '0.15em', marginBottom: 12 }}>{c.label}</div>
+                <h3 style={{ fontSize: 20, fontWeight: 600, margin: '0 0 20px', lineHeight: 1.3, color: '#fff' }}>{c.title}</h3>
+                {/* Chat mockup */}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 10, padding: '10px 12px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                      <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#333', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, color: '#999' }}>{c.chat.user[0]}</div>
+                      <span style={{ fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,0.6)' }}>{c.chat.user}</span>
+                      <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.2)' }}>{c.chat.time}</span>
+                    </div>
+                    <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', margin: 0, lineHeight: 1.5, fontWeight: 400 }}>{c.chat.msg}</p>
+                  </div>
+                  <div style={{ background: 'rgba(124,58,237,0.06)', borderRadius: 10, padding: '10px 12px', border: '1px solid rgba(124,58,237,0.1)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                      <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#7c3aed', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="white" opacity="0.7"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="white" opacity="0.7"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="white" opacity="0.4"/></svg>
+                      </div>
+                      <span style={{ fontSize: 11, fontWeight: 600, color: '#a78bfa' }}>Onsprint Brain</span>
+                    </div>
+                    <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', margin: 0, lineHeight: 1.5, fontWeight: 400 }}>{c.chat.reply}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom 3 cards — integrations style */}
+        <div style={{ ...mx, padding: '0 24px 80px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, background: 'rgba(255,255,255,0.06)', borderRadius: 14, overflow: 'hidden' }}>
+            {[
+              { title: 'Your print shop\'s AI', desc: 'A brain built for you and your team.', icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a10 10 0 0110 10 10 10 0 01-10 10A10 10 0 012 12 10 10 0 0112 2z"/><path d="M12 8v8M8 12h8"/></svg> },
+              { title: 'Connected to Billplz', desc: 'FPX, cards, e-wallets — all payment methods.', icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> },
+              { title: 'Cloudflare powered', desc: 'Fast globally. R2 storage. Edge computing.', icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"/></svg> },
+            ].map((c, i) => (
+              <motion.div key={c.title} {...stagger(i)} style={{ padding: '36px 28px', textAlign: 'center', background: '#0a0a0a' }}>
+                <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'center' }}>{c.icon}</div>
+                <div style={{ fontSize: 15, fontWeight: 600, color: '#fff', marginBottom: 6 }}>{c.title}</div>
+                <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.35)', fontWeight: 400 }}>{c.desc}</div>
               </motion.div>
             ))}
           </div>
