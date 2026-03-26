@@ -450,7 +450,7 @@ export default function LoginPage() {
                       await supabase.auth.signInWithOAuth({
                         provider: btn.provider,
                         options: {
-                          redirectTo: `${window.location.origin}/dashboard`,
+                          redirectTo: `${window.location.origin}/auth/callback`,
                         },
                       })
                     } catch (err) {

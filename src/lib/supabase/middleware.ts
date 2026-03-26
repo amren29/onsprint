@@ -10,6 +10,7 @@ const PUBLIC_ROUTES = [
   '/register',
   '/reset-password',
   '/verify-email',
+  '/auth/callback',
   '/api/',
 ]
 
