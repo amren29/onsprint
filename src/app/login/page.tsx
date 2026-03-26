@@ -486,6 +486,7 @@ export default function LoginPage() {
                         provider: btn.provider,
                         options: {
                           redirectTo: `${window.location.origin}/auth/callback`,
+                          skipBrowserRedirect: false,
                         },
                       })
                     } catch (err) {

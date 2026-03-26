@@ -77,8 +77,16 @@ export async function updateSession(request: NextRequest) {
 
   // Redirect logged-in users away from auth pages
   if (user && isAuthPage) {
+    // Check if user has a shop — if not, send to onboarding
+    const { data: membership } = await supabase
+      .from('shop_members')
+      .select('shop_id')
+      .eq('user_id', user.id)
+      .maybeSingle()
+
     const url = request.nextUrl.clone()
-    url.pathname = '/dashboard'
+    url.pathname = membership?.shop_id ? '/dashboard' : '/onboarding'
+    url.search = ''
     return NextResponse.redirect(url)
   }
 
