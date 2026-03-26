@@ -365,42 +365,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
   const handleDownloadInvoice = () => {
     if (!order) return
-    const invId = order.seqId.replace('ORD', 'INV')
-    const capturedAmount = (order.payments ?? []).filter(p => p.status === 'Captured').reduce((sum, p) => sum + p.amount, 0)
-    const invoiceTotal = order.grandTotal ?? grandTotal
-    const balanceDue = invoiceTotal - capturedAmount
-    const paymentStatus = capturedAmount <= 0 ? 'Unpaid' : capturedAmount >= invoiceTotal ? 'Paid' : 'Partially Paid'
-    const [bg, color] = badgeColors(paymentStatus === 'Unpaid' ? 'Overdue' : paymentStatus)
-    const lineRows = order.items.map(i =>
-      `<tr><td>${i.name}</td><td class="text-mono">${i.sku || '—'}</td><td style="text-align:right">${i.qty.toLocaleString()}</td><td class="text-right">${fmt(i.unitPrice)}</td><td class="text-right">${fmt(i.total)}</td></tr>`
-    ).join('')
-    const body =
-      docHeader('INVOICE', invId, paymentStatus, bg, color) +
-      section('Bill To', fields2([
-        { label: 'Customer', value: order.customer || '—' },
-        { label: 'Agent', value: order.agent || '—' },
-        { label: 'Order Ref', value: order.seqId },
-        { label: 'Date', value: order.created || '—' },
-      ])) +
-      section('Items', `<table>
-        <thead><tr><th>Product</th><th>SKU</th><th style="text-align:right">Qty</th><th class="text-right">Unit Price</th><th class="text-right">Total</th></tr></thead>
-        <tbody>${lineRows}</tbody>
-        <tbody class="total-section">
-          <tr class="total-row"><td colspan="4" style="text-align:right;font-weight:600">Subtotal</td><td class="text-right">${fmt(subtotal)}</td></tr>
-          ${t.discountAmt > 0 ? `<tr><td colspan="4" style="text-align:right;color:#6b7280">Discount</td><td class="text-right" style="color:#ef4444">−${fmt(t.discountAmt)}</td></tr>` : ''}
-          ${sstEnabled ? `<tr><td colspan="4" style="text-align:right;color:#6b7280">SST (${sstRate}%)</td><td class="text-right" style="color:#6b7280">${fmt(t.sstAmt)}</td></tr>` : ''}
-          ${shippingCost > 0 ? `<tr><td colspan="4" style="text-align:right;color:#6b7280">Shipping</td><td class="text-right" style="color:#6b7280">${fmt(shippingCost)}</td></tr>` : ''}
-          ${rounding !== 0 ? `<tr><td colspan="4" style="text-align:right;color:#6b7280">Rounding</td><td class="text-right" style="color:#6b7280">${rounding > 0 ? '+' : ''}${fmt(rounding)}</td></tr>` : ''}
-          <tr class="grand-row"><td colspan="4" style="text-align:right">Grand Total</td><td class="text-right accent">${fmt(grandTotal)}</td></tr>
-        </tbody>
-      </table>`) +
-      section('Payment Summary', fields2([
-        { label: 'Amount Paid', value: fmt(capturedAmount), accent: capturedAmount > 0 },
-        { label: 'Balance Due', value: balanceDue > 0 ? fmt(balanceDue) : 'Settled', accent: balanceDue <= 0 },
-      ])) +
-      (order.notes ? section('Notes', textBlock(order.notes)) : '') +
-      docFooter()
-    printDocument(`Invoice ${invId}`, body)
+    window.open(`/api/invoice?orderId=${order.id}&shopId=${shopId}`, '_blank')
   }
 
   const handlePrint = () => {
