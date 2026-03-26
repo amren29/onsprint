@@ -1,467 +1,269 @@
-# Onsprint — Print Shop Management System
+# Onsprint
 
-A **simple printshop system** built for one owner/operator, not a bloated SaaS.
+Multi-tenant print shop management platform built for Malaysian printing businesses.
 
-## Core workflow
-
-**Inquiry → Quote → Order → Artwork → Production → Ready → Delivered**
-
-That's it.
-
-You only need 6 screens.
-
-## 1. Dashboard
-
-Show today's work.
-
-Cards:
-
-* New inquiries
-* Waiting for customer approval
-* In production
-* Ready for pickup
-* Unpaid orders
-
-Also show:
-
-* today's due jobs
-* overdue jobs
-* low stock alerts
-
-## 2. Customers
-
-Keep it minimal.
-
-Fields:
-
-* name
-* phone
-* company
-* email
-* address
-* notes
-
-Useful extras:
-
-* preferred pickup/delivery
-* common order type
-* tax info if needed
-
-## 3. Quotes
-
-This is the heart of the app.
-
-Each quote should have:
-
-* customer
-* item name
-* category
-* size
-* quantity
-* material
-* finishing
-* unit price
-* total price
-* notes
-* status: draft / sent / approved / rejected
-
-### Suggested categories
-
-* banner
-* sticker
-* flyer
-* business card
-* poster
-* tshirt
-* signage
-* custom
-
-### Pricing model
-
-Use a flexible structure:
-
-* base price
-* material cost
-* print cost
-* finishing cost
-* design fee
-* rush fee
-* discount
-
-Formula:
-`total = base + material + print + finishing + design + rush - discount`
-
-Do not hardcode everything into one formula. Keep each piece separate.
-
-## 4. Orders / Jobs
-
-Once quote is approved, convert it into a job.
-
-Fields:
-
-* order number
-* linked quote
-* customer
-* due date
-* priority
-* payment status
-* production status
-* assigned notes
-* delivery method
-
-### Production status
-
-Use simple statuses:
-
-* pending artwork
-* waiting approval
-* approved
-* printing
-* finishing
-* ready
-* delivered
-* canceled
-
-## 5. Artwork / Files
-
-Very important for printshops.
-
-Each order should allow:
-
-* file upload
-* preview link
-* version number
-* customer approval flag
-* revision notes
-
-Fields:
-
-* filename
-* type
-* uploaded at
-* version
-* approved yes/no
-* approved date
-* comments
-
-Keep a rule:
-**Nothing goes to print until artwork is approved.**
-
-## 6. Payments
-
-Simple, not accounting software.
-
-Fields:
-
-* order total
-* amount paid
-* balance
-* payment method
-* payment date
-* invoice number
-
-Statuses:
-
-* unpaid
-* partial
-* paid
+**Live:** [onsprint.mohamedamrin07.workers.dev](https://onsprint.mohamedamrin07.workers.dev)
 
 ---
 
-# Recommended database tables
+## What is Onsprint?
 
-## customers
+Onsprint replaces spreadsheets, WhatsApp orders, and scattered tools with one unified platform. Shop owners manage orders, production, payments, customers, and their online store — all from a single dashboard.
 
-* id
-* name
-* phone
-* email
-* company
-* address
-* notes
-* created_at
-* updated_at
+## Tech Stack
 
-## quotes
+- **Frontend:** Next.js 15 (App Router)
+- **Backend:** Supabase (PostgreSQL + Auth + Realtime)
+- **Hosting:** Cloudflare Workers (OpenNext)
+- **Payments:** Billplz (Malaysian FPX, cards, e-wallets) + Stripe (subscriptions)
+- **File Storage:** Cloudflare R2
+- **UI:** Custom CSS, Fira Sans, dark/light theme
 
-* id
-* quote_number
-* customer_id
-* status
-* subtotal
-* discount
-* rush_fee
-* total
-* notes
-* valid_until
-* created_at
-* updated_at
+## Architecture
 
-## quote_items
+```
+Browser → Cloudflare Workers (Next.js via OpenNext)
+              ↓
+         /api/db proxy (service role key)
+              ↓
+         Supabase (PostgreSQL)
+              ↓
+         R2 (file storage)
+```
 
-* id
-* quote_id
-* category
-* item_name
-* width
-* height
-* unit
-* quantity
-* material
-* finishing
-* unit_price
-* line_total
-* notes
+All DB calls go through `/api/db` generic proxy — no direct `'use server'` imports in client components (Cloudflare Workers compatibility).
 
-## orders
-
-* id
-* order_number
-* customer_id
-* quote_id
-* due_date
-* priority
-* status
-* payment_status
-* total_amount
-* amount_paid
-* balance
-* delivery_method
-* notes
-* created_at
-* updated_at
-
-## order_items
-
-* id
-* order_id
-* category
-* item_name
-* width
-* height
-* unit
-* quantity
-* material
-* finishing
-* unit_price
-* line_total
-* notes
-
-## artwork_files
-
-* id
-* order_id
-* file_url
-* file_name
-* version
-* is_approved
-* approved_at
-* revision_note
-* uploaded_at
-
-## payments
-
-* id
-* order_id
-* amount
-* method
-* reference_number
-* paid_at
-* notes
-
-## inventory_items
-
-* id
-* name
-* category
-* unit
-* quantity_on_hand
-* reorder_level
-* cost_per_unit
-* notes
+Multi-tenant: every query requires `shop_id`. The middleware validates shop membership via cookies.
 
 ---
 
-# Best MVP features
+## Features
 
-Build these first:
+### Admin Dashboard
+- Revenue overview with charts (weekly/daily)
+- Active orders, pending orders, stock alerts
+- Real-time order notifications via Supabase Realtime
+- Welcome banner with onboarding checklist
 
-### Phase 1
+### Order Management
+- Create, edit, duplicate orders
+- Order status: Pending → Confirmed → Cancelled
+- Production tracking linked to kanban board
+- Invoice generation (HTML → PDF via browser print)
+- Customer and agent assignment
 
-* customer management
-* quote creation
-* quote to order conversion
-* order status tracking
-* payment tracking
+### Production Board
+- Kanban-style board with 12 stages:
+  - New Order → Artwork Checking → Designing → Refine → Waiting Customer Feedback → Ready to Print → Printing → Finishing → QC → Ready to Pickup → Collected → Done
+- Drag & drop cards between columns
+- Card modal with proofing, jobsheets, timeline, notes
+- Artwork upload to R2 with version control
 
-### Phase 2
+### Online Store
+- Product catalog with 55 seed products
+- Size dropdown, option dropdowns (Material, Lamination, Cut)
+- Pricing engine: volume, sqft, fixed, fixed_per_size
+- Cart, checkout, Billplz payment gateway
+- Customer accounts (Supabase Auth, auto-confirmed)
+- Order tracking page
+- Simplified for Tier 1 & 2 (Home, Products, Track Order)
 
-* file upload
-* artwork approval
-* printable job sheet
-* reorder from past job
+### Products & Catalog
+- 55 pre-loaded products from Excel spreadsheet
+- 33 categories
+- 6 product groups: Standard, Signage & Office, Books & Calendars, Packaging, Apparel & Merch, Event Material
+- Auto-seed on onboarding based on shop type
+- Product editor with sizes, options, pricing tiers, images (R2 upload)
+- Categories tab inline in Products page
 
-### Phase 3
+### Customer Management
+- Customer directory with CRUD
+- Online store customers linked via `store_users` table
+- Agent system with prepaid wallets and discount rates
+- Membership tiers (Supabase-backed)
+- Affiliate tracking
 
-* inventory deduction
-* profit per order
-* delivery tracking
-* WhatsApp sharing for quotes/status
+### Payments
+- Billplz integration (FPX, cards, e-wallets)
+- Auto-split payments between platform and shop owner
+- Platform fee per plan: Starter RM 1.00, Growth RM 0.60, Pro RM 0.20
+- Payment transactions table
+- Bank account connection flow
 
----
+### Team & Permissions
+- Custom permissions per team member
+- Owner has full access
+- Staff see only pages assigned to them
+- Permission toggles: Dashboard, Orders, Customers, Payments, Stock, Suppliers, Agents, Membership, Products, Reports, Production, Store, Settings
 
-# UI layout
+### Subscription Plans (Stripe)
+- Starter: RM 99/mo — 1 team member, standard products, basic store
+- Growth: RM 249/mo — 5 team members, all products, agent system
+- Pro: RM 499/mo — unlimited team, website builder, custom domain
+- 14-day free trial on all plans
+- Stripe Checkout + Customer Portal
+- Webhook handles subscription lifecycle
+- Plan enforcement: 7-day grace period after expiry → blocked to billing page
 
-## Sidebar
+### File Upload (Cloudflare R2)
+- Product images
+- Customer artwork uploads (up to 100MB)
+- Production proofing files with version control
+- Public URLs via r2.dev
 
-* Dashboard
-* Customers
-* Quotes
-* Orders
-* Files
-* Payments
-* Inventory
-* Settings
+### Authentication
+- Admin: Supabase Auth with OTP email verification
+- Store customers: Supabase Auth, auto-confirmed (no email verification)
+- Google OAuth for admin login
+- Forgot password flow for both admin and customers
+- Middleware validates session + shop membership on every request
 
-## Orders page
-
-Table columns:
-
-* order no
-* customer
-* item summary
-* due date
-* status
-* payment
-* total
-* actions
-
-## Order detail page
-
-Sections:
-
-* customer info
-* items ordered
-* artwork files
-* approval history
-* payment summary
-* production notes
-* timeline
-
----
-
-# Practical rules for printshop workflow
-
-These rules make the system useful:
-
-### Rule 1
-
-Quote can become order with one click.
-
-### Rule 2
-
-Order cannot move to printing unless artwork is approved.
-
-### Rule 3
-
-Balance must always auto-calculate:
-`balance = total_amount - amount_paid`
-
-### Rule 4
-
-Overdue jobs should be highlighted.
-
-### Rule 5
-
-Repeat orders should be clonable.
-
-That last one is very important in printshops.
+### Other Features
+- Stock/inventory management
+- Supplier management
+- Reports page
+- Notification system (in-app + bell sound)
+- Search palette (Cmd+K)
+- Dark/light theme toggle
+- Store website builder (Pro tier, 18 section types)
+- SEO settings
+- Abandoned cart tracking
+- Discount/campaign management
 
 ---
 
-# Suggested status colors
+## Project Structure
 
-* pending: gray
-* waiting approval: yellow
-* printing: blue
-* finishing: purple
-* ready: green
-* overdue: red
-
----
-
-# Good starter tech decisions for your app
-
-Since you said it's mainly for yourself:
-
-* single user login is enough
-* SQLite or Postgres both fine
-* no need for multi-tenant
-* no need for team roles yet
-* use simple local/cloud file storage for artwork
-* prioritize speed over perfection
-
----
-
-# What not to build yet
-
-Avoid these for now:
-
-* full accounting
-* HR/staff modules
-* advanced analytics
-* live machine integration
-* customer self-service portal
-* subscription billing
-* complex permissions
-
-They will slow you down.
-
----
-
-# Best daily-use workflow
-
-Use the app like this:
-
-1. Add customer
-2. Create quote
-3. Customer agrees
-4. Convert to order
-5. Upload artwork
-6. Mark approved
-7. Move through production
-8. Mark ready
-9. Record payment
-10. Mark delivered
-
-If your app does this smoothly, it already has real value.
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── api/               # API routes
+│   │   ├── db/            # Generic DB proxy
+│   │   ├── store/         # Store auth, checkout, products
+│   │   ├── plan/          # Stripe subscription
+│   │   ├── upload/        # R2 file upload
+│   │   ├── invoice/       # Invoice generation
+│   │   └── billplz/       # Payment callbacks
+│   ├── dashboard/         # Admin dashboard
+│   ├── orders/            # Order management
+│   ├── catalog/           # Product management
+│   ├── production/        # Kanban production board
+│   ├── store/             # Customer-facing online store
+│   ├── settings/          # Account, billing, team
+│   ├── storefront/        # Store admin (editor, settings)
+│   └── onboarding/        # New shop setup (10 steps)
+├── components/
+│   ├── Sidebar.tsx         # Main nav with permissions
+│   ├── AppShell.tsx        # Dashboard layout wrapper
+│   ├── production/         # Kanban components
+│   ├── store/              # Store UI components
+│   ├── store-builder/      # Website builder
+│   └── settings/           # Settings components
+├── lib/
+│   ├── db/
+│   │   ├── client.ts       # 80+ client-safe DB functions
+│   │   ├── orders.ts       # Server actions (unused on Cloudflare)
+│   │   └── ...             # Other DB modules
+│   ├── store/
+│   │   ├── auth-store.ts   # Zustand + Supabase auth
+│   │   ├── cart-store.ts   # Shopping cart
+│   │   └── pricing-engine.ts
+│   ├── supabase/           # Supabase client/server/middleware
+│   ├── stripe.ts           # Stripe API (fetch-based)
+│   └── upload.ts           # R2 upload helper
+├── providers/
+│   ├── shop-provider.tsx   # Admin multi-tenant context
+│   ├── store-context.tsx   # Store multi-tenant context
+│   └── query-provider.tsx  # React Query
+├── data/
+│   └── seed-products.json  # 55 product templates
+└── types/
+    └── store.ts            # TypeScript types
+```
 
 ---
 
-# Smart extras for later
+## Environment Variables
 
-These are high-value:
+```env
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
 
-* generate PDF quote
-* generate invoice
-* WhatsApp "Ready for pickup"
-* duplicate previous order
-* search by phone number
-* due-today filter
-* monthly sales summary
+# Site
+NEXT_PUBLIC_SITE_URL=
+BASE_URL=
+
+# Billplz
+BILLPLZ_API_KEY=
+BILLPLZ_SIGNATURE_KEY=
+BILLPLZ_SANDBOX=true
+ONSPRINT_BILLPLZ_EMAIL=
+
+# Stripe
+STRIPE_SECRET_KEY=
+STRIPE_PUBLISHABLE_KEY=
+STRIPE_WEBHOOK_SECRET=
+STRIPE_PRICE_STARTER_MONTHLY=
+STRIPE_PRICE_STARTER_ANNUALLY=
+STRIPE_PRICE_GROWTH_MONTHLY=
+STRIPE_PRICE_GROWTH_ANNUALLY=
+STRIPE_PRICE_PRO_MONTHLY=
+STRIPE_PRICE_PRO_ANNUALLY=
+
+# R2
+R2_PUBLIC_URL=
+
+# Node
+NODE_VERSION=20
+```
 
 ---
 
-# My honest recommendation
+## Deploy
 
-For a printshop app, your **real MVP** is:
+```bash
+# Build and deploy to Cloudflare Workers
+./deploy.sh
 
-* Customers
-* Quotes
-* Orders
-* Artwork approval
-* Payments
+# Or manually
+npx next build
+npx opennextjs-cloudflare build
+npx wrangler deploy
+```
 
-Everything else can wait.
+---
 
-If you want, next I can turn this into a **real Prisma schema + Next.js folder structure** for your app.
+## Database
+
+38 Supabase tables including:
+
+- `shops`, `shop_members` — multi-tenant
+- `orders`, `customers`, `agents`, `payments` — core business
+- `products`, `categories` — catalog
+- `boards`, `board_columns`, `board_cards` — production kanban
+- `store_users`, `store_user_wallet_entries` — customer auth
+- `store_pages`, `store_settings` — website builder
+- `memberships`, `discounts`, `affiliates` — loyalty
+- `notifications`, `proofs`, `sequences` — system
+
+Auto `seq_id` generation via `next_seq()` PostgreSQL function.
+
+---
+
+## Key Design Decisions
+
+1. **No `'use server'` in `'use client'` components** — causes RSC 500 on Cloudflare Workers. All DB calls go through `/api/db` proxy.
+2. **`btoa()` instead of `Buffer.from()`** — Cloudflare Workers compatibility.
+3. **Web Crypto API instead of Node.js `crypto`** — edge runtime.
+4. **Billplz API calls inlined in route handlers** — no shared module imports (chunk loading fails on Cloudflare).
+5. **Stripe SDK replaced with fetch** — Node.js HTTP doesn't work on Cloudflare Workers.
+6. **React Query with 5-min staleTime** — instant navigation, background refetch.
+7. **Cookie-based shopId** — middleware prefetches, ShopProvider reads instantly.
+
+---
+
+## License
+
+Private. All rights reserved.
