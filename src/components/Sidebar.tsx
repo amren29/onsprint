@@ -233,7 +233,7 @@ export const ALL_PERMISSIONS = ['dashboard', 'orders', 'customers', 'payments', 
 export type PermissionKey = typeof ALL_PERMISSIONS[number]
 
 /* ── Component ─────────────────────────────────────── */
-export default function Sidebar() {
+export default function Sidebar({ mobileOpen = false, onNavigate }: { mobileOpen?: boolean; onNavigate?: () => void } = {}) {
   const pathname    = usePathname()
   const router      = useRouter()
   const searchParams = useSearchParams()
@@ -429,7 +429,7 @@ export default function Sidebar() {
   }, [])
 
   return (
-    <aside className={`sidebar${collapsed ? ' collapsed' : ''}`}>
+    <aside className={`sidebar${collapsed ? ' collapsed' : ''}${mobileOpen ? ' mobile-open' : ''}`}>
       {/* Header */}
       <div className="sidebar-header" style={collapsed ? { justifyContent: 'center', padding: 0 } : undefined}>
         {!collapsed && (
@@ -453,7 +453,7 @@ export default function Sidebar() {
           const badge = 0
           const stockBadge = item.label === 'Stock' && !collapsed && lowStockCount > 0 ? lowStockCount : 0
           return (
-            <Link key={item.href} href={item.href} className={`nav-item${isActive ? ' active' : ''}`}>
+            <Link key={item.href} href={item.href} className={`nav-item${isActive ? ' active' : ''}`} onClick={onNavigate}>
               <span className="nav-icon"><item.icon /></span>
               <span className="nav-label">{item.label}</span>
               {badge > 0 && (
@@ -477,6 +477,7 @@ export default function Sidebar() {
           <Link
             href={boards.length > 0 ? `/production?board=${boards[0]?.id}` : '/production'}
             className={`nav-item${isProductionActive ? ' active' : ''}`}
+            onClick={onNavigate}
           >
             <span className="nav-icon"><Icon.Production /></span>
             <span className="nav-label">Production</span>
@@ -487,7 +488,7 @@ export default function Sidebar() {
         {/* Bottom pinned items */}
         <div style={{ marginTop: 'auto', paddingTop: 8, borderTop: '1px solid var(--border)' }}>
           {hasPermission('store') && (
-          <Link href="/storefront" className={`nav-item${pathname === '/storefront' || pathname.startsWith('/storefront/') ? ' active' : ''}`}>
+          <Link href="/storefront" className={`nav-item${pathname === '/storefront' || pathname.startsWith('/storefront/') ? ' active' : ''}`} onClick={onNavigate}>
             <span className="nav-icon"><Icon.Storefront /></span>
             <span className="nav-label">My Store</span>
           </Link>
@@ -497,7 +498,7 @@ export default function Sidebar() {
 
       {/* Footer */}
       <div className="sidebar-footer">
-        <div className="user-profile" onClick={() => router.push('/settings')} style={{ cursor: 'pointer' }}>
+        <div className="user-profile" onClick={() => { router.push('/settings'); onNavigate?.() }} style={{ cursor: 'pointer' }}>
           <div className="user-avatar">{(userName || userEmail || 'A').slice(0, 2).toUpperCase()}</div>
           <div className="user-info">
             <div className="user-name">{userName || userEmail || 'User'}</div>

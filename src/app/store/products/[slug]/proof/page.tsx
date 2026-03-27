@@ -542,20 +542,23 @@ function ProofPageContent({
 
                   <p className="text-xs text-gray-400">{MAX_SIZE_MB}MB max file size</p>
 
-                  {/* Import from Canva */}
+                  {/* Request Design */}
                   <div className="flex items-center gap-3">
                     <div className="flex-1 border-t border-gray-200" />
                     <span className="text-xs text-gray-400">or</span>
                     <div className="flex-1 border-t border-gray-200" />
                   </div>
                   <button
-                    onClick={handleCanvaImport}
-                    className="w-full py-3 rounded-xl border-2 border-[#7B2FBE] text-[#7B2FBE] font-bold text-sm hover:bg-[#7B2FBE] hover:text-white transition-all flex items-center justify-center gap-2"
+                    onClick={() => {
+                      const msg = encodeURIComponent(`Hi, I'd like to request a design for ${productName}. Size: ${activePrintSpecs.trimWidthMm}x${activePrintSpecs.trimHeightMm}mm`)
+                      window.open(`https://wa.me/?text=${msg}`, '_blank', 'noopener,noreferrer')
+                    }}
+                    className="w-full py-3 rounded-xl border-2 border-accent text-accent font-bold text-sm hover:bg-accent hover:text-white transition-all flex items-center justify-center gap-2"
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
+                      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/>
                     </svg>
-                    Import from Canva
+                    Request Design
                   </button>
 
                   {/* Error */}
@@ -760,17 +763,7 @@ function ProofPageContent({
         </>
       )}
 
-      {/* Canva Design Picker Modal */}
-      <CanvaDesignPicker
-        isOpen={canvaPickerOpen}
-        onClose={() => setCanvaPickerOpen(false)}
-        productSlug={slug}
-        productName={productName}
-        trimWidthMm={activePrintSpecs.trimWidthMm}
-        trimHeightMm={activePrintSpecs.trimHeightMm}
-        bleedMm={activePrintSpecs.bleedMm}
-        onDesignExported={handleCanvaDesignExported}
-      />
+      {/* Canva Design Picker — hidden for now */}
 
       {/* ═══════════════════════════════════════════════════════════════════════ */}
       {/* STEP 3: REVIEW                                                        */}

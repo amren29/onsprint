@@ -244,8 +244,7 @@ export default function AccountDashboard() {
         )}
       </div>
 
-      {/* Canva + Quick Actions */}
-      <CanvaSection user={user} />
+      {/* Quick Actions */}
       <QuickActions />
     </div>
   )
