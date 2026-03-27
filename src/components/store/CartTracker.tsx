@@ -1,11 +1,9 @@
-// @ts-nocheck
 'use client'
 
 import { useEffect, useRef } from 'react'
 import { useCartStore } from '@/lib/store/cart-store'
 import { useAuthStore } from '@/lib/store/auth-store'
 import { useStore } from '@/providers/store-context'
-import { upsertAbandonedCart, deleteAbandonedCartBySession } from '@/lib/db/client'
 
 const SESSION_KEY = 'onsprint_cart_session_id'
 
@@ -41,24 +39,33 @@ export default function CartTracker() {
 
       if (items.length === 0) {
         // Cart empty — remove from abandoned carts
-        deleteAbandonedCartBySession(shopId, sessionId).catch(() => {})
+        fetch(`/api/store/abandoned-cart?shopId=${shopId}&sessionId=${sessionId}`, {
+          method: 'DELETE',
+        }).catch(() => {})
         return
       }
 
-      upsertAbandonedCart(shopId, {
-        session_id: sessionId,
-        customer_name: currentUser?.name || 'Guest',
-        customer_email: currentUser?.email || '',
-        is_guest: !currentUser,
-        items: items.map(i => ({
-          name: i.name,
-          qty: i.qty,
-          unitPrice: i.unitPrice,
-          total: i.total,
-          optionSummary: i.optionSummary,
-        })),
-        total_value: items.reduce((s, i) => s + i.total, 0),
-        item_count: items.reduce((s, i) => s + i.qty, 0),
+      fetch('/api/store/abandoned-cart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          shopId,
+          data: {
+            session_id: sessionId,
+            customer_name: currentUser?.name || 'Guest',
+            customer_email: currentUser?.email || '',
+            is_guest: !currentUser,
+            items: items.map(i => ({
+              name: i.name,
+              qty: i.qty,
+              unitPrice: i.unitPrice,
+              total: i.total,
+              optionSummary: i.optionSummary,
+            })),
+            total_value: items.reduce((s, i) => s + i.total, 0),
+            item_count: items.reduce((s, i) => s + i.qty, 0),
+          },
+        }),
       }).catch(err => {
         console.warn('[CartTracker] Failed to sync:', err?.message)
       })

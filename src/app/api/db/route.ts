@@ -57,7 +57,10 @@ export async function POST(req: NextRequest) {
     }
 
     // SECURITY: Verify user session and derive shopId from membership
+    const isWrite = ['insert', 'update', 'upsert', 'delete'].includes(action)
     let shopId = requestedShopId
+    let isAuthenticated = false
+
     if (needsShopId) {
       try {
         const cookieStore = await cookies()
@@ -69,6 +72,7 @@ export async function POST(req: NextRequest) {
         const { data: { user } } = await authClient.auth.getUser()
 
         if (user) {
+          isAuthenticated = true
           // Derive shopId from user's membership — don't trust request
           const { data: membership } = await supabase
             .from('shop_members')
@@ -82,8 +86,13 @@ export async function POST(req: NextRequest) {
           }
         }
       } catch {
-        // If auth check fails, still use requested shopId (for public store routes)
+        // If auth check fails, fall through — reads allowed, writes blocked below
       }
+    }
+
+    // SECURITY: All write operations REQUIRE authenticated session
+    if (isWrite && !isAuthenticated) {
+      return NextResponse.json({ error: 'Authentication required for write operations' }, { status: 403 })
     }
 
     // SECURITY: shopId is REQUIRED for all tenant tables

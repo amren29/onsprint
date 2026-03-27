@@ -1,4 +1,6 @@
 // @ts-nocheck
+// FROZEN — no new functions. New features should use domain-specific API routes.
+// See REFACTORING-PLAN.md for the migration plan.
 /**
  * Client-safe DB helper — all calls go through /api/db proxy (secure, uses service role key).
  * RLS stays enabled on all tables for security.
