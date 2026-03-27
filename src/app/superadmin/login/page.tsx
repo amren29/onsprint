@@ -3,6 +3,41 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
+/* ── Icons ───────────────────────────────────────────── */
+const EyeIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+  </svg>
+)
+const EyeOffIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/>
+    <line x1="1" y1="1" x2="23" y2="23"/>
+  </svg>
+)
+
+/* ── Animated CSS ──────────────────────────────────────── */
+const ANIM_CSS = `
+  @keyframes bubbleFloat1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%  { transform: translate(25px, -30px) scale(1.05); }
+    66%  { transform: translate(-15px, -15px) scale(0.97); }
+  }
+  @keyframes bubbleFloat2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%  { transform: translate(-20px, 25px) scale(0.95); }
+    66%  { transform: translate(18px, 10px) scale(1.03); }
+  }
+  @keyframes bubbleFloat3 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(15px, 20px) scale(1.06); }
+  }
+  @media (max-width: 768px) {
+    .sa-login-grid { grid-template-columns: 1fr !important; }
+    .sa-login-right { display: none !important; }
+  }
+`
+
 export default function SuperAdminLoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -18,7 +53,6 @@ export default function SuperAdminLoginPage() {
     setLoading(true)
 
     try {
-      // Step 1: Sign in via Supabase
       const { signIn } = await import('@/lib/auth-actions')
       const result = await signIn({ email, password })
       if (result.error) {
@@ -27,10 +61,8 @@ export default function SuperAdminLoginPage() {
         return
       }
 
-      // Step 2: Verify super admin access
       const res = await fetch('/api/superadmin/me')
       if (!res.ok) {
-        // Sign them out — they're not a super admin
         await fetch('/api/auth/signout', { method: 'POST' })
         setError('Access denied. This account is not a platform admin.')
         setLoading(false)
@@ -48,174 +80,256 @@ export default function SuperAdminLoginPage() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#0f0f0f',
+      background: '#f0f0f3',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       padding: '24px 16px',
       fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
     }}>
-      <div style={{
+      <style>{ANIM_CSS}</style>
+
+      <div className="sa-login-grid" style={{
         width: '100%',
-        maxWidth: 420,
-        background: '#1a1a1a',
-        borderRadius: 16,
-        padding: '48px 40px',
-        border: '1px solid #2a2a2a',
-        boxShadow: '0 24px 64px rgba(0,0,0,0.4)',
+        maxWidth: 960,
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        borderRadius: 20,
+        overflow: 'hidden',
+        boxShadow: '0 24px 64px rgba(15,23,42,0.12), 0 4px 16px rgba(15,23,42,0.06)',
+        minHeight: 580,
       }}>
-        {/* Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-          <div style={{
-            width: 34, height: 34,
-            background: '#dc2626',
-            borderRadius: 9,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0,
-            color: '#fff',
-            fontSize: 11,
-            fontWeight: 700,
-          }}>
-            SA
-          </div>
-          <span style={{ fontSize: 16, fontWeight: 700, color: '#fff', letterSpacing: '-0.3px' }}>Onsprint</span>
-          <span style={{
-            fontSize: 8,
-            fontWeight: 700,
-            letterSpacing: '0.08em',
-            color: '#fff',
-            background: '#dc2626',
-            padding: '2px 6px',
-            borderRadius: 4,
-            lineHeight: 1,
-          }}>
-            SUPER ADMIN
-          </span>
-        </div>
 
-        {/* Heading */}
-        <div style={{ marginBottom: 32 }}>
-          <h1 style={{ fontSize: 24, fontWeight: 800, color: '#fff', margin: '16px 0 8px', letterSpacing: '-0.5px' }}>
-            Platform Login
-          </h1>
-          <p style={{ fontSize: 13, color: '#888', margin: 0, lineHeight: 1.5 }}>
-            Authorized administrators only.
-          </p>
-        </div>
-
-        {/* Form */}
-        <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {error && (
+        {/* ── LEFT — Form ── */}
+        <div style={{
+          background: '#ffffff',
+          padding: '48px 52px',
+          display: 'flex',
+          flexDirection: 'column',
+        }}>
+          {/* Logo */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 52 }}>
             <div style={{
-              background: 'rgba(220,38,38,0.12)',
-              border: '1px solid rgba(220,38,38,0.3)',
-              borderRadius: 8,
-              padding: '10px 14px',
-              fontSize: 13,
-              color: '#f87171',
+              width: 34, height: 34,
+              background: '#dc2626',
+              borderRadius: 9,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0,
+              color: '#fff',
+              fontSize: 11,
+              fontWeight: 700,
             }}>
-              {error}
+              SA
             </div>
-          )}
-
-          {/* Email */}
-          <div>
-            <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: '#ccc', marginBottom: 6 }}>
-              Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="admin@onsprint.com"
-              style={{
-                width: '100%', boxSizing: 'border-box',
-                padding: '10px 14px',
-                fontSize: 14, color: '#fff',
-                background: '#252525',
-                border: '1.5px solid #333',
-                borderRadius: 8, outline: 'none',
-                fontFamily: 'inherit',
-                transition: 'border-color 0.15s',
-              }}
-              onFocus={e => { e.target.style.borderColor = '#dc2626' }}
-              onBlur={e => { e.target.style.borderColor = '#333' }}
-            />
+            <span style={{ fontSize: 16, fontWeight: 700, color: '#0f172a', letterSpacing: '-0.3px' }}>Onsprint</span>
+            <span style={{
+              fontSize: 8,
+              fontWeight: 700,
+              letterSpacing: '0.08em',
+              color: '#fff',
+              background: '#dc2626',
+              padding: '2px 6px',
+              borderRadius: 4,
+              lineHeight: 1,
+            }}>
+              SUPER ADMIN
+            </span>
           </div>
 
-          {/* Password */}
-          <div>
-            <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: '#ccc', marginBottom: 6 }}>
-              Password
-            </label>
-            <div style={{ position: 'relative' }}>
+          {/* Heading */}
+          <div style={{ marginBottom: 36 }}>
+            <h1 style={{ fontSize: 28, fontWeight: 800, color: '#0f172a', margin: '0 0 8px', letterSpacing: '-0.5px' }}>
+              Platform Login
+            </h1>
+            <p style={{ fontSize: 14, color: '#64748b', margin: 0, lineHeight: 1.5 }}>
+              Authorized administrators only.
+            </p>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleLogin} style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16 }}>
+
+            {/* Email */}
+            <div>
+              <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: '#374151', marginBottom: 6 }}>
+                Email
+              </label>
               <input
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                placeholder="••••••••"
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="admin@onsprint.com"
                 style={{
                   width: '100%', boxSizing: 'border-box',
-                  padding: '10px 40px 10px 14px',
-                  fontSize: 14, color: '#fff',
-                  background: '#252525',
-                  border: '1.5px solid #333',
+                  padding: '10px 14px',
+                  fontSize: 14, color: '#0f172a',
+                  background: '#f8fafc',
+                  border: '1.5px solid #e2e8f0',
                   borderRadius: 8, outline: 'none',
                   fontFamily: 'inherit',
                   transition: 'border-color 0.15s',
                 }}
-                onFocus={e => { e.target.style.borderColor = '#dc2626' }}
-                onBlur={e => { e.target.style.borderColor = '#333' }}
+                onFocus={e => { e.target.style.borderColor = '#dc2626'; e.target.style.background = '#fff' }}
+                onBlur={e => { e.target.style.borderColor = '#e2e8f0'; e.target.style.background = '#f8fafc' }}
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                style={{
-                  position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)',
-                  background: 'none', border: 'none', cursor: 'pointer',
-                  color: '#666', padding: 4,
-                }}
-              >
-                {showPassword ? (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/>
-                    <line x1="1" y1="1" x2="23" y2="23"/>
-                  </svg>
-                ) : (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-                  </svg>
-                )}
-              </button>
             </div>
+
+            {/* Password */}
+            <div>
+              <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: '#374151', marginBottom: 6 }}>
+                Password
+              </label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  style={{
+                    width: '100%', boxSizing: 'border-box',
+                    padding: '10px 40px 10px 14px',
+                    fontSize: 14, color: '#0f172a',
+                    background: '#f8fafc',
+                    border: '1.5px solid #e2e8f0',
+                    borderRadius: 8, outline: 'none',
+                    fontFamily: 'inherit',
+                    transition: 'border-color 0.15s',
+                  }}
+                  onFocus={e => { e.target.style.borderColor = '#dc2626'; e.target.style.background = '#fff' }}
+                  onBlur={e => { e.target.style.borderColor = '#e2e8f0'; e.target.style.background = '#f8fafc' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(v => !v)}
+                  style={{
+                    position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    color: '#94a3b8', padding: 2, display: 'flex', alignItems: 'center',
+                  }}
+                >
+                  {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                </button>
+              </div>
+            </div>
+
+            {/* Error */}
+            {error && (
+              <div style={{ fontSize: 13, color: '#ef4444', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, padding: '8px 12px' }}>
+                {error}
+              </div>
+            )}
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                width: '100%', padding: '11px',
+                background: loading ? '#b91c1c' : '#dc2626',
+                color: '#fff', border: 'none',
+                borderRadius: 8, fontSize: 14, fontWeight: 600,
+                cursor: loading ? 'not-allowed' : 'pointer',
+                fontFamily: 'inherit',
+                transition: 'background 0.15s, transform 0.1s',
+                letterSpacing: '0.1px',
+              }}
+              onMouseEnter={e => { if (!loading) e.currentTarget.style.background = '#b91c1c' }}
+              onMouseLeave={e => { if (!loading) e.currentTarget.style.background = '#dc2626' }}
+            >
+              {loading ? 'Signing in...' : 'Log In'}
+            </button>
+          </form>
+
+          {/* Footer */}
+          <div style={{ marginTop: 28, textAlign: 'center', fontSize: 12, color: '#94a3b8' }}>
+            This is a restricted area. Unauthorized access is prohibited.
+          </div>
+        </div>
+
+        {/* ── RIGHT — Branding panel ── */}
+        <div className="sa-login-right" style={{
+          background: 'linear-gradient(140deg, #7f1d1d 0%, #dc2626 45%, #ef4444 100%)',
+          padding: '48px 40px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          gap: 24,
+          position: 'relative',
+          overflow: 'hidden',
+        }}>
+          {/* Animated bubbles */}
+          <div style={{ position: 'absolute', top: -80, right: -80, width: 300, height: 300, borderRadius: '50%', background: 'rgba(255,255,255,0.05)', pointerEvents: 'none', animation: 'bubbleFloat1 8s ease-in-out infinite' }} />
+          <div style={{ position: 'absolute', bottom: -60, left: -60, width: 220, height: 220, borderRadius: '50%', background: 'rgba(255,255,255,0.04)', pointerEvents: 'none', animation: 'bubbleFloat2 10s ease-in-out infinite' }} />
+          <div style={{ position: 'absolute', top: '40%', left: '50%', width: 160, height: 160, borderRadius: '50%', background: 'rgba(255,255,255,0.03)', pointerEvents: 'none', animation: 'bubbleFloat3 12s ease-in-out infinite' }} />
+
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <h2 style={{
+              fontSize: 28, fontWeight: 800, color: '#ffffff',
+              margin: '0 0 12px', lineHeight: 1.25, letterSpacing: '-0.5px',
+            }}>
+              Platform Administration
+            </h2>
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.72)', margin: 0, lineHeight: 1.6 }}>
+              Manage all shops, users, subscriptions, and revenue across the Onsprint platform from a single dashboard.
+            </p>
           </div>
 
-          {/* Submit */}
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              width: '100%',
-              padding: '11px 0',
-              background: loading ? '#7f1d1d' : '#dc2626',
-              color: '#fff',
-              border: 'none',
-              borderRadius: 8,
-              fontSize: 14,
-              fontWeight: 600,
-              cursor: loading ? 'not-allowed' : 'pointer',
-              fontFamily: 'inherit',
-              marginTop: 8,
-              transition: 'background 0.15s',
-            }}
-          >
-            {loading ? 'Signing in...' : 'Sign In'}
-          </button>
-        </form>
+          {/* Admin mockup */}
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 14, padding: 16, border: '1px solid rgba(255,255,255,0.15)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginBottom: 12 }}>
+                {[
+                  { label: 'Total Shops', value: '24', color: '#fbbf24' },
+                  { label: 'Active Subs', value: '18', color: '#4ade80' },
+                  { label: 'MRR', value: 'RM 2,340', color: '#60a5fa' },
+                ].map(stat => (
+                  <div key={stat.label} style={{
+                    background: 'rgba(255,255,255,0.06)',
+                    borderRadius: 8,
+                    padding: '8px 10px',
+                  }}>
+                    <div style={{ fontSize: 8, color: 'rgba(255,255,255,0.5)', marginBottom: 2 }}>{stat.label}</div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: stat.color }}>{stat.value}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ fontSize: 8, color: 'rgba(255,255,255,0.4)', marginBottom: 6, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Recent Shops</div>
+              {[
+                { name: 'PrintHub KL', plan: 'Pro', status: 'Active' },
+                { name: 'QuickPrint JB', plan: 'Starter', status: 'Active' },
+                { name: 'DesignWorks PJ', plan: 'Trial', status: 'Trial' },
+              ].map((shop, i) => (
+                <div key={shop.name} style={{
+                  padding: '5px 10px',
+                  display: 'grid',
+                  gridTemplateColumns: '1.5fr 0.8fr 0.7fr',
+                  gap: 6,
+                  borderBottom: i < 2 ? '1px solid rgba(255,255,255,0.07)' : 'none',
+                }}>
+                  <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.9)', fontWeight: 600 }}>{shop.name}</div>
+                  <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.5)' }}>{shop.plan}</div>
+                  <span style={{
+                    fontSize: 7, fontWeight: 600,
+                    color: shop.status === 'Active' ? '#4ade80' : '#fbbf24',
+                    background: shop.status === 'Active' ? 'rgba(74,222,128,0.15)' : 'rgba(251,191,36,0.15)',
+                    borderRadius: 4, padding: '1px 4px', display: 'inline-block',
+                  }}>{shop.status}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <p style={{ textAlign: 'center', fontSize: 11, color: '#555', marginTop: 24 }}>
-          This is a restricted area. Unauthorized access is prohibited.
-        </p>
+      {/* Footer */}
+      <div style={{
+        position: 'fixed', bottom: 0, left: 0, right: 0,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: '14px 32px',
+        fontSize: 12, color: '#94a3b8',
+        pointerEvents: 'none',
+      }}>
+        <span>Copyright &copy; 2026 Onsprint</span>
       </div>
     </div>
   )
