@@ -12,6 +12,7 @@ const PUBLIC_ROUTES = [
   '/verify-email',
   '/auth/callback',
   '/api/',
+  '/superadmin/login',
 ]
 
 function isPublicRoute(path: string): boolean {

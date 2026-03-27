@@ -1,32 +1,41 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import SuperAdminSidebar from './SuperAdminSidebar'
 import SuperAdminTopbar from './SuperAdminTopbar'
 
 export default function SuperAdminShell({ children }: { children: React.ReactNode }) {
   const router = useRouter()
+  const pathname = usePathname()
   const [status, setStatus] = useState<'loading' | 'authorized' | 'denied'>('loading')
   const [mobileOpen, setMobileOpen] = useState(false)
   const closeMobile = useCallback(() => setMobileOpen(false), [])
   const toggleMobile = useCallback(() => setMobileOpen(v => !v), [])
 
+  // Login page renders without shell
+  const isLoginPage = pathname === '/superadmin/login'
+
   useEffect(() => {
+    if (isLoginPage) {
+      setStatus('denied')
+      return
+    }
+
     fetch('/api/superadmin/me')
       .then(r => {
         if (r.ok) {
           setStatus('authorized')
         } else {
           setStatus('denied')
-          router.push('/dashboard')
+          router.push('/superadmin/login')
         }
       })
       .catch(() => {
         setStatus('denied')
-        router.push('/dashboard')
+        router.push('/superadmin/login')
       })
-  }, [router])
+  }, [router, isLoginPage])
 
   if (status === 'loading') {
     return (
@@ -37,6 +46,9 @@ export default function SuperAdminShell({ children }: { children: React.ReactNod
       </div>
     )
   }
+
+  // Login page: render children directly (no shell)
+  if (isLoginPage) return <>{children}</>
 
   if (status === 'denied') return null
 
