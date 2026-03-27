@@ -54,19 +54,22 @@ export default function SuperAdminLoginPage() {
   const [error, setError] = useState('')
   const router = useRouter()
 
-  // Handle Google OAuth callback (redirected back with hash tokens)
+  // Handle Google OAuth callback (redirected back with ?code=)
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const hash = window.location.hash
-    if (!hash || !hash.includes('access_token')) return
+    const params = new URLSearchParams(window.location.search)
+    const code = params.get('code')
+    if (!code) return
 
     async function handleOAuthReturn() {
+      setLoading(true)
       try {
         const { createClient } = await import('@/lib/supabase/client')
         const supabase = createClient()
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) {
+        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code!)
+        if (exchangeError) {
           setError('Google sign-in failed.')
+          setLoading(false)
           return
         }
 
@@ -75,6 +78,7 @@ export default function SuperAdminLoginPage() {
         if (!res.ok) {
           await fetch('/api/auth/signout', { method: 'POST' })
           setError('Access denied. This account is not a platform admin.')
+          setLoading(false)
           return
         }
 
@@ -82,6 +86,7 @@ export default function SuperAdminLoginPage() {
         router.refresh()
       } catch {
         setError('Something went wrong.')
+        setLoading(false)
       }
     }
     handleOAuthReturn()
