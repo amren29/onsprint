@@ -90,6 +90,11 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
+  // Super admin routes — skip shop membership validation (just needs session)
+  if (user && path.startsWith('/superadmin')) {
+    return supabaseResponse
+  }
+
   // Prefetch/validate shopId cookie — always verify against actual membership
   if (user && !isPublic) {
     try {

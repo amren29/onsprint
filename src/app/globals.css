@@ -258,6 +258,18 @@ button:where(:not(.store-root button)) { cursor: pointer; border: none; backgrou
   overflow: hidden;
 }
 
+.sa-badge {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #fff;
+  background: #dc2626;
+  padding: 2px 6px;
+  border-radius: 4px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
 .brand-icon {
   width: 28px;
   height: 28px;

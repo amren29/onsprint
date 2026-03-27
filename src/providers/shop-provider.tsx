@@ -39,8 +39,8 @@ export function ShopProvider({ children }: { children: ReactNode }) {
     if (initRef.current) return
     initRef.current = true
 
-    // Skip on store pages
-    if (typeof window !== 'undefined' && window.location.pathname.startsWith('/store')) {
+    // Skip on store pages and super admin pages
+    if (typeof window !== 'undefined' && (window.location.pathname.startsWith('/store') || window.location.pathname.startsWith('/superadmin'))) {
       setState(s => ({ ...s, isLoading: false }))
       return
     }
