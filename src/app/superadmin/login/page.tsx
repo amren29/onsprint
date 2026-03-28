@@ -157,7 +157,7 @@ export default function SuperAdminLoginPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 52 }}>
             <div style={{
               width: 34, height: 34,
-              background: '#dc2626',
+              background: '#006AFF',
               borderRadius: 9,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               flexShrink: 0,
@@ -173,7 +173,7 @@ export default function SuperAdminLoginPage() {
               fontWeight: 700,
               letterSpacing: '0.08em',
               color: '#fff',
-              background: '#dc2626',
+              background: '#006AFF',
               padding: '2px 6px',
               borderRadius: 4,
               lineHeight: 1,
@@ -215,7 +215,7 @@ export default function SuperAdminLoginPage() {
                   fontFamily: 'inherit',
                   transition: 'border-color 0.15s',
                 }}
-                onFocus={e => { e.target.style.borderColor = '#dc2626'; e.target.style.background = '#fff' }}
+                onFocus={e => { e.target.style.borderColor = '#006AFF'; e.target.style.background = '#fff' }}
                 onBlur={e => { e.target.style.borderColor = '#e2e8f0'; e.target.style.background = '#f8fafc' }}
               />
             </div>
@@ -241,7 +241,7 @@ export default function SuperAdminLoginPage() {
                     fontFamily: 'inherit',
                     transition: 'border-color 0.15s',
                   }}
-                  onFocus={e => { e.target.style.borderColor = '#dc2626'; e.target.style.background = '#fff' }}
+                  onFocus={e => { e.target.style.borderColor = '#006AFF'; e.target.style.background = '#fff' }}
                   onBlur={e => { e.target.style.borderColor = '#e2e8f0'; e.target.style.background = '#f8fafc' }}
                 />
                 <button
@@ -260,7 +260,7 @@ export default function SuperAdminLoginPage() {
 
             {/* Error */}
             {error && (
-              <div style={{ fontSize: 13, color: '#ef4444', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, padding: '8px 12px' }}>
+              <div style={{ fontSize: 13, color: '#338bff', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, padding: '8px 12px' }}>
                 {error}
               </div>
             )}
@@ -271,7 +271,7 @@ export default function SuperAdminLoginPage() {
               disabled={loading}
               style={{
                 width: '100%', padding: '11px',
-                background: loading ? '#b91c1c' : '#dc2626',
+                background: loading ? '#005ce6' : '#006AFF',
                 color: '#fff', border: 'none',
                 borderRadius: 8, fontSize: 14, fontWeight: 600,
                 cursor: loading ? 'not-allowed' : 'pointer',
@@ -279,8 +279,8 @@ export default function SuperAdminLoginPage() {
                 transition: 'background 0.15s, transform 0.1s',
                 letterSpacing: '0.1px',
               }}
-              onMouseEnter={e => { if (!loading) e.currentTarget.style.background = '#b91c1c' }}
-              onMouseLeave={e => { if (!loading) e.currentTarget.style.background = '#dc2626' }}
+              onMouseEnter={e => { if (!loading) e.currentTarget.style.background = '#005ce6' }}
+              onMouseLeave={e => { if (!loading) e.currentTarget.style.background = '#006AFF' }}
             >
               {loading ? 'Signing in...' : 'Log In'}
             </button>
@@ -336,7 +336,7 @@ export default function SuperAdminLoginPage() {
 
         {/* ── RIGHT — Branding panel ── */}
         <div className="sa-login-right" style={{
-          background: 'linear-gradient(140deg, #7f1d1d 0%, #dc2626 45%, #ef4444 100%)',
+          background: 'linear-gradient(140deg, #0055d4 0%, #006AFF 45%, #338bff 100%)',
           padding: '48px 40px',
           display: 'flex',
           flexDirection: 'column',

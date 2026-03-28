@@ -118,7 +118,7 @@ export default function SuperAdminSidebar({ mobileOpen, onNavigate }: {
     <aside className={`sidebar${mobileOpen ? ' mobile-open' : ''}`}>
       <div className="sidebar-header">
         <div className="sidebar-brand">
-          <div className="brand-icon" style={{ background: '#dc2626' }}>SA</div>
+          <div className="brand-icon">SA</div>
           <span>Onsprint</span>
           <span className="sa-badge">SUPER ADMIN</span>
         </div>

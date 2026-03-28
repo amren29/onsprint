@@ -263,7 +263,7 @@ button:where(:not(.store-root button)) { cursor: pointer; border: none; backgrou
   font-weight: 700;
   letter-spacing: 0.08em;
   color: #fff;
-  background: #dc2626;
+  background: var(--accent);
   padding: 2px 6px;
   border-radius: 4px;
   line-height: 1;
