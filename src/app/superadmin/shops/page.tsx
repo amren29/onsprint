@@ -42,22 +42,27 @@ export default function SuperAdminShops() {
 
   return (
     <>
-      <h1 style={{ fontSize: 18, fontWeight: 700 }}>Shops</h1>
+      <div className="page-header">
+        <div>
+          <div className="page-title">Shops</div>
+          <div className="page-subtitle">{total} shops across the platform</div>
+        </div>
+      </div>
 
-      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
         <input
           type="text"
           placeholder="Search shops..."
           value={search}
           onChange={e => { setSearch(e.target.value); setPage(1) }}
           className="form-input"
-          style={{ width: 260 }}
+          style={{ width: 240 }}
         />
         <select
           value={planFilter}
           onChange={e => { setPlanFilter(e.target.value); setPage(1) }}
           className="form-input"
-          style={{ width: 140 }}
+          style={{ width: 130 }}
         >
           <option value="">All Plans</option>
           <option value="free">Free</option>
@@ -66,9 +71,6 @@ export default function SuperAdminShops() {
           <option value="pro">Pro</option>
           <option value="business">Business</option>
         </select>
-        <span style={{ color: 'var(--text-muted)', alignSelf: 'center', fontSize: 12 }}>
-          {total} shops total
-        </span>
       </div>
 
       <div className="page-scroll">
@@ -97,18 +99,18 @@ export default function SuperAdminShops() {
                   <td style={{ fontWeight: 500 }}>{shop.name}</td>
                   <td style={{ color: 'var(--text-muted)' }}>{shop.slug}</td>
                   <td>
-                    <span className={`status-badge status-${shop.plan || 'free'}`}>
+                    <span className="badge badge-info" style={{ textTransform: 'capitalize' }}>
                       {shop.plan || 'free'}
                     </span>
                   </td>
-                  <td style={{ color: 'var(--text-muted)', fontSize: 12 }}>
+                  <td style={{ color: 'var(--text-muted)' }}>
                     {new Date(shop.created_at).toLocaleDateString()}
                   </td>
                   <td>
                     {shop.suspended ? (
-                      <span style={{ color: 'var(--negative)', fontWeight: 500, fontSize: 12 }}>Suspended</span>
+                      <span className="badge badge-warning">Suspended</span>
                     ) : (
-                      <span style={{ color: 'var(--success-text)', fontSize: 12 }}>Active</span>
+                      <span className="badge badge-success">Active</span>
                     )}
                   </td>
                 </tr>

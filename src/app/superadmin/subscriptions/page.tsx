@@ -53,37 +53,49 @@ export default function SuperAdminSubscriptions() {
 
   return (
     <>
-      <h1 style={{ fontSize: 18, fontWeight: 700 }}>Subscriptions</h1>
+      <div className="page-header">
+        <div>
+          <div className="page-title">Subscriptions</div>
+          <div className="page-subtitle">Plan overview and billing status for all shops</div>
+        </div>
+      </div>
 
       <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
         <div className="stat-card">
           <div className="stat-card-header">
             <div className="stat-card-label">MRR</div>
+            <span className="stat-card-period">Monthly</span>
           </div>
           <div className="stat-value">RM {data.stats.mrr}</div>
         </div>
         <div className="stat-card">
           <div className="stat-card-header">
             <div className="stat-card-label">Active</div>
+            <span className="stat-card-period">Paid plans</span>
           </div>
-          <div className="stat-value" style={{ color: 'var(--success-text)' }}>{data.stats.activeSubs}</div>
+          <div className="stat-value">{data.stats.activeSubs}</div>
         </div>
         <div className="stat-card">
           <div className="stat-card-header">
             <div className="stat-card-label">Trial</div>
+            <span className="stat-card-period">In progress</span>
           </div>
-          <div className="stat-value" style={{ color: 'var(--warning)' }}>{data.stats.trialSubs}</div>
+          <div className="stat-value">{data.stats.trialSubs}</div>
         </div>
         <div className="stat-card">
           <div className="stat-card-header">
-            <div className="stat-card-label">Expired/Free</div>
+            <div className="stat-card-label">Expired / Free</div>
+            <span className="stat-card-period">Inactive</span>
           </div>
-          <div className="stat-value" style={{ color: 'var(--text-muted)' }}>{data.stats.expiredSubs}</div>
+          <div className="stat-value">{data.stats.expiredSubs}</div>
         </div>
       </div>
 
       <div className="page-scroll">
         <div className="card">
+          <div className="card-header">
+            <h3 className="card-title">All Shops</h3>
+          </div>
           <table className="data-table">
             <thead>
               <tr>
@@ -97,29 +109,22 @@ export default function SuperAdminSubscriptions() {
             <tbody>
               {data.shops.map(shop => {
                 const status = getStatus(shop)
+                const badgeClass = status === 'active' ? 'badge badge-success'
+                  : status === 'trial' ? 'badge badge-warning'
+                  : status === 'expired' ? 'badge badge-pending'
+                  : 'badge badge-pending'
                 return (
                   <tr key={shop.id}>
                     <td style={{ fontWeight: 500 }}>{shop.name}</td>
-                    <td style={{ textTransform: 'capitalize' }}>{shop.plan || 'free'}</td>
-                    <td>
-                      <span style={{
-                        fontSize: 11,
-                        fontWeight: 500,
-                        padding: '2px 8px',
-                        borderRadius: 4,
-                        background: status === 'active' ? 'var(--success-bg)' : status === 'trial' ? 'var(--warning-bg)' : status === 'expired' ? 'var(--danger-bg)' : 'var(--bg-elevated)',
-                        color: status === 'active' ? 'var(--success-text)' : status === 'trial' ? 'var(--warning-text)' : status === 'expired' ? 'var(--danger-text)' : 'var(--text-muted)',
-                      }}>
-                        {status}
-                      </span>
-                    </td>
-                    <td style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+                    <td><span className="badge badge-info" style={{ textTransform: 'capitalize' }}>{shop.plan || 'free'}</span></td>
+                    <td><span className={badgeClass} style={{ textTransform: 'capitalize' }}>{status}</span></td>
+                    <td style={{ color: 'var(--text-muted)' }}>
                       {shop.stripe_subscription_id ? 'Stripe' : 'Manual'}
                     </td>
-                    <td style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+                    <td style={{ color: 'var(--text-muted)' }}>
                       {shop.plan_expires_at
                         ? new Date(shop.plan_expires_at).toLocaleDateString()
-                        : '-'}
+                        : '—'}
                     </td>
                   </tr>
                 )

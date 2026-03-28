@@ -3,25 +3,25 @@
 import { useEffect, useState } from 'react'
 
 const ShopIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
   </svg>
 )
 
 const SubsIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
   </svg>
 )
 
 const RevenueIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
   </svg>
 )
 
 const NewIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
   </svg>
 )
@@ -78,58 +78,53 @@ export default function SuperAdminDashboard() {
     )
   }
 
-  // Build chart data from dailyRevenue
   const entries = Object.entries(stats.dailyRevenue).sort(([a], [b]) => a.localeCompare(b))
   const maxRevenue = Math.max(...entries.map(([, v]) => v), 1)
 
   return (
     <>
-      <h1 style={{ fontSize: 18, fontWeight: 700 }}>Platform Dashboard</h1>
+      <div className="page-header">
+        <div>
+          <div className="page-title">Platform Dashboard</div>
+          <div className="page-subtitle">{stats.totalShops} shops · {stats.totalOrders} orders · {stats.newThisMonth} new this month</div>
+        </div>
+      </div>
 
       <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
         <div className="stat-card">
           <div className="stat-card-header">
-            <div className="stat-card-label">
-              <span className="stat-icon" style={{ color: 'var(--accent)' }}><ShopIcon /></span>
-              Total Shops
-            </div>
+            <div className="stat-card-label"><ShopIcon /> Total Shops</div>
+            <span className="stat-card-period">All time</span>
           </div>
           <div className="stat-value">{stats.totalShops}</div>
         </div>
 
         <div className="stat-card">
           <div className="stat-card-header">
-            <div className="stat-card-label">
-              <span className="stat-icon" style={{ color: 'var(--success-text)' }}><SubsIcon /></span>
-              Active Subs
-            </div>
+            <div className="stat-card-label"><SubsIcon /> Active Subs</div>
+            <span className="stat-card-period">Current</span>
           </div>
           <div className="stat-value">{stats.activeSubs}</div>
         </div>
 
         <div className="stat-card">
           <div className="stat-card-header">
-            <div className="stat-card-label">
-              <span className="stat-icon" style={{ color: 'var(--warning)' }}><RevenueIcon /></span>
-              Revenue (30d)
-            </div>
+            <div className="stat-card-label"><RevenueIcon /> Revenue</div>
+            <span className="stat-card-period">30 days</span>
           </div>
           <div className="stat-value">{formatRM(stats.mrr)}</div>
         </div>
 
         <div className="stat-card">
           <div className="stat-card-header">
-            <div className="stat-card-label">
-              <span className="stat-icon" style={{ color: 'var(--purple-text)' }}><NewIcon /></span>
-              New This Month
-            </div>
+            <div className="stat-card-label"><NewIcon /> New Shops</div>
+            <span className="stat-card-period">This month</span>
           </div>
           <div className="stat-value">{stats.newThisMonth}</div>
         </div>
       </div>
 
       <div className="page-scroll">
-        {/* Revenue Chart */}
         {entries.length > 0 && (
           <div className="card">
             <div className="card-header">
@@ -166,7 +161,6 @@ export default function SuperAdminDashboard() {
           </div>
         )}
 
-        {/* Recent Activity */}
         <div className="card">
           <div className="card-header">
             <h3 className="card-title">Recent Shops</h3>
@@ -186,7 +180,7 @@ export default function SuperAdminDashboard() {
                   <td style={{ fontWeight: 500 }}>{shop.name}</td>
                   <td style={{ color: 'var(--text-muted)' }}>{shop.slug}</td>
                   <td>
-                    <span className={`status-badge status-${shop.plan || 'free'}`}>
+                    <span className="badge badge-info" style={{ textTransform: 'capitalize' }}>
                       {shop.plan || 'free'}
                     </span>
                   </td>

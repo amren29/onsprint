@@ -34,16 +34,21 @@ export default function SuperAdminUsers() {
 
   return (
     <>
-      <h1 style={{ fontSize: 18, fontWeight: 700 }}>Users</h1>
+      <div className="page-header">
+        <div>
+          <div className="page-title">Users</div>
+          <div className="page-subtitle">All registered users across the platform</div>
+        </div>
+      </div>
 
-      <div style={{ display: 'flex', gap: 10 }}>
+      <div style={{ display: 'flex', gap: 8 }}>
         <input
           type="text"
           placeholder="Search by email or name..."
           value={search}
           onChange={e => { setSearch(e.target.value); setPage(1) }}
           className="form-input"
-          style={{ width: 300 }}
+          style={{ width: 280 }}
         />
       </div>
 
@@ -67,11 +72,11 @@ export default function SuperAdminUsers() {
               ) : users.map(user => (
                 <tr key={user.id}>
                   <td>{user.email}</td>
-                  <td>{user.name || '-'}</td>
+                  <td>{user.name || '—'}</td>
                   <td>
                     {user.shops.length > 0 ? (
                       user.shops.map((s, i) => (
-                        <span key={i} style={{ fontSize: 11, background: 'var(--bg-elevated)', padding: '1px 6px', borderRadius: 4, marginRight: 4 }}>
+                        <span key={i} className="badge badge-info" style={{ marginRight: 4 }}>
                           {(s.shops as any)?.name || s.shop_id.slice(0, 8)}
                         </span>
                       ))
@@ -79,10 +84,10 @@ export default function SuperAdminUsers() {
                       <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>No shop</span>
                     )}
                   </td>
-                  <td style={{ color: 'var(--text-muted)', fontSize: 12 }}>
+                  <td style={{ color: 'var(--text-muted)' }}>
                     {new Date(user.created_at).toLocaleDateString()}
                   </td>
-                  <td style={{ color: 'var(--text-muted)', fontSize: 12 }}>
+                  <td style={{ color: 'var(--text-muted)' }}>
                     {user.last_sign_in_at
                       ? new Date(user.last_sign_in_at).toLocaleDateString()
                       : 'Never'}

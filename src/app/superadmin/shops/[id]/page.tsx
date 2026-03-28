@@ -60,45 +60,53 @@ export default function SuperAdminShopDetail() {
 
   return (
     <>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <button
-          onClick={() => router.push('/superadmin/shops')}
-          style={{ color: 'var(--text-muted)', fontSize: 13 }}
-        >
-          &larr; Back
-        </button>
-        <h1 style={{ fontSize: 18, fontWeight: 700 }}>{shop.name}</h1>
-        {shop.suspended && (
-          <span style={{ color: 'var(--negative)', fontSize: 12, fontWeight: 600, background: 'var(--danger-bg)', padding: '2px 8px', borderRadius: 4 }}>
-            SUSPENDED
-          </span>
-        )}
+      <div className="page-header">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <button className="btn-ghost" onClick={() => router.push('/superadmin/shops')} style={{ fontSize: 12 }}>
+            &larr; Back
+          </button>
+          <div>
+            <div className="page-title" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              {shop.name}
+              {shop.suspended && <span className="badge badge-warning">SUSPENDED</span>}
+            </div>
+            <div className="page-subtitle">{shop.slug} · {data.members.length} members · {data.orderCount} orders</div>
+          </div>
+        </div>
+        <div className="page-actions">
+          <button
+            className={shop.suspended ? 'btn-primary' : 'btn-secondary'}
+            onClick={toggleSuspend}
+            disabled={saving}
+            style={!shop.suspended ? { color: 'var(--negative)', borderColor: 'var(--negative)' } : {}}
+          >
+            {saving ? 'Saving...' : shop.suspended ? 'Unsuspend' : 'Suspend'}
+          </button>
+        </div>
+      </div>
+
+      <div className="stat-grid">
+        <div className="stat-card">
+          <div className="stat-card-header">
+            <div className="stat-card-label">Plan</div>
+          </div>
+          <div className="stat-value" style={{ textTransform: 'capitalize' }}>{shop.plan || 'free'}</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-card-header">
+            <div className="stat-card-label">Orders</div>
+          </div>
+          <div className="stat-value">{data.orderCount}</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-card-header">
+            <div className="stat-card-label">Members</div>
+          </div>
+          <div className="stat-value">{data.members.length}</div>
+        </div>
       </div>
 
       <div className="page-scroll">
-        {/* Shop Info */}
-        <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
-          <div className="stat-card">
-            <div className="stat-card-header">
-              <div className="stat-card-label">Plan</div>
-            </div>
-            <div className="stat-value" style={{ textTransform: 'capitalize' }}>{shop.plan || 'free'}</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-card-header">
-              <div className="stat-card-label">Orders</div>
-            </div>
-            <div className="stat-value">{data.orderCount}</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-card-header">
-              <div className="stat-card-label">Members</div>
-            </div>
-            <div className="stat-value">{data.members.length}</div>
-          </div>
-        </div>
-
-        {/* Shop Details */}
         <div className="card">
           <div className="card-header">
             <h3 className="card-title">Shop Details</h3>
@@ -119,7 +127,6 @@ export default function SuperAdminShopDetail() {
           </div>
         </div>
 
-        {/* Members */}
         <div className="card">
           <div className="card-header">
             <h3 className="card-title">Members</h3>
@@ -137,9 +144,9 @@ export default function SuperAdminShopDetail() {
               {data.members.map(m => (
                 <tr key={m.user_id}>
                   <td>{m.email}</td>
-                  <td>{m.name || '-'}</td>
-                  <td style={{ textTransform: 'capitalize' }}>{m.role}</td>
-                  <td style={{ color: 'var(--text-muted)', fontSize: 12 }}>
+                  <td>{m.name || '—'}</td>
+                  <td><span className="badge badge-info" style={{ textTransform: 'capitalize' }}>{m.role}</span></td>
+                  <td style={{ color: 'var(--text-muted)' }}>
                     {new Date(m.created_at).toLocaleDateString()}
                   </td>
                 </tr>
@@ -149,18 +156,6 @@ export default function SuperAdminShopDetail() {
               )}
             </tbody>
           </table>
-        </div>
-
-        {/* Actions */}
-        <div style={{ display: 'flex', gap: 10, padding: '8px 0' }}>
-          <button
-            className={shop.suspended ? 'btn-primary' : 'btn-danger'}
-            onClick={toggleSuspend}
-            disabled={saving}
-            style={{ padding: '8px 20px', borderRadius: 8, fontWeight: 500, fontSize: 13, color: 'white', background: shop.suspended ? 'var(--accent)' : 'var(--negative)' }}
-          >
-            {saving ? 'Saving...' : shop.suspended ? 'Unsuspend Shop' : 'Suspend Shop'}
-          </button>
         </div>
       </div>
     </>

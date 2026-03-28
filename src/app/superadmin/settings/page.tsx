@@ -9,10 +9,14 @@ export default function SuperAdminSettings() {
 
   return (
     <>
-      <h1 style={{ fontSize: 18, fontWeight: 700 }}>Settings</h1>
+      <div className="page-header">
+        <div>
+          <div className="page-title">Settings</div>
+          <div className="page-subtitle">Platform configuration (read-only)</div>
+        </div>
+      </div>
 
       <div className="page-scroll">
-        {/* Plan Pricing */}
         <div className="card">
           <div className="card-header">
             <h3 className="card-title">Plan Pricing</h3>
@@ -37,7 +41,6 @@ export default function SuperAdminSettings() {
           </table>
         </div>
 
-        {/* Environment Info */}
         <div className="card">
           <div className="card-header">
             <h3 className="card-title">Environment</h3>
