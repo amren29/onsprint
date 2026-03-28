@@ -21,6 +21,10 @@ export default function SuperAdminShopDetail() {
   const [notifMessage, setNotifMessage] = useState('')
   const [notifType, setNotifType] = useState('info')
   const [notifStatus, setNotifStatus] = useState('')
+  const [showTransfer, setShowTransfer] = useState(false)
+  const [transferEmail, setTransferEmail] = useState('')
+  const [deleteSlug, setDeleteSlug] = useState('')
+  const [showDelete, setShowDelete] = useState(false)
 
   const id = params.id as string
 
@@ -78,6 +82,38 @@ export default function SuperAdminShopDetail() {
     } else {
       setNotifStatus('Failed to send')
     }
+  }
+
+  async function transferOwnership() {
+    if (!transferEmail) return
+    setSaving(true)
+    const res = await fetch(`/api/superadmin/shops/${id}/transfer`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ new_owner_email: transferEmail }),
+    })
+    if (res.ok) {
+      setShowTransfer(false); setTransferEmail(''); loadShop()
+    } else {
+      const d = await res.json(); alert(d.error)
+    }
+    setSaving(false)
+  }
+
+  async function deleteShop() {
+    if (!deleteSlug || deleteSlug !== data?.shop?.slug) { alert('Slug does not match'); return }
+    setSaving(true)
+    const res = await fetch(`/api/superadmin/shops/${id}/delete`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ confirm_slug: deleteSlug }),
+    })
+    if (res.ok) {
+      router.push('/superadmin/shops')
+    } else {
+      const d = await res.json(); alert(d.error)
+    }
+    setSaving(false)
   }
 
   async function impersonate() {
@@ -276,6 +312,57 @@ export default function SuperAdminShopDetail() {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Transfer Ownership */}
+        <div className="card">
+          <div className="card-header">
+            <h3 className="card-title">Transfer Ownership</h3>
+            {!showTransfer && (
+              <button className="btn-ghost" style={{ fontSize: 12, color: 'var(--accent)' }} onClick={() => setShowTransfer(true)}>Transfer</button>
+            )}
+          </div>
+          {showTransfer && (
+            <div style={{ padding: 16, display: 'flex', gap: 8, alignItems: 'flex-end' }}>
+              <div style={{ flex: 1 }}>
+                <label style={{ display: 'block', fontSize: 11, color: 'var(--text-muted)', marginBottom: 3 }}>New Owner Email</label>
+                <input value={transferEmail} onChange={e => setTransferEmail(e.target.value)} className="form-input" placeholder="newowner@email.com" />
+              </div>
+              <button className="btn-primary" onClick={transferOwnership} disabled={saving || !transferEmail}>
+                {saving ? '...' : 'Transfer'}
+              </button>
+              <button className="btn-secondary" onClick={() => setShowTransfer(false)}>Cancel</button>
+            </div>
+          )}
+        </div>
+
+        {/* Danger Zone */}
+        <div className="card" style={{ borderColor: 'var(--negative)' }}>
+          <div className="card-header">
+            <h3 className="card-title" style={{ color: 'var(--negative)' }}>Danger Zone</h3>
+            {!showDelete && (
+              <button className="btn-ghost" style={{ fontSize: 12, color: 'var(--negative)' }} onClick={() => setShowDelete(true)}>Delete Shop</button>
+            )}
+          </div>
+          {showDelete && (
+            <div style={{ padding: 16 }}>
+              <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 10 }}>
+                Type <strong>{shop.slug}</strong> to confirm deletion. This action cannot be undone.
+              </p>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <input value={deleteSlug} onChange={e => setDeleteSlug(e.target.value)} className="form-input" style={{ width: 200 }} placeholder={shop.slug} />
+                <button
+                  className="btn-primary"
+                  style={{ background: 'var(--negative)' }}
+                  onClick={deleteShop}
+                  disabled={saving || deleteSlug !== shop.slug}
+                >
+                  {saving ? '...' : 'Delete Forever'}
+                </button>
+                <button className="btn-secondary" onClick={() => { setShowDelete(false); setDeleteSlug('') }}>Cancel</button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>

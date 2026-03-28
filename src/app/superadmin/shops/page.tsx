@@ -20,6 +20,11 @@ export default function SuperAdminShops() {
   const [search, setSearch] = useState('')
   const [planFilter, setPlanFilter] = useState('')
   const [loading, setLoading] = useState(true)
+  const [showCreate, setShowCreate] = useState(false)
+  const [newName, setNewName] = useState('')
+  const [newEmail, setNewEmail] = useState('')
+  const [newPlan, setNewPlan] = useState('free')
+  const [creating, setCreating] = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -47,7 +52,43 @@ export default function SuperAdminShops() {
           <div className="page-title">Shops</div>
           <div className="page-subtitle">{total} shops across the platform</div>
         </div>
+        <div className="page-actions">
+          <button className="btn-primary" onClick={() => setShowCreate(!showCreate)}>+ Create Shop</button>
+        </div>
       </div>
+
+      {showCreate && (
+        <div className="card" style={{ marginBottom: 0 }}>
+          <div className="card-header"><h3 className="card-title">Create New Shop</h3></div>
+          <div style={{ padding: 16, display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'flex-end' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: 11, color: 'var(--text-muted)', marginBottom: 3 }}>Shop Name *</label>
+              <input value={newName} onChange={e => setNewName(e.target.value)} className="form-input" style={{ width: 180 }} placeholder="My Print Shop" />
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: 11, color: 'var(--text-muted)', marginBottom: 3 }}>Owner Email</label>
+              <input value={newEmail} onChange={e => setNewEmail(e.target.value)} className="form-input" style={{ width: 200 }} placeholder="owner@email.com" />
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: 11, color: 'var(--text-muted)', marginBottom: 3 }}>Plan</label>
+              <select value={newPlan} onChange={e => setNewPlan(e.target.value)} className="form-input" style={{ width: 110 }}>
+                <option value="free">Free</option><option value="trial">Trial</option><option value="starter">Starter</option><option value="pro">Pro</option><option value="business">Business</option>
+              </select>
+            </div>
+            <button className="btn-primary" disabled={creating || !newName} onClick={async () => {
+              setCreating(true)
+              const res = await fetch('/api/superadmin/shops/create', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: newName, owner_email: newEmail || undefined, plan: newPlan }),
+              })
+              if (res.ok) { setNewName(''); setNewEmail(''); setShowCreate(false); setPage(1) }
+              else { const d = await res.json(); alert(d.error) }
+              setCreating(false)
+            }}>{creating ? '...' : 'Create'}</button>
+            <button className="btn-secondary" onClick={() => setShowCreate(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
 
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
         <input
