@@ -15,6 +15,12 @@ export default function SuperAdminShopDetail() {
   const [data, setData] = useState<ShopDetail | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [selectedPlan, setSelectedPlan] = useState('')
+  const [showNotifyForm, setShowNotifyForm] = useState(false)
+  const [notifTitle, setNotifTitle] = useState('')
+  const [notifMessage, setNotifMessage] = useState('')
+  const [notifType, setNotifType] = useState('info')
+  const [notifStatus, setNotifStatus] = useState('')
 
   const id = params.id as string
 
@@ -22,7 +28,11 @@ export default function SuperAdminShopDetail() {
     setLoading(true)
     fetch(`/api/superadmin/shops/${id}`)
       .then(r => r.json())
-      .then(d => { setData(d); setLoading(false) })
+      .then(d => {
+        setData(d)
+        setSelectedPlan(d.shop?.plan || 'free')
+        setLoading(false)
+      })
       .catch(() => setLoading(false))
   }
 
@@ -38,6 +48,48 @@ export default function SuperAdminShopDetail() {
     })
     loadShop()
     setSaving(false)
+  }
+
+  async function changePlan() {
+    if (!data?.shop || selectedPlan === (data.shop.plan || 'free')) return
+    setSaving(true)
+    await fetch('/api/superadmin/shops', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, plan: selectedPlan }),
+    })
+    loadShop()
+    setSaving(false)
+  }
+
+  async function sendNotification() {
+    if (!notifTitle || !notifMessage) return
+    setNotifStatus('Sending...')
+    const res = await fetch('/api/superadmin/notifications', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ shop_ids: [id], title: notifTitle, message: notifMessage, type: notifType }),
+    })
+    if (res.ok) {
+      setNotifStatus('Sent!')
+      setNotifTitle('')
+      setNotifMessage('')
+      setTimeout(() => { setShowNotifyForm(false); setNotifStatus('') }, 1500)
+    } else {
+      setNotifStatus('Failed to send')
+    }
+  }
+
+  async function impersonate() {
+    if (!confirm(`Login as "${data?.shop?.name}" owner? You'll be redirected to their dashboard.`)) return
+    const res = await fetch('/api/superadmin/impersonate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ shop_id: id }),
+    })
+    if (res.ok) {
+      window.location.href = '/dashboard'
+    }
   }
 
   if (loading) {
@@ -74,6 +126,12 @@ export default function SuperAdminShopDetail() {
           </div>
         </div>
         <div className="page-actions">
+          <button className="btn-secondary" onClick={() => setShowNotifyForm(!showNotifyForm)}>
+            Notify
+          </button>
+          <button className="btn-secondary" onClick={impersonate}>
+            Impersonate
+          </button>
           <button
             className={shop.suspended ? 'btn-primary' : 'btn-secondary'}
             onClick={toggleSuspend}
@@ -90,7 +148,25 @@ export default function SuperAdminShopDetail() {
           <div className="stat-card-header">
             <div className="stat-card-label">Plan</div>
           </div>
-          <div className="stat-value" style={{ textTransform: 'capitalize' }}>{shop.plan || 'free'}</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <select
+              value={selectedPlan}
+              onChange={e => setSelectedPlan(e.target.value)}
+              className="form-input"
+              style={{ width: 120, fontSize: 13 }}
+            >
+              <option value="free">Free</option>
+              <option value="trial">Trial</option>
+              <option value="starter">Starter</option>
+              <option value="pro">Pro</option>
+              <option value="business">Business</option>
+            </select>
+            {selectedPlan !== (shop.plan || 'free') && (
+              <button className="btn-primary" onClick={changePlan} disabled={saving} style={{ fontSize: 12, padding: '5px 12px' }}>
+                {saving ? '...' : 'Save'}
+              </button>
+            )}
+          </div>
         </div>
         <div className="stat-card">
           <div className="stat-card-header">
@@ -107,6 +183,49 @@ export default function SuperAdminShopDetail() {
       </div>
 
       <div className="page-scroll">
+        {/* Notify Form */}
+        {showNotifyForm && (
+          <div className="card">
+            <div className="card-header">
+              <h3 className="card-title">Send Notification to {shop.name}</h3>
+            </div>
+            <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <input
+                  type="text"
+                  placeholder="Title"
+                  value={notifTitle}
+                  onChange={e => setNotifTitle(e.target.value)}
+                  className="form-input"
+                  style={{ flex: 1 }}
+                />
+                <select value={notifType} onChange={e => setNotifType(e.target.value)} className="form-input" style={{ width: 100 }}>
+                  <option value="info">Info</option>
+                  <option value="success">Success</option>
+                  <option value="warning">Warning</option>
+                  <option value="danger">Danger</option>
+                </select>
+              </div>
+              <textarea
+                placeholder="Message..."
+                value={notifMessage}
+                onChange={e => setNotifMessage(e.target.value)}
+                className="form-input"
+                rows={3}
+                style={{ resize: 'vertical' }}
+              />
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <button className="btn-primary" onClick={sendNotification} disabled={!notifTitle || !notifMessage}>
+                  Send
+                </button>
+                <button className="btn-secondary" onClick={() => setShowNotifyForm(false)}>Cancel</button>
+                {notifStatus && <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>{notifStatus}</span>}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Shop Details */}
         <div className="card">
           <div className="card-header">
             <h3 className="card-title">Shop Details</h3>
@@ -127,6 +246,7 @@ export default function SuperAdminShopDetail() {
           </div>
         </div>
 
+        {/* Members */}
         <div className="card">
           <div className="card-header">
             <h3 className="card-title">Members</h3>

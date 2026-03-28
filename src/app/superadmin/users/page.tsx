@@ -16,6 +16,7 @@ export default function SuperAdminUsers() {
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(true)
+  const [resetting, setResetting] = useState<string | null>(null)
 
   useEffect(() => {
     setLoading(true)
@@ -31,6 +32,23 @@ export default function SuperAdminUsers() {
       })
       .catch(() => setLoading(false))
   }, [search, page])
+
+  async function resetPassword(userId: string, email: string) {
+    if (!confirm(`Send password reset email to ${email}?`)) return
+    setResetting(userId)
+    const res = await fetch('/api/superadmin/users/reset-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: userId }),
+    })
+    if (res.ok) {
+      alert(`Reset email sent to ${email}`)
+    } else {
+      const data = await res.json()
+      alert(`Failed: ${data.error}`)
+    }
+    setResetting(null)
+  }
 
   return (
     <>
@@ -62,13 +80,14 @@ export default function SuperAdminUsers() {
                 <th>Shop(s)</th>
                 <th>Created</th>
                 <th>Last Sign In</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={5} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>Loading...</td></tr>
+                <tr><td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>Loading...</td></tr>
               ) : users.length === 0 ? (
-                <tr><td colSpan={5} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>No users found</td></tr>
+                <tr><td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>No users found</td></tr>
               ) : users.map(user => (
                 <tr key={user.id}>
                   <td>{user.email}</td>
@@ -92,6 +111,16 @@ export default function SuperAdminUsers() {
                       ? new Date(user.last_sign_in_at).toLocaleDateString()
                       : 'Never'}
                   </td>
+                  <td>
+                    <button
+                      className="btn-ghost"
+                      style={{ fontSize: 11, color: 'var(--accent)' }}
+                      onClick={() => resetPassword(user.id, user.email)}
+                      disabled={resetting === user.id}
+                    >
+                      {resetting === user.id ? '...' : 'Reset Password'}
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -99,23 +128,9 @@ export default function SuperAdminUsers() {
         </div>
 
         <div style={{ display: 'flex', gap: 8, justifyContent: 'center', padding: '12px 0' }}>
-          <button
-            className="btn-secondary"
-            disabled={page <= 1}
-            onClick={() => setPage(p => p - 1)}
-          >
-            Previous
-          </button>
-          <span style={{ alignSelf: 'center', color: 'var(--text-muted)', fontSize: 12 }}>
-            Page {page}
-          </span>
-          <button
-            className="btn-secondary"
-            onClick={() => setPage(p => p + 1)}
-            disabled={users.length < 20}
-          >
-            Next
-          </button>
+          <button className="btn-secondary" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>Previous</button>
+          <span style={{ alignSelf: 'center', color: 'var(--text-muted)', fontSize: 12 }}>Page {page}</span>
+          <button className="btn-secondary" onClick={() => setPage(p => p + 1)} disabled={users.length < 20}>Next</button>
         </div>
       </div>
     </>

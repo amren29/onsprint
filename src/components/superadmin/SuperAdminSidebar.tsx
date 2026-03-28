@@ -21,6 +21,12 @@ const UsersIcon = () => (
   </svg>
 )
 
+const OrdersIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/>
+  </svg>
+)
+
 const SubsIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
@@ -42,6 +48,7 @@ const BackIcon = () => (
 const NAV_ITEMS = [
   { href: '/superadmin', label: 'Dashboard', icon: DashboardIcon, exact: true },
   { href: '/superadmin/shops', label: 'Shops', icon: ShopIcon },
+  { href: '/superadmin/orders', label: 'Orders', icon: OrdersIcon },
   { href: '/superadmin/users', label: 'Users', icon: UsersIcon },
   { href: '/superadmin/subscriptions', label: 'Subscriptions', icon: SubsIcon },
   { href: '/superadmin/settings', label: 'Settings', icon: SettingsIcon },
