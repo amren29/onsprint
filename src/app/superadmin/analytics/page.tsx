@@ -32,13 +32,6 @@ export default function SuperAdminAnalytics() {
     }
   }, [tab, period])
 
-  const tabStyle = (t: Tab) => ({
-    padding: '6px 14px', borderRadius: 6, fontSize: 12, fontWeight: 500,
-    background: tab === t ? 'var(--accent)' : 'var(--bg-elevated)',
-    color: tab === t ? '#fff' : 'var(--text-secondary)',
-    cursor: 'pointer', border: 'none',
-  })
-
   return (
     <>
       <div className="page-header">
@@ -58,11 +51,13 @@ export default function SuperAdminAnalytics() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: 4 }}>
-        <button style={tabStyle('revenue')} onClick={() => setTab('revenue')}>Revenue</button>
-        <button style={tabStyle('growth')} onClick={() => setTab('growth')}>Growth</button>
-        <button style={tabStyle('leaderboard')} onClick={() => setTab('leaderboard')}>Leaderboard</button>
-        <button style={tabStyle('churn')} onClick={() => setTab('churn')}>Churn</button>
+      <div className="filter-row">
+        <div className="filter-bar">
+          <button className={`filter-tab${tab === 'revenue' ? ' active' : ''}`} onClick={() => setTab('revenue')}>Revenue</button>
+          <button className={`filter-tab${tab === 'growth' ? ' active' : ''}`} onClick={() => setTab('growth')}>Growth</button>
+          <button className={`filter-tab${tab === 'leaderboard' ? ' active' : ''}`} onClick={() => setTab('leaderboard')}>Leaderboard</button>
+          <button className={`filter-tab${tab === 'churn' ? ' active' : ''}`} onClick={() => setTab('churn')}>Churn</button>
+        </div>
       </div>
 
       <div className="page-scroll">
@@ -114,7 +109,7 @@ export default function SuperAdminAnalytics() {
               <tbody>
                 {growthData.series.map((s: any) => (
                   <tr key={s.month}>
-                    <td style={{ fontWeight: 500 }}>{s.month}</td>
+                    <td><div className="cell-name">{s.month}</div></td>
                     <td>{s.count}</td>
                     <td style={{ color: 'var(--accent)', fontWeight: 600 }}>{s.cumulative}</td>
                   </tr>
@@ -131,10 +126,10 @@ export default function SuperAdminAnalytics() {
                 {leaderboardData.leaderboard.map((s: any, i: number) => (
                   <tr key={s.shop_id}>
                     <td style={{ fontWeight: 700, color: i < 3 ? 'var(--accent)' : 'var(--text-muted)' }}>{i + 1}</td>
-                    <td style={{ fontWeight: 500 }}>{s.name || s.shop_id?.slice(0, 8)}</td>
+                    <td><div className="cell-name">{s.name || s.shop_id?.slice(0, 8)}</div></td>
                     <td><span className="badge badge-info" style={{ textTransform: 'capitalize' }}>{s.plan || 'free'}</span></td>
                     <td>{s.orders}</td>
-                    <td style={{ fontWeight: 600 }}>{fmtRM(s.revenue)}</td>
+                    <td><div className="cell-name">{fmtRM(s.revenue)}</div></td>
                   </tr>
                 ))}
                 {leaderboardData.leaderboard.length === 0 && (
@@ -167,7 +162,7 @@ export default function SuperAdminAnalytics() {
                   <tbody>
                     {churnData.atRisk.map((s: any) => (
                       <tr key={s.id}>
-                        <td style={{ fontWeight: 500 }}>{s.name}</td>
+                        <td><div className="cell-name">{s.name}</div></td>
                         <td><span className="badge badge-info" style={{ textTransform: 'capitalize' }}>{s.plan || 'free'}</span></td>
                         <td>{s.orderCount}</td>
                         <td style={{ color: 'var(--warning)' }}>{new Date(s.lastOrder).toLocaleDateString()}</td>
@@ -185,7 +180,7 @@ export default function SuperAdminAnalytics() {
                   <tbody>
                     {churnData.churned.map((s: any) => (
                       <tr key={s.id}>
-                        <td style={{ fontWeight: 500 }}>{s.name}</td>
+                        <td><div className="cell-name">{s.name}</div></td>
                         <td><span className="badge badge-info" style={{ textTransform: 'capitalize' }}>{s.plan || 'free'}</span></td>
                         <td>{s.orderCount}</td>
                         <td style={{ color: 'var(--negative)' }}>{new Date(s.lastOrder).toLocaleDateString()}</td>

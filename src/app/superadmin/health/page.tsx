@@ -40,7 +40,7 @@ export default function SuperAdminHealth() {
               {data.overall}
             </span>
           )}
-          <button className="btn-secondary" onClick={load} disabled={loading}>
+          <button className="topbar-btn" onClick={load} disabled={loading}>
             {loading ? '...' : 'Refresh'}
           </button>
         </div>
@@ -51,7 +51,7 @@ export default function SuperAdminHealth() {
           <div style={{ color: 'var(--text-muted)', padding: 40, textAlign: 'center' }}>Checking health...</div>
         ) : data ? (
           <>
-            <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+            <div className="finance-stats">
               {Object.entries(data.checks as Record<string, { status: string; detail: string }>).map(([name, check]) => (
                 <div className="stat-card" key={name}>
                   <div className="stat-card-header">
@@ -64,7 +64,7 @@ export default function SuperAdminHealth() {
                   <div style={{ fontSize: 12, color: statusColor(check.status), fontWeight: 500, marginTop: 4 }}>
                     {check.status.toUpperCase()}
                   </div>
-                  <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>
+                  <div className="cell-sub" style={{ marginTop: 2 }}>
                     {check.detail}
                   </div>
                 </div>
@@ -74,13 +74,13 @@ export default function SuperAdminHealth() {
             <div className="card">
               <div className="card-header"><h3 className="card-title">Platform Metrics</h3></div>
               <div style={{ padding: 16, display: 'grid', gridTemplateColumns: '160px 1fr', gap: '8px 16px', fontSize: 13 }}>
-                <span style={{ color: 'var(--text-muted)' }}>Total Shops</span>
+                <span className="form-label">Total Shops</span>
                 <span style={{ fontWeight: 600 }}>{data.metrics.shops}</span>
-                <span style={{ color: 'var(--text-muted)' }}>Total Orders</span>
+                <span className="form-label">Total Orders</span>
                 <span style={{ fontWeight: 600 }}>{data.metrics.orders}</span>
-                <span style={{ color: 'var(--text-muted)' }}>Platform</span>
+                <span className="form-label">Platform</span>
                 <span>{data.metrics.platform}</span>
-                <span style={{ color: 'var(--text-muted)' }}>Runtime</span>
+                <span className="form-label">Runtime</span>
                 <span>{data.metrics.runtime}</span>
               </div>
             </div>

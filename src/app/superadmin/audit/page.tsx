@@ -32,16 +32,19 @@ export default function SuperAdminAudit() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: 8 }}>
-        <select value={actionFilter} onChange={e => { setActionFilter(e.target.value); setPage(1) }} className="form-input" style={{ width: 200 }}>
-          <option value="">All Actions</option>
-          <option value="shop_created">Shop Created</option>
-          <option value="shop_deleted">Shop Deleted</option>
-          <option value="shop_ownership_transferred">Ownership Transfer</option>
-          <option value="coupon_created">Coupon Created</option>
-          <option value="coupon_deactivated">Coupon Deactivated</option>
-          <option value="announcement_sent">Announcement Sent</option>
-        </select>
+      <div className="filter-row">
+        <div className="filter-bar" />
+        <div className="filter-right">
+          <select value={actionFilter} onChange={e => { setActionFilter(e.target.value); setPage(1) }} className="form-input" style={{ width: 200 }}>
+            <option value="">All Actions</option>
+            <option value="shop_created">Shop Created</option>
+            <option value="shop_deleted">Shop Deleted</option>
+            <option value="shop_ownership_transferred">Ownership Transfer</option>
+            <option value="coupon_created">Coupon Created</option>
+            <option value="coupon_deactivated">Coupon Deactivated</option>
+            <option value="announcement_sent">Announcement Sent</option>
+          </select>
+        </div>
       </div>
 
       <div className="page-scroll">
@@ -55,18 +58,18 @@ export default function SuperAdminAudit() {
                 <tr><td colSpan={5} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>No audit logs</td></tr>
               ) : logs.map(log => (
                 <tr key={log.id}>
-                  <td style={{ color: 'var(--text-muted)', fontSize: 11, whiteSpace: 'nowrap' }}>
+                  <td><div className="cell-sub" style={{ whiteSpace: 'nowrap' }}>
                     {new Date(log.created_at).toLocaleString()}
-                  </td>
-                  <td>{log.admin_email}</td>
+                  </div></td>
+                  <td><div className="cell-name">{log.admin_email}</div></td>
                   <td><span className="badge badge-info">{log.action}</span></td>
                   <td style={{ fontSize: 11 }}>
                     {log.entity_type && <span>{log.entity_type}</span>}
-                    {log.entity_id && <span style={{ color: 'var(--text-muted)', marginLeft: 4 }}>{log.entity_id.slice(0, 8)}</span>}
+                    {log.entity_id && <span className="cell-sub" style={{ marginLeft: 4 }}>{log.entity_id.slice(0, 8)}</span>}
                   </td>
-                  <td style={{ fontSize: 11, color: 'var(--text-muted)', maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <td><div className="cell-sub" style={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {JSON.stringify(log.details)}
-                  </td>
+                  </div></td>
                 </tr>
               ))}
             </tbody>

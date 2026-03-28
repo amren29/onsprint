@@ -71,7 +71,7 @@ export default function SuperAdminCatalog() {
                         <button className="btn-ghost" style={{ fontSize: 11 }} onClick={() => setRenaming(null)}>Cancel</button>
                       </div>
                     ) : (
-                      <span style={{ fontWeight: 500 }}>{c.name}</span>
+                      <div className="cell-name">{c.name}</div>
                     )}
                   </td>
                   <td>{c.shopCount}</td>

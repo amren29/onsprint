@@ -162,14 +162,14 @@ export default function SuperAdminShopDetail() {
           </div>
         </div>
         <div className="page-actions">
-          <button className="btn-secondary" onClick={() => setShowNotifyForm(!showNotifyForm)}>
+          <button className="topbar-btn" onClick={() => setShowNotifyForm(!showNotifyForm)}>
             Notify
           </button>
-          <button className="btn-secondary" onClick={impersonate}>
+          <button className="topbar-btn" onClick={impersonate}>
             Impersonate
           </button>
           <button
-            className={shop.suspended ? 'btn-primary' : 'btn-secondary'}
+            className={shop.suspended ? 'btn-primary' : 'topbar-btn'}
             onClick={toggleSuspend}
             disabled={saving}
             style={!shop.suspended ? { color: 'var(--negative)', borderColor: 'var(--negative)' } : {}}
@@ -227,29 +227,37 @@ export default function SuperAdminShopDetail() {
             </div>
             <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
               <div style={{ display: 'flex', gap: 8 }}>
-                <input
-                  type="text"
-                  placeholder="Title"
-                  value={notifTitle}
-                  onChange={e => setNotifTitle(e.target.value)}
-                  className="form-input"
-                  style={{ flex: 1 }}
-                />
-                <select value={notifType} onChange={e => setNotifType(e.target.value)} className="form-input" style={{ width: 100 }}>
-                  <option value="info">Info</option>
-                  <option value="success">Success</option>
-                  <option value="warning">Warning</option>
-                  <option value="danger">Danger</option>
-                </select>
+                <div style={{ flex: 1 }}>
+                  <span className="form-label">Title</span>
+                  <input
+                    type="text"
+                    placeholder="Title"
+                    value={notifTitle}
+                    onChange={e => setNotifTitle(e.target.value)}
+                    className="form-input"
+                  />
+                </div>
+                <div>
+                  <span className="form-label">Type</span>
+                  <select value={notifType} onChange={e => setNotifType(e.target.value)} className="form-input" style={{ width: 100 }}>
+                    <option value="info">Info</option>
+                    <option value="success">Success</option>
+                    <option value="warning">Warning</option>
+                    <option value="danger">Danger</option>
+                  </select>
+                </div>
               </div>
-              <textarea
-                placeholder="Message..."
-                value={notifMessage}
-                onChange={e => setNotifMessage(e.target.value)}
-                className="form-input"
-                rows={3}
-                style={{ resize: 'vertical' }}
-              />
+              <div>
+                <span className="form-label">Message</span>
+                <textarea
+                  placeholder="Message..."
+                  value={notifMessage}
+                  onChange={e => setNotifMessage(e.target.value)}
+                  className="form-input"
+                  rows={3}
+                  style={{ resize: 'vertical' }}
+                />
+              </div>
               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                 <button className="btn-primary" onClick={sendNotification} disabled={!notifTitle || !notifMessage}>
                   Send
@@ -267,15 +275,15 @@ export default function SuperAdminShopDetail() {
             <h3 className="card-title">Shop Details</h3>
           </div>
           <div style={{ padding: 16, display: 'grid', gridTemplateColumns: '120px 1fr', gap: '8px 16px', fontSize: 13 }}>
-            <span style={{ color: 'var(--text-muted)' }}>ID</span>
+            <span className="form-label">ID</span>
             <span style={{ fontFamily: 'monospace', fontSize: 11 }}>{shop.id}</span>
-            <span style={{ color: 'var(--text-muted)' }}>Slug</span>
+            <span className="form-label">Slug</span>
             <span>{shop.slug}</span>
-            <span style={{ color: 'var(--text-muted)' }}>Created</span>
+            <span className="form-label">Created</span>
             <span>{new Date(shop.created_at).toLocaleString()}</span>
             {shop.plan_expires_at && (
               <>
-                <span style={{ color: 'var(--text-muted)' }}>Plan Expires</span>
+                <span className="form-label">Plan Expires</span>
                 <span>{new Date(shop.plan_expires_at).toLocaleString()}</span>
               </>
             )}
@@ -299,12 +307,10 @@ export default function SuperAdminShopDetail() {
             <tbody>
               {data.members.map(m => (
                 <tr key={m.user_id}>
-                  <td>{m.email}</td>
-                  <td>{m.name || '—'}</td>
+                  <td><div className="cell-name">{m.email}</div></td>
+                  <td><div className="cell-sub">{m.name || '—'}</div></td>
                   <td><span className="badge badge-info" style={{ textTransform: 'capitalize' }}>{m.role}</span></td>
-                  <td style={{ color: 'var(--text-muted)' }}>
-                    {new Date(m.created_at).toLocaleDateString()}
-                  </td>
+                  <td><div className="cell-sub">{new Date(m.created_at).toLocaleDateString()}</div></td>
                 </tr>
               ))}
               {data.members.length === 0 && (
@@ -319,13 +325,13 @@ export default function SuperAdminShopDetail() {
           <div className="card-header">
             <h3 className="card-title">Transfer Ownership</h3>
             {!showTransfer && (
-              <button className="btn-ghost" style={{ fontSize: 12, color: 'var(--accent)' }} onClick={() => setShowTransfer(true)}>Transfer</button>
+              <button className="topbar-btn" style={{ fontSize: 12 }} onClick={() => setShowTransfer(true)}>Transfer</button>
             )}
           </div>
           {showTransfer && (
             <div style={{ padding: 16, display: 'flex', gap: 8, alignItems: 'flex-end' }}>
               <div style={{ flex: 1 }}>
-                <label style={{ display: 'block', fontSize: 11, color: 'var(--text-muted)', marginBottom: 3 }}>New Owner Email</label>
+                <span className="form-label">New Owner Email</span>
                 <input value={transferEmail} onChange={e => setTransferEmail(e.target.value)} className="form-input" placeholder="newowner@email.com" />
               </div>
               <button className="btn-primary" onClick={transferOwnership} disabled={saving || !transferEmail}>

@@ -59,15 +59,15 @@ export default function SuperAdminUsers() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: 8 }}>
-        <input
-          type="text"
-          placeholder="Search by email or name..."
-          value={search}
-          onChange={e => { setSearch(e.target.value); setPage(1) }}
-          className="form-input"
-          style={{ width: 280 }}
-        />
+      <div className="filter-row">
+        <div className="filter-bar" />
+        <div className="filter-right">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--r-md)', padding: '6px 12px' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input value={search} onChange={e => { setSearch(e.target.value); setPage(1) }} placeholder="Search by email or name..."
+              style={{ border: 'none', outline: 'none', background: 'transparent', fontSize: 12.5, color: 'var(--text-primary)', width: 200 }} />
+          </div>
+        </div>
       </div>
 
       <div className="page-scroll">
@@ -90,8 +90,8 @@ export default function SuperAdminUsers() {
                 <tr><td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>No users found</td></tr>
               ) : users.map(user => (
                 <tr key={user.id}>
-                  <td>{user.email}</td>
-                  <td>{user.name || '—'}</td>
+                  <td><div className="cell-name">{user.email}</div></td>
+                  <td><div className="cell-sub">{user.name || '—'}</div></td>
                   <td>
                     {user.shops.length > 0 ? (
                       user.shops.map((s, i) => (
@@ -103,14 +103,12 @@ export default function SuperAdminUsers() {
                       <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>No shop</span>
                     )}
                   </td>
-                  <td style={{ color: 'var(--text-muted)' }}>
-                    {new Date(user.created_at).toLocaleDateString()}
-                  </td>
-                  <td style={{ color: 'var(--text-muted)' }}>
+                  <td><div className="cell-sub">{new Date(user.created_at).toLocaleDateString()}</div></td>
+                  <td><div className="cell-sub">
                     {user.last_sign_in_at
                       ? new Date(user.last_sign_in_at).toLocaleDateString()
                       : 'Never'}
-                  </td>
+                  </div></td>
                   <td>
                     <button
                       className="btn-ghost"

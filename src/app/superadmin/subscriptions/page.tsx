@@ -60,7 +60,7 @@ export default function SuperAdminSubscriptions() {
         </div>
       </div>
 
-      <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+      <div className="finance-stats">
         <div className="stat-card">
           <div className="stat-card-header">
             <div className="stat-card-label">MRR</div>
@@ -115,17 +115,15 @@ export default function SuperAdminSubscriptions() {
                   : 'badge badge-pending'
                 return (
                   <tr key={shop.id}>
-                    <td style={{ fontWeight: 500 }}>{shop.name}</td>
+                    <td><div className="cell-name">{shop.name}</div></td>
                     <td><span className="badge badge-info" style={{ textTransform: 'capitalize' }}>{shop.plan || 'free'}</span></td>
                     <td><span className={badgeClass} style={{ textTransform: 'capitalize' }}>{status}</span></td>
-                    <td style={{ color: 'var(--text-muted)' }}>
-                      {shop.stripe_subscription_id ? 'Stripe' : 'Manual'}
-                    </td>
-                    <td style={{ color: 'var(--text-muted)' }}>
+                    <td><div className="cell-sub">{shop.stripe_subscription_id ? 'Stripe' : 'Manual'}</div></td>
+                    <td><div className="cell-sub">
                       {shop.plan_expires_at
                         ? new Date(shop.plan_expires_at).toLocaleDateString()
                         : '—'}
-                    </td>
+                    </div></td>
                   </tr>
                 )
               })}

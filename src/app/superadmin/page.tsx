@@ -7,19 +7,16 @@ const ShopIcon = () => (
     <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
   </svg>
 )
-
 const SubsIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
   </svg>
 )
-
 const RevenueIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
   </svg>
 )
-
 const NewIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
@@ -36,9 +33,7 @@ interface Stats {
   recentShops: Array<{ id: string; name: string; slug: string; plan: string; created_at: string }>
 }
 
-function formatRM(n: number) {
-  return `RM ${n.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-}
+const fmtRM = (n: number) => `RM ${(n || 0).toLocaleString('en-MY', { minimumFractionDigits: 2 })}`
 
 function relativeTime(iso: string): string {
   const diff = Date.now() - new Date(iso).getTime()
@@ -62,20 +57,8 @@ export default function SuperAdminDashboard() {
       .catch(() => setLoading(false))
   }, [])
 
-  if (loading) {
-    return (
-      <div className="page-scroll">
-        <div style={{ color: 'var(--text-muted)', padding: '40px 0', textAlign: 'center' }}>Loading dashboard...</div>
-      </div>
-    )
-  }
-
-  if (!stats) {
-    return (
-      <div className="page-scroll">
-        <div style={{ color: 'var(--text-muted)', padding: '40px 0', textAlign: 'center' }}>Failed to load stats</div>
-      </div>
-    )
+  if (loading || !stats) {
+    return <div className="page-scroll"><div style={{ color: 'var(--text-muted)', padding: '40px 0', textAlign: 'center' }}>{loading ? 'Loading dashboard...' : 'Failed to load stats'}</div></div>
   }
 
   const entries = Object.entries(stats.dailyRevenue).sort(([a], [b]) => a.localeCompare(b))
@@ -90,37 +73,38 @@ export default function SuperAdminDashboard() {
         </div>
       </div>
 
-      <div className="stat-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+      <div className="finance-stats">
         <div className="stat-card">
           <div className="stat-card-header">
             <div className="stat-card-label"><ShopIcon /> Total Shops</div>
             <span className="stat-card-period">All time</span>
           </div>
           <div className="stat-value">{stats.totalShops}</div>
+          <div className="stat-vs">{stats.newThisMonth} new this month</div>
         </div>
-
         <div className="stat-card">
           <div className="stat-card-header">
             <div className="stat-card-label"><SubsIcon /> Active Subs</div>
             <span className="stat-card-period">Current</span>
           </div>
           <div className="stat-value">{stats.activeSubs}</div>
+          <div className="stat-vs">paid plans</div>
         </div>
-
         <div className="stat-card">
           <div className="stat-card-header">
             <div className="stat-card-label"><RevenueIcon /> Revenue</div>
             <span className="stat-card-period">30 days</span>
           </div>
-          <div className="stat-value">{formatRM(stats.mrr)}</div>
+          <div className="stat-value">{fmtRM(stats.mrr)}</div>
+          <div className="stat-vs">platform-wide</div>
         </div>
-
         <div className="stat-card">
           <div className="stat-card-header">
             <div className="stat-card-label"><NewIcon /> New Shops</div>
             <span className="stat-card-period">This month</span>
           </div>
           <div className="stat-value">{stats.newThisMonth}</div>
+          <div className="stat-vs">registrations</div>
         </div>
       </div>
 
@@ -130,29 +114,17 @@ export default function SuperAdminDashboard() {
             <div className="card-header">
               <h3 className="card-title">Daily Revenue (Last 30 Days)</h3>
             </div>
-            <div style={{ padding: '16px', overflowX: 'auto' }}>
+            <div style={{ padding: 16, overflowX: 'auto' }}>
               <svg width="100%" height="200" viewBox={`0 0 ${Math.max(entries.length * 24, 300)} 200`} style={{ minWidth: 300 }}>
                 {entries.map(([date, value], i) => {
                   const barHeight = (value / maxRevenue) * 160
                   const x = i * 24 + 4
                   return (
                     <g key={date}>
-                      <rect
-                        x={x}
-                        y={180 - barHeight}
-                        width="16"
-                        height={barHeight}
-                        rx="3"
-                        fill="var(--accent)"
-                        opacity="0.8"
-                      >
-                        <title>{date}: {formatRM(value)}</title>
+                      <rect x={x} y={180 - barHeight} width="16" height={barHeight} rx="3" fill="var(--accent)" opacity="0.8">
+                        <title>{date}: {fmtRM(value)}</title>
                       </rect>
-                      {i % 5 === 0 && (
-                        <text x={x + 8} y="196" textAnchor="middle" fontSize="9" fill="var(--text-muted)">
-                          {date.slice(5)}
-                        </text>
-                      )}
+                      {i % 5 === 0 && <text x={x + 8} y="196" textAnchor="middle" fontSize="9" fill="var(--text-muted)">{date.slice(5)}</text>}
                     </g>
                   )
                 })}
@@ -167,23 +139,14 @@ export default function SuperAdminDashboard() {
           </div>
           <table className="data-table">
             <thead>
-              <tr>
-                <th>Name</th>
-                <th>Slug</th>
-                <th>Plan</th>
-                <th>Registered</th>
-              </tr>
+              <tr><th>Name</th><th>Slug</th><th>Plan</th><th>Registered</th></tr>
             </thead>
             <tbody>
               {stats.recentShops.map(shop => (
                 <tr key={shop.id}>
-                  <td style={{ fontWeight: 500 }}>{shop.name}</td>
-                  <td style={{ color: 'var(--text-muted)' }}>{shop.slug}</td>
-                  <td>
-                    <span className="badge badge-info" style={{ textTransform: 'capitalize' }}>
-                      {shop.plan || 'free'}
-                    </span>
-                  </td>
+                  <td><div className="cell-name">{shop.name}</div></td>
+                  <td><div className="cell-sub">{shop.slug}</div></td>
+                  <td><span className="badge badge-info" style={{ textTransform: 'capitalize' }}>{shop.plan || 'free'}</span></td>
                   <td style={{ color: 'var(--text-muted)' }}>{relativeTime(shop.created_at)}</td>
                 </tr>
               ))}

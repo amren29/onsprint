@@ -53,15 +53,24 @@ export default function SuperAdminAnnouncements() {
           <div className="card-header"><h3 className="card-title">New Announcement</h3></div>
           <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
             <div style={{ display: 'flex', gap: 8 }}>
-              <input type="text" placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} className="form-input" style={{ flex: 1 }} />
-              <select value={type} onChange={e => setType(e.target.value)} className="form-input" style={{ width: 110 }}>
-                <option value="info">Info</option>
-                <option value="success">Success</option>
-                <option value="warning">Warning</option>
-                <option value="danger">Urgent</option>
-              </select>
+              <div style={{ flex: 1 }}>
+                <span className="form-label">Title</span>
+                <input type="text" placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} className="form-input" />
+              </div>
+              <div>
+                <span className="form-label">Type</span>
+                <select value={type} onChange={e => setType(e.target.value)} className="form-input" style={{ width: 110 }}>
+                  <option value="info">Info</option>
+                  <option value="success">Success</option>
+                  <option value="warning">Warning</option>
+                  <option value="danger">Urgent</option>
+                </select>
+              </div>
             </div>
-            <textarea placeholder="Message to all shops..." value={message} onChange={e => setMessage(e.target.value)} className="form-input" rows={3} style={{ resize: 'vertical' }} />
+            <div>
+              <span className="form-label">Message</span>
+              <textarea placeholder="Message to all shops..." value={message} onChange={e => setMessage(e.target.value)} className="form-input" rows={3} style={{ resize: 'vertical' }} />
+            </div>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
               <button className="btn-primary" onClick={send} disabled={sending || !title || !message}>
                 {sending ? 'Sending...' : 'Broadcast to All Shops'}
@@ -83,12 +92,12 @@ export default function SuperAdminAnnouncements() {
               ) : announcements.map(a => (
                 <tr key={a.id}>
                   <td>
-                    <div style={{ fontWeight: 500 }}>{a.title}</div>
-                    <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>{a.message?.slice(0, 80)}{a.message?.length > 80 ? '...' : ''}</div>
+                    <div className="cell-name">{a.title}</div>
+                    <div className="cell-sub">{a.message?.slice(0, 80)}{a.message?.length > 80 ? '...' : ''}</div>
                   </td>
                   <td><span className={`badge badge-${a.type === 'danger' ? 'warning' : a.type === 'success' ? 'success' : 'info'}`}>{a.type}</span></td>
                   <td style={{ textTransform: 'capitalize' }}>{a.target}</td>
-                  <td style={{ color: 'var(--text-muted)' }}>{new Date(a.created_at).toLocaleString()}</td>
+                  <td><div className="cell-sub">{new Date(a.created_at).toLocaleString()}</div></td>
                 </tr>
               ))}
             </tbody>

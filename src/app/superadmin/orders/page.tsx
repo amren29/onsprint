@@ -59,27 +59,27 @@ export default function SuperAdminOrders() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-        <input
-          type="text"
-          placeholder="Search order # or customer..."
-          value={search}
-          onChange={e => { setSearch(e.target.value); setPage(1) }}
-          className="form-input"
-          style={{ width: 260 }}
-        />
-        <select
-          value={statusFilter}
-          onChange={e => { setStatusFilter(e.target.value); setPage(1) }}
-          className="form-input"
-          style={{ width: 140 }}
-        >
-          <option value="">All Status</option>
-          <option value="Pending">Pending</option>
-          <option value="Confirmed">Confirmed</option>
-          <option value="Completed">Completed</option>
-          <option value="Cancelled">Cancelled</option>
-        </select>
+      <div className="filter-row">
+        <div className="filter-bar" />
+        <div className="filter-right">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--r-md)', padding: '6px 12px' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input value={search} onChange={e => { setSearch(e.target.value); setPage(1) }} placeholder="Search order # or customer..."
+              style={{ border: 'none', outline: 'none', background: 'transparent', fontSize: 12.5, color: 'var(--text-primary)', width: 200 }} />
+          </div>
+          <select
+            value={statusFilter}
+            onChange={e => { setStatusFilter(e.target.value); setPage(1) }}
+            className="form-input"
+            style={{ width: 140 }}
+          >
+            <option value="">All Status</option>
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
       </div>
 
       <div className="page-scroll">
@@ -102,22 +102,20 @@ export default function SuperAdminOrders() {
                 <tr><td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>No orders found</td></tr>
               ) : orders.map(order => (
                 <tr key={order.id}>
-                  <td style={{ fontWeight: 500 }}>{order.seq_id || order.id.slice(0, 8)}</td>
+                  <td><div className="cell-name">{order.seq_id || order.id.slice(0, 8)}</div></td>
                   <td>
                     <Link href={`/superadmin/shops/${order.shop_id}`} style={{ color: 'var(--accent)' }}>
                       {(order.shops as any)?.name || order.shop_id.slice(0, 8)}
                     </Link>
                   </td>
-                  <td>{order.customer_name || '—'}</td>
+                  <td><div className="cell-sub">{order.customer_name || '—'}</div></td>
                   <td>
                     <span className={STATUS_BADGE[order.status] || 'badge badge-pending'}>
                       {order.status}
                     </span>
                   </td>
-                  <td>{fmtRM(order.grand_total)}</td>
-                  <td style={{ color: 'var(--text-muted)' }}>
-                    {new Date(order.created_at).toLocaleDateString()}
-                  </td>
+                  <td><div className="cell-name">{fmtRM(order.grand_total)}</div></td>
+                  <td><div className="cell-sub">{new Date(order.created_at).toLocaleDateString()}</div></td>
                 </tr>
               ))}
             </tbody>

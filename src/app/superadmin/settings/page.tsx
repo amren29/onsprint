@@ -96,14 +96,16 @@ export default function SuperAdminSettings() {
               {admins.map(a => (
                 <tr key={a.user_id}>
                   <td>
-                    {a.email}
-                    {a.user_id === currentUserId && (
-                      <span className="badge badge-info" style={{ marginLeft: 6 }}>You</span>
-                    )}
+                    <div className="cell-name">
+                      {a.email}
+                      {a.user_id === currentUserId && (
+                        <span className="badge badge-info" style={{ marginLeft: 6 }}>You</span>
+                      )}
+                    </div>
                   </td>
-                  <td>{a.name || '—'}</td>
+                  <td><div className="cell-sub">{a.name || '—'}</div></td>
                   <td><span className="badge badge-success" style={{ textTransform: 'capitalize' }}>{a.role}</span></td>
-                  <td style={{ color: 'var(--text-muted)' }}>{new Date(a.created_at).toLocaleDateString()}</td>
+                  <td><div className="cell-sub">{new Date(a.created_at).toLocaleDateString()}</div></td>
                   <td>
                     {a.user_id !== currentUserId && (
                       <button
@@ -121,19 +123,22 @@ export default function SuperAdminSettings() {
             </tbody>
           </table>
           <div style={{ padding: '12px 16px', borderTop: '1px solid var(--border)', display: 'flex', gap: 8, alignItems: 'center' }}>
-            <input
-              type="email"
-              placeholder="Email address"
-              value={newEmail}
-              onChange={e => { setNewEmail(e.target.value); setAddError('') }}
-              className="form-input"
-              style={{ width: 260 }}
-              onKeyDown={e => e.key === 'Enter' && addAdmin()}
-            />
-            <button className="btn-primary" onClick={addAdmin} disabled={adding || !newEmail}>
+            <div>
+              <span className="form-label">Admin Email</span>
+              <input
+                type="email"
+                placeholder="Email address"
+                value={newEmail}
+                onChange={e => { setNewEmail(e.target.value); setAddError('') }}
+                className="form-input"
+                style={{ width: 260 }}
+                onKeyDown={e => e.key === 'Enter' && addAdmin()}
+              />
+            </div>
+            <button className="btn-primary" onClick={addAdmin} disabled={adding || !newEmail} style={{ alignSelf: 'flex-end' }}>
               {adding ? '...' : 'Add Admin'}
             </button>
-            {addError && <span style={{ fontSize: 12, color: 'var(--negative)' }}>{addError}</span>}
+            {addError && <span style={{ fontSize: 12, color: 'var(--negative)', alignSelf: 'flex-end' }}>{addError}</span>}
           </div>
         </div>
 
@@ -153,9 +158,9 @@ export default function SuperAdminSettings() {
             <tbody>
               {planPricing.map(p => (
                 <tr key={p.plan}>
-                  <td style={{ fontWeight: 500 }}>{p.plan}</td>
+                  <td><div className="cell-name">{p.plan}</div></td>
                   <td>{p.price}</td>
-                  <td style={{ color: 'var(--text-secondary)' }}>{p.features}</td>
+                  <td><div className="cell-sub">{p.features}</div></td>
                 </tr>
               ))}
             </tbody>
@@ -168,15 +173,15 @@ export default function SuperAdminSettings() {
             <h3 className="card-title">Environment</h3>
           </div>
           <div style={{ padding: 16, display: 'grid', gridTemplateColumns: '160px 1fr', gap: '8px 16px', fontSize: 13 }}>
-            <span style={{ color: 'var(--text-muted)' }}>Platform</span>
+            <span className="form-label">Platform</span>
             <span>Cloudflare Workers</span>
-            <span style={{ color: 'var(--text-muted)' }}>Framework</span>
+            <span className="form-label">Framework</span>
             <span>Next.js (App Router)</span>
-            <span style={{ color: 'var(--text-muted)' }}>Database</span>
+            <span className="form-label">Database</span>
             <span>Supabase (PostgreSQL)</span>
-            <span style={{ color: 'var(--text-muted)' }}>Auth</span>
+            <span className="form-label">Auth</span>
             <span>Supabase Auth</span>
-            <span style={{ color: 'var(--text-muted)' }}>Currency</span>
+            <span className="form-label">Currency</span>
             <span>MYR (Malaysian Ringgit)</span>
           </div>
         </div>

@@ -53,7 +53,7 @@ export default function SuperAdminShops() {
           <div className="page-subtitle">{total} shops across the platform</div>
         </div>
         <div className="page-actions">
-          <button className="btn-primary" onClick={() => setShowCreate(!showCreate)}>+ Create Shop</button>
+          <button className="topbar-btn" onClick={() => setShowCreate(!showCreate)}>+ Create Shop</button>
         </div>
       </div>
 
@@ -62,15 +62,15 @@ export default function SuperAdminShops() {
           <div className="card-header"><h3 className="card-title">Create New Shop</h3></div>
           <div style={{ padding: 16, display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'flex-end' }}>
             <div>
-              <label style={{ display: 'block', fontSize: 11, color: 'var(--text-muted)', marginBottom: 3 }}>Shop Name *</label>
+              <span className="form-label">Shop Name *</span>
               <input value={newName} onChange={e => setNewName(e.target.value)} className="form-input" style={{ width: 180 }} placeholder="My Print Shop" />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: 11, color: 'var(--text-muted)', marginBottom: 3 }}>Owner Email</label>
+              <span className="form-label">Owner Email</span>
               <input value={newEmail} onChange={e => setNewEmail(e.target.value)} className="form-input" style={{ width: 200 }} placeholder="owner@email.com" />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: 11, color: 'var(--text-muted)', marginBottom: 3 }}>Plan</label>
+              <span className="form-label">Plan</span>
               <select value={newPlan} onChange={e => setNewPlan(e.target.value)} className="form-input" style={{ width: 110 }}>
                 <option value="free">Free</option><option value="trial">Trial</option><option value="starter">Starter</option><option value="pro">Pro</option><option value="business">Business</option>
               </select>
@@ -90,28 +90,28 @@ export default function SuperAdminShops() {
         </div>
       )}
 
-      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-        <input
-          type="text"
-          placeholder="Search shops..."
-          value={search}
-          onChange={e => { setSearch(e.target.value); setPage(1) }}
-          className="form-input"
-          style={{ width: 240 }}
-        />
-        <select
-          value={planFilter}
-          onChange={e => { setPlanFilter(e.target.value); setPage(1) }}
-          className="form-input"
-          style={{ width: 130 }}
-        >
-          <option value="">All Plans</option>
-          <option value="free">Free</option>
-          <option value="trial">Trial</option>
-          <option value="starter">Starter</option>
-          <option value="pro">Pro</option>
-          <option value="business">Business</option>
-        </select>
+      <div className="filter-row">
+        <div className="filter-bar" />
+        <div className="filter-right">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--r-md)', padding: '6px 12px' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input value={search} onChange={e => { setSearch(e.target.value); setPage(1) }} placeholder="Search shops..."
+              style={{ border: 'none', outline: 'none', background: 'transparent', fontSize: 12.5, color: 'var(--text-primary)', width: 180 }} />
+          </div>
+          <select
+            value={planFilter}
+            onChange={e => { setPlanFilter(e.target.value); setPage(1) }}
+            className="form-input"
+            style={{ width: 130 }}
+          >
+            <option value="">All Plans</option>
+            <option value="free">Free</option>
+            <option value="trial">Trial</option>
+            <option value="starter">Starter</option>
+            <option value="pro">Pro</option>
+            <option value="business">Business</option>
+          </select>
+        </div>
       </div>
 
       <div className="page-scroll">
@@ -137,16 +137,14 @@ export default function SuperAdminShops() {
                   style={{ cursor: 'pointer' }}
                   onClick={() => router.push(`/superadmin/shops/${shop.id}`)}
                 >
-                  <td style={{ fontWeight: 500 }}>{shop.name}</td>
-                  <td style={{ color: 'var(--text-muted)' }}>{shop.slug}</td>
+                  <td><div className="cell-name">{shop.name}</div></td>
+                  <td><div className="cell-sub">{shop.slug}</div></td>
                   <td>
                     <span className="badge badge-info" style={{ textTransform: 'capitalize' }}>
                       {shop.plan || 'free'}
                     </span>
                   </td>
-                  <td style={{ color: 'var(--text-muted)' }}>
-                    {new Date(shop.created_at).toLocaleDateString()}
-                  </td>
+                  <td><div className="cell-sub">{new Date(shop.created_at).toLocaleDateString()}</div></td>
                   <td>
                     {shop.suspended ? (
                       <span className="badge badge-warning">Suspended</span>
