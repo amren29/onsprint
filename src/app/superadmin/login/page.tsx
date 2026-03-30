@@ -66,9 +66,14 @@ export default function SuperAdminLoginPage() {
       try {
         const { createClient } = await import('@/lib/supabase/client')
         const supabase = createClient()
-        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code!)
-        if (exchangeError) {
-          setError('Google sign-in failed.')
+
+        // Try exchanging code — may fail if middleware already exchanged it
+        await supabase.auth.exchangeCodeForSession(code!).catch(() => {})
+
+        // Check if we have a session (either from exchange or middleware)
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+          setError('Google sign-in failed. Please try again.')
           setLoading(false)
           return
         }
