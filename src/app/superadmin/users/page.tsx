@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react'
 
+type Tab = 'shop_admins' | 'store_customers' | 'platform_admins'
+
 interface UserRow {
   id: string
   email: string
@@ -12,6 +14,7 @@ interface UserRow {
 }
 
 export default function SuperAdminUsers() {
+  const [tab, setTab] = useState<Tab>('shop_admins')
   const [users, setUsers] = useState<UserRow[]>([])
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
@@ -23,6 +26,7 @@ export default function SuperAdminUsers() {
     const params = new URLSearchParams()
     if (search) params.set('search', search)
     params.set('page', String(page))
+    params.set('type', tab)
 
     fetch(`/api/superadmin/users?${params}`)
       .then(r => r.json())
@@ -31,7 +35,7 @@ export default function SuperAdminUsers() {
         setLoading(false)
       })
       .catch(() => setLoading(false))
-  }, [search, page])
+  }, [search, page, tab])
 
   async function resetPassword(userId: string, email: string) {
     if (!confirm(`Send password reset email to ${email}?`)) return
@@ -60,7 +64,11 @@ export default function SuperAdminUsers() {
       </div>
 
       <div className="filter-row">
-        <div className="filter-bar" />
+        <div className="filter-bar">
+          <button className={`filter-tab${tab === 'shop_admins' ? ' active' : ''}`} onClick={() => { setTab('shop_admins'); setPage(1) }}>Shop Admins</button>
+          <button className={`filter-tab${tab === 'store_customers' ? ' active' : ''}`} onClick={() => { setTab('store_customers'); setPage(1) }}>Store Customers</button>
+          <button className={`filter-tab${tab === 'platform_admins' ? ' active' : ''}`} onClick={() => { setTab('platform_admins'); setPage(1) }}>Platform Admins</button>
+        </div>
         <div className="filter-right">
           <div style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--r-md)', padding: '6px 12px' }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -77,7 +85,7 @@ export default function SuperAdminUsers() {
               <tr>
                 <th>Email</th>
                 <th>Name</th>
-                <th>Shop(s)</th>
+                <th>{tab === 'store_customers' ? 'Shop' : 'Shop(s)'}</th>
                 <th>Created</th>
                 <th>Last Sign In</th>
                 <th>Actions</th>

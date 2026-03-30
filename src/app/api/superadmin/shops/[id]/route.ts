@@ -15,10 +15,16 @@ export async function GET(
   const { id } = await params
   const db = getServiceClient()
 
-  const [shopRes, membersRes, ordersRes] = await Promise.all([
+  const [shopRes, membersRes, ordersRes, productsRes, customersRes, storeUsersRes, storeSettingsRes, recentOrdersRes] = await Promise.all([
     db.from('shops').select('*').eq('id', id).maybeSingle(),
     db.from('shop_members').select('user_id, role, created_at').eq('shop_id', id),
-    db.from('orders').select('id', { count: 'exact' }).eq('shop_id', id),
+    db.from('orders').select('id, grand_total', { count: 'exact' }).eq('shop_id', id),
+    db.from('products').select('id', { count: 'exact' }).eq('shop_id', id),
+    db.from('customers').select('id', { count: 'exact' }).eq('shop_id', id),
+    db.from('store_users').select('id', { count: 'exact' }).eq('shop_id', id),
+    db.from('store_settings').select('store_name, logo_url, domain').eq('shop_id', id).maybeSingle(),
+    db.from('orders').select('id, seq_id, customer_name, grand_total, status, created_at')
+      .eq('shop_id', id).order('created_at', { ascending: false }).limit(10),
   ])
 
   if (!shopRes.data) {
@@ -36,9 +42,18 @@ export async function GET(
     })
   }
 
+  // Calculate total revenue
+  const totalRevenue = (ordersRes.data || []).reduce((s, o) => s + (o.grand_total || 0), 0)
+
   return NextResponse.json({
     shop: shopRes.data,
     members,
     orderCount: ordersRes.count || 0,
+    productCount: productsRes.count || 0,
+    customerCount: customersRes.count || 0,
+    storeUserCount: storeUsersRes.count || 0,
+    totalRevenue,
+    storeSettings: storeSettingsRes.data || null,
+    recentOrders: recentOrdersRes.data || [],
   })
 }

@@ -4,10 +4,18 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import CustomSelect from '@/components/CustomSelect'
 
+const fmtRM = (n: number) => `RM ${(n || 0).toLocaleString('en-MY', { minimumFractionDigits: 2 })}`
+
 interface ShopDetail {
   shop: any
   members: Array<{ user_id: string; email: string; name: string; role: string; created_at: string }>
   orderCount: number
+  productCount: number
+  customerCount: number
+  storeUserCount: number
+  totalRevenue: number
+  storeSettings: { store_name?: string; logo_url?: string; domain?: string } | null
+  recentOrders: Array<{ id: string; seq_id: string; customer_name: string; grand_total: number; status: string; created_at: string }>
 }
 
 export default function SuperAdminShopDetail() {
@@ -180,7 +188,7 @@ export default function SuperAdminShopDetail() {
         </div>
       </div>
 
-      <div className="stat-grid">
+      <div className="finance-stats">
         <div className="stat-card">
           <div className="stat-card-header">
             <div className="stat-card-label">Plan</div>
@@ -196,7 +204,6 @@ export default function SuperAdminShopDetail() {
                 { value: 'pro', label: 'Pro' },
                 { value: 'business', label: 'Business' },
               ]}
-              style={{ width: 120, fontSize: 13 }}
             />
             {selectedPlan !== (shop.plan || 'free') && (
               <button className="btn-primary" onClick={changePlan} disabled={saving} style={{ fontSize: 12, padding: '5px 12px' }}>
@@ -207,15 +214,25 @@ export default function SuperAdminShopDetail() {
         </div>
         <div className="stat-card">
           <div className="stat-card-header">
-            <div className="stat-card-label">Orders</div>
+            <div className="stat-card-label">Revenue</div>
+            <span className="stat-card-period">All time</span>
           </div>
-          <div className="stat-value">{data.orderCount}</div>
+          <div className="stat-value">{fmtRM(data.totalRevenue)}</div>
+          <div className="stat-vs">{data.orderCount} orders</div>
         </div>
         <div className="stat-card">
           <div className="stat-card-header">
-            <div className="stat-card-label">Members</div>
+            <div className="stat-card-label">Products</div>
           </div>
-          <div className="stat-value">{data.members.length}</div>
+          <div className="stat-value">{data.productCount}</div>
+          <div className="stat-vs">in catalog</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-card-header">
+            <div className="stat-card-label">Customers</div>
+          </div>
+          <div className="stat-value">{data.customerCount}</div>
+          <div className="stat-vs">{data.storeUserCount} store users</div>
         </div>
       </div>
 
@@ -275,26 +292,78 @@ export default function SuperAdminShopDetail() {
           </div>
         )}
 
-        {/* Shop Details */}
-        <div className="card">
-          <div className="card-header">
-            <h3 className="card-title">Shop Details</h3>
+        {/* Shop Details + Store Info side by side */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+          <div className="card">
+            <div className="card-header">
+              <h3 className="card-title">Shop Details</h3>
+            </div>
+            <div style={{ padding: 16, display: 'grid', gridTemplateColumns: '100px 1fr', gap: '8px 16px', fontSize: 13 }}>
+              <span className="form-label">ID</span>
+              <span style={{ fontFamily: 'monospace', fontSize: 11 }}>{shop.id}</span>
+              <span className="form-label">Slug</span>
+              <span>{shop.slug}</span>
+              <span className="form-label">Created</span>
+              <span>{new Date(shop.created_at).toLocaleString()}</span>
+              {shop.plan_expires_at && (
+                <>
+                  <span className="form-label">Plan Expires</span>
+                  <span>{new Date(shop.plan_expires_at).toLocaleString()}</span>
+                </>
+              )}
+              <span className="form-label">Store URL</span>
+              <span style={{ color: 'var(--accent)' }}>/s/{shop.slug}</span>
+            </div>
           </div>
-          <div style={{ padding: 16, display: 'grid', gridTemplateColumns: '120px 1fr', gap: '8px 16px', fontSize: 13 }}>
-            <span className="form-label">ID</span>
-            <span style={{ fontFamily: 'monospace', fontSize: 11 }}>{shop.id}</span>
-            <span className="form-label">Slug</span>
-            <span>{shop.slug}</span>
-            <span className="form-label">Created</span>
-            <span>{new Date(shop.created_at).toLocaleString()}</span>
-            {shop.plan_expires_at && (
-              <>
-                <span className="form-label">Plan Expires</span>
-                <span>{new Date(shop.plan_expires_at).toLocaleString()}</span>
-              </>
-            )}
+          <div className="card">
+            <div className="card-header">
+              <h3 className="card-title">Store Settings</h3>
+            </div>
+            <div style={{ padding: 16, display: 'grid', gridTemplateColumns: '100px 1fr', gap: '8px 16px', fontSize: 13 }}>
+              <span className="form-label">Store Name</span>
+              <span>{data.storeSettings?.store_name || '—'}</span>
+              <span className="form-label">Domain</span>
+              <span>{data.storeSettings?.domain || '—'}</span>
+              <span className="form-label">Logo</span>
+              <span>{data.storeSettings?.logo_url ? 'Uploaded' : 'None'}</span>
+              <span className="form-label">Members</span>
+              <span>{data.members.length} team members</span>
+              <span className="form-label">Store Users</span>
+              <span>{data.storeUserCount} registered</span>
+            </div>
           </div>
         </div>
+
+        {/* Recent Orders */}
+        {data.recentOrders.length > 0 && (
+          <div className="card">
+            <div className="card-header">
+              <h3 className="card-title">Recent Orders ({data.orderCount} total)</h3>
+            </div>
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Order #</th>
+                  <th>Customer</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.recentOrders.map(o => (
+                  <tr key={o.id}>
+                    <td><div className="cell-name">{o.seq_id || o.id.slice(0, 8)}</div></td>
+                    <td><div className="cell-sub">{o.customer_name || '—'}</div></td>
+                    <td><div className="cell-name">{fmtRM(o.grand_total)}</div></td>
+                    <td><span className={`badge badge-${o.status === 'Completed' ? 'success' : o.status === 'Pending' ? 'warning' : 'info'}`}>{o.status}</span></td>
+                    <td><div className="cell-sub">{new Date(o.created_at).toLocaleDateString()}</div></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
 
         {/* Members */}
         <div className="card">
