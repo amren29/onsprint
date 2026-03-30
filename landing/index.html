@@ -15,121 +15,157 @@
 
   <!-- ══ NAVBAR ══ -->
   <nav class="nav" id="nav">
-    <div class="nav-inner">
+    <div class="nav-pill">
       <a href="#" class="nav-brand">
-        <div class="nav-logo">
+        <div class="nav-logo-icon">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="white" opacity=".7"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="white" opacity=".7"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="white" opacity=".4"/></svg>
         </div>
-        <span>Onsprint</span>
+        Onsprint
       </a>
       <div class="nav-links">
+        <a href="#features">About</a>
         <a href="#features">Features</a>
         <a href="#pricing">Pricing</a>
-        <a href="#stories">Case Studies</a>
-        <a href="#faq">FAQ</a>
       </div>
-      <div class="nav-actions">
-        <a href="/login" class="nav-login">Log In</a>
-        <a href="/register" class="btn btn-primary btn-sm">Get Started</a>
-      </div>
-      <button class="nav-hamburger" id="hamburger" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-    <!-- Mobile menu -->
-    <div class="nav-mobile" id="mobile-menu">
-      <a href="#features">Features</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#stories">Case Studies</a>
-      <a href="#faq">FAQ</a>
-      <div class="nav-mobile-actions">
-        <a href="/login" class="btn btn-outline btn-full">Log In</a>
-        <a href="/register" class="btn btn-primary btn-full">Get Started</a>
-      </div>
+      <a href="/register" class="nav-cta">Contact us <span class="nav-cta-arrow">→</span></a>
     </div>
   </nav>
 
   <!-- ══ HERO ══ -->
   <section class="hero">
-    <div class="hero-bg">
-      <div class="hero-orb hero-orb-1"></div>
-      <div class="hero-orb hero-orb-2"></div>
-      <div class="hero-grid-pattern"></div>
-    </div>
-    <div class="container hero-content">
+    <div class="container hero-grid">
       <div class="hero-text">
-        <div class="hero-badge fade-up">
-          <span class="badge-dot"></span>
-          Now available in Malaysia
-        </div>
-        <h1 class="hero-title fade-up d1">
-          The modern way to<br>manage your print shop
-        </h1>
-        <p class="hero-desc fade-up d2">
-          Orders, production, payments, and your own online store — all in one platform built for Malaysian print shops.
-        </p>
-        <div class="hero-btns fade-up d3">
-          <a href="/register" class="btn btn-primary btn-lg">Start free trial
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </a>
-          <a href="#features" class="btn btn-glass">See how it works</a>
-        </div>
-        <div class="hero-rating fade-up d4">
-          <div class="stars">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-          <span>4.9 / 5 Rated · <strong>Over 500 shops</strong></span>
+        <h1 class="hero-title">Strategy and growth for print shops</h1>
+        <p class="hero-desc">Onsprint partners with print shops to streamline operations, elevate team performance, and build a foundation for lasting success.</p>
+        <div class="hero-btns">
+          <a href="/register" class="btn-dark">Get started <span class="btn-arrow">→</span></a>
+          <a href="#features" class="btn-outline-dark">Contact us</a>
         </div>
       </div>
-      <div class="hero-visual fade-up d2">
-        <div class="mockup">
-          <div class="mockup-stats">
-            <div class="mockup-stat">
-              <div class="mockup-stat-label">Revenue</div>
-              <div class="mockup-stat-value" style="color:#4ade80">RM 48,250</div>
+      <div class="hero-visual">
+        <!-- Customers Card -->
+        <div class="hero-card hero-card-main">
+          <div class="hero-card-header">
+            <span class="hero-card-title">Customers</span>
+            <span class="hero-card-sort">Sort by Newest ▾</span>
+          </div>
+          <div class="hero-card-row hero-card-row-active">
+            <div class="hero-card-avatar" style="background:#006AFF">AR</div>
+            <div class="hero-card-info">
+              <div class="hero-card-name">Ahmad Razali</div>
+              <div class="hero-card-company">PrintHub KL</div>
             </div>
-            <div class="mockup-stat">
-              <div class="mockup-stat-label">Orders</div>
-              <div class="mockup-stat-value" style="color:#60a5fa">156</div>
-            </div>
-            <div class="mockup-stat">
-              <div class="mockup-stat-label">Customers</div>
-              <div class="mockup-stat-value" style="color:#fbbf24">89</div>
+            <div class="hero-card-actions">
+              <span>✏️</span><span>⭐</span><span>💬</span><span>⋮</span>
             </div>
           </div>
-          <div class="mockup-chart">
-            <div class="mockup-chart-label">Revenue Trend</div>
-            <svg width="100%" height="50" viewBox="0 0 300 50" preserveAspectRatio="none">
-              <defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#006AFF" stop-opacity=".25"/><stop offset="100%" stop-color="#006AFF" stop-opacity="0"/></linearGradient></defs>
-              <path d="M0,42 Q30,38 60,36 T120,28 T180,22 T240,14 T300,6" fill="none" stroke="#006AFF" stroke-width="2" stroke-linecap="round"/>
-              <path d="M0,42 Q30,38 60,36 T120,28 T180,22 T240,14 T300,6 L300,50 L0,50Z" fill="url(#cg)"/>
-            </svg>
+          <div class="hero-card-row">
+            <div class="hero-card-avatar" style="background:#e2725b">SN</div>
+            <div class="hero-card-info">
+              <div class="hero-card-name">Siti Nurhaliza</div>
+              <div class="hero-card-company">QuickPrint JB</div>
+            </div>
           </div>
-          <div class="mockup-orders">
-            <div class="mockup-order">
-              <div class="mockup-order-info">
-                <div class="mockup-order-id">ORD-0042</div>
-                <div class="mockup-order-name">Ahmad R.</div>
-              </div>
-              <span class="mockup-badge" style="color:#60a5fa;background:rgba(96,165,250,.12)">Printing</span>
+          <div class="hero-card-row">
+            <div class="hero-card-avatar" style="background:#7c3aed">LM</div>
+            <div class="hero-card-info">
+              <div class="hero-card-name">Lee Min Wei</div>
+              <div class="hero-card-company">DesignWorks PJ</div>
             </div>
-            <div class="mockup-order">
-              <div class="mockup-order-info">
-                <div class="mockup-order-id">ORD-0041</div>
-                <div class="mockup-order-name">Siti N.</div>
-              </div>
-              <span class="mockup-badge" style="color:#4ade80;background:rgba(74,222,128,.12)">Ready</span>
+          </div>
+          <div class="hero-card-footer">All customers ☺</div>
+        </div>
+        <!-- Stats Mini Card -->
+        <div class="hero-card hero-card-stats">
+          <div class="hero-stats-header">
+            <span>Daily Average</span>
+            <span class="hero-stats-change">+30m this week</span>
+          </div>
+          <div class="hero-stats-value">2h 20m</div>
+          <div class="hero-stats-chart">
+            <div class="bar-group">
+              <div class="bar bar-blue" style="height:45px"></div>
+              <div class="bar bar-yellow" style="height:20px"></div>
             </div>
-            <div class="mockup-order">
-              <div class="mockup-order-info">
-                <div class="mockup-order-id">ORD-0040</div>
-                <div class="mockup-order-name">Lee M.</div>
+            <div class="bar-group">
+              <div class="bar bar-blue" style="height:55px"></div>
+              <div class="bar bar-pink" style="height:15px"></div>
+            </div>
+            <div class="bar-group">
+              <div class="bar bar-blue" style="height:40px"></div>
+              <div class="bar bar-yellow" style="height:25px"></div>
+            </div>
+            <div class="bar-group">
+              <div class="bar bar-blue" style="height:60px"></div>
+              <div class="bar bar-pink" style="height:18px"></div>
+            </div>
+            <div class="bar-group">
+              <div class="bar bar-blue" style="height:50px"></div>
+              <div class="bar bar-yellow" style="height:22px"></div>
+            </div>
+            <div class="bar-group">
+              <div class="bar bar-blue" style="height:48px"></div>
+              <div class="bar bar-yellow" style="height:16px"></div>
+            </div>
+            <div class="bar-group">
+              <div class="bar bar-blue" style="height:35px"></div>
+              <div class="bar bar-pink" style="height:12px"></div>
+            </div>
+          </div>
+          <div class="hero-stats-days">
+            <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ LOGOS MARQUEE ══ -->
+  <section class="logos-section">
+    <div class="logos-track">
+      <div class="logos-slide">
+        <div class="logo-item"><span class="logo-dot" style="background:#4ade80"></span> PrintHub</div>
+        <div class="logo-item"><span class="logo-dot" style="background:#7c3aed"></span> QuickPrint</div>
+        <div class="logo-item"><span class="logo-dot" style="background:#f59e0b"></span> DesignWorks</div>
+        <div class="logo-item"><span class="logo-dot" style="background:#e2725b"></span> MegaPrint</div>
+        <div class="logo-item"><span class="logo-dot" style="background:#006AFF"></span> ArtPress</div>
+        <div class="logo-item"><span class="logo-dot" style="background:#4ade80"></span> PrintHub</div>
+        <div class="logo-item"><span class="logo-dot" style="background:#7c3aed"></span> QuickPrint</div>
+        <div class="logo-item"><span class="logo-dot" style="background:#f59e0b"></span> DesignWorks</div>
+        <div class="logo-item"><span class="logo-dot" style="background:#e2725b"></span> MegaPrint</div>
+        <div class="logo-item"><span class="logo-dot" style="background:#006AFF"></span> ArtPress</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ APP PREVIEW ══ -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="app-preview reveal">
+        <div class="app-mockup">
+          <div class="app-sidebar">
+            <div class="app-sidebar-dot"></div>
+            <div class="app-sidebar-line"></div>
+            <div class="app-sidebar-line"></div>
+            <div class="app-sidebar-line short"></div>
+          </div>
+          <div class="app-main">
+            <div class="app-main-title">Production Board ✏️</div>
+            <div class="app-columns">
+              <div class="app-col">
+                <div class="app-col-header">New</div>
+                <div class="app-col-card" style="background:#fff3cd">Business Cards</div>
+                <div class="app-col-card">Flyer A3</div>
               </div>
-              <span class="mockup-badge" style="color:#fbbf24;background:rgba(251,191,36,.12)">Design</span>
+              <div class="app-col">
+                <div class="app-col-header">In Progress</div>
+                <div class="app-col-card">Banner 6ft</div>
+                <div class="app-col-card" style="background:#d1ecf1">Stickers x500</div>
+              </div>
+              <div class="app-col">
+                <div class="app-col-header">Done</div>
+                <div class="app-col-card" style="background:#d4edda">Poster A2</div>
+              </div>
             </div>
           </div>
         </div>
@@ -138,94 +174,78 @@
   </section>
 
   <!-- ══ NUMBERED FEATURES ══ -->
-  <section id="features" class="section section-white border-b">
+  <section class="section">
     <div class="container">
       <div class="num-grid">
         <div class="num-item reveal">
-          <div class="num-number">01</div>
+          <div class="num-label">01</div>
+          <div class="num-img" style="background:#f5f0eb"></div>
           <h3 class="num-title">Easy setup</h3>
-          <p class="num-desc">Get started in minutes. Import your products, invite your team, and start managing orders right away.</p>
+          <p class="num-desc">Create your workspace and invite your team. Get everything ready in minutes.</p>
         </div>
         <div class="num-item reveal">
-          <div class="num-number">02</div>
+          <div class="num-label">02</div>
+          <div class="num-img" style="background:#fff3cd">
+            <div class="num-img-badge">Dashboard</div>
+          </div>
           <h3 class="num-title">Collaborate</h3>
-          <p class="num-desc">Assign jobs, track progress, and keep everyone aligned with real-time production updates.</p>
+          <p class="num-desc">Assign tasks and keep communication clear. Everyone stays aligned.</p>
         </div>
         <div class="num-item reveal">
-          <div class="num-number">03</div>
+          <div class="num-label">03</div>
+          <div class="num-img" style="background:#e8e4df"></div>
           <h3 class="num-title">Track growth</h3>
-          <p class="num-desc">Revenue reports, order analytics, and customer insights to help you scale your business.</p>
+          <p class="num-desc">Use dashboards to monitor progress, trends, and what matters most.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ══ PERFORMANCE ══ -->
-  <section class="section section-gray">
-    <div class="container">
-      <div class="perf-grid">
-        <div class="perf-text reveal">
-          <span class="tag">Performance</span>
-          <h2 class="section-title">Built for high performance</h2>
-          <p class="section-desc">Onsprint gives your team everything it needs to stay aligned, track performance, and scale with confidence — all in one place.</p>
-          <div class="perf-list">
-            <div class="perf-item">
-              <div class="perf-check">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              </div>
+  <!-- ══ BUILT FOR HIGH PERFORMANCE ══ -->
+  <section class="section">
+    <div class="container" style="text-align:center">
+      <h2 class="perf-title reveal">Built for high performance</h2>
+      <p class="perf-subtitle reveal">Onsprint gives your team everything it needs to stay aligned, track performance, and scale with confidence — all in one place.</p>
+      <!-- Tab pills -->
+      <div class="perf-tabs reveal">
+        <button class="perf-tab active" data-tab="portal">Client portal</button>
+        <button class="perf-tab" data-tab="api">API tracking</button>
+        <button class="perf-tab" data-tab="workflow">Workflow automation</button>
+        <button class="perf-tab" data-tab="team">Team management</button>
+      </div>
+    </div>
+    <!-- Feature Detail -->
+    <div class="perf-detail">
+      <div class="container">
+        <div class="perf-detail-grid reveal">
+          <div class="perf-detail-card">
+            <div class="perf-detail-card-header">Customer Portal</div>
+            <div class="perf-detail-card-row active">
+              <div class="perf-detail-avatar" style="background:#006AFF">AR</div>
               <div>
-                <div class="perf-item-title">Production Pipeline</div>
-                <div class="perf-item-desc">Kanban-style board with 12 stages. Drag orders from artwork checking to delivery.</div>
+                <div class="perf-detail-name">Ahmad R.</div>
+                <div class="perf-detail-sub">3 active orders</div>
               </div>
             </div>
-            <div class="perf-item">
-              <div class="perf-check">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              </div>
+            <div class="perf-detail-card-row">
+              <div class="perf-detail-avatar" style="background:#7c3aed">SN</div>
               <div>
-                <div class="perf-item-title">Automated Invoicing</div>
-                <div class="perf-item-desc">Auto-generate invoices, track payments, and manage customer wallets in one place.</div>
+                <div class="perf-detail-name">Siti N.</div>
+                <div class="perf-detail-sub">1 pending</div>
               </div>
             </div>
-            <div class="perf-item">
-              <div class="perf-check">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              </div>
+            <div class="perf-detail-card-row">
+              <div class="perf-detail-avatar" style="background:#e2725b">LM</div>
               <div>
-                <div class="perf-item-title">Online Storefront</div>
-                <div class="perf-item-desc">Your own branded store where customers browse products, upload artwork, and order 24/7.</div>
-              </div>
-            </div>
-            <div class="perf-item">
-              <div class="perf-check">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              </div>
-              <div>
-                <div class="perf-item-title">Team Permissions</div>
-                <div class="perf-item-desc">Role-based access control. Each team member sees only what they need.</div>
+                <div class="perf-detail-name">Lee M.</div>
+                <div class="perf-detail-sub">Completed</div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="perf-card reveal">
-          <div class="perf-card-label">Centralized access for teams</div>
-          <div class="perf-card-grid">
-            <div class="perf-card-stat">
-              <div class="perf-card-stat-label">Active Jobs</div>
-              <div class="perf-card-stat-value" style="color:#60a5fa">34</div>
-            </div>
-            <div class="perf-card-stat">
-              <div class="perf-card-stat-label">Completed</div>
-              <div class="perf-card-stat-value" style="color:#4ade80">128</div>
-            </div>
-            <div class="perf-card-stat">
-              <div class="perf-card-stat-label">Revenue</div>
-              <div class="perf-card-stat-value" style="color:#fbbf24">RM 48K</div>
-            </div>
-            <div class="perf-card-stat">
-              <div class="perf-card-stat-label">Team</div>
-              <div class="perf-card-stat-value" style="color:#a78bfa">8</div>
-            </div>
+          <div class="perf-detail-text">
+            <div class="perf-detail-label">CLIENT PORTAL</div>
+            <h3 class="perf-detail-heading">Centralized access for teams and clients</h3>
+            <p class="perf-detail-desc">Securely share progress, files, feedback, and timelines with stakeholders. Keep everyone on the same page without switching platforms.</p>
           </div>
         </div>
       </div>
@@ -233,153 +253,170 @@
   </section>
 
   <!-- ══ INTEGRATIONS ══ -->
-  <section class="section section-white border-t border-b" style="text-align:center">
+  <section class="section">
     <div class="container">
-      <div class="reveal">
-        <span class="tag">Integrations</span>
-        <h2 class="section-title">Powerful integrations</h2>
-        <p class="section-desc" style="max-width:480px;margin:0 auto 40px">Seamlessly integrate with your favorite tools to streamline workflows and keep everything in sync.</p>
-        <div class="integrations">
-          <div class="integration-item">Stripe</div>
-          <div class="integration-item">Billplz</div>
-          <div class="integration-item">Google</div>
-          <div class="integration-item">WhatsApp</div>
-          <div class="integration-item">Supabase</div>
-          <div class="integration-item">Cloudflare</div>
+      <div class="integ-grid reveal">
+        <div class="integ-left">
+          <h2 class="integ-title">Powerful integrations</h2>
+          <p class="integ-desc">Seamlessly integrate with your favorite tools to streamline workflows and keep everything in sync.</p>
+          <a href="/register" class="btn-dark" style="margin-top:24px">Get started <span class="btn-arrow">→</span></a>
+          <div class="integ-checklist">
+            <div class="integ-check">⚬ Explore 50+ supported integrations</div>
+            <div class="integ-check">⚬ Securely link your account</div>
+            <div class="integ-check">⚬ Sync and streamline your workflow</div>
+          </div>
         </div>
-        <a href="/register" class="btn btn-primary" style="margin-top:32px">Get started
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
+        <div class="integ-right">
+          <div class="integ-icons">
+            <div class="integ-icon" style="background:#f0f0f2">Stripe</div>
+            <div class="integ-icon" style="background:#fff3cd">Billplz</div>
+            <div class="integ-icon" style="background:#e0e7ff">Google</div>
+            <div class="integ-icon" style="background:#d1fae5">WhatsApp</div>
+            <div class="integ-icon" style="background:#fce7f3">Supabase</div>
+            <div class="integ-icon" style="background:#dbeafe">Cloudflare</div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ══ PRICING ══ -->
-  <section id="pricing" class="section section-gray">
+  <section class="pricing-section" id="pricing">
     <div class="container">
-      <div class="reveal" style="text-align:center;margin-bottom:52px">
-        <span class="tag">Pricing</span>
-        <h2 class="section-title">Flexible pricing</h2>
-        <p class="section-desc">Simple, transparent pricing with no hidden fees.</p>
-        <div class="pricing-rating">
-          <div class="stars">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-          <span>4.9 / 5 · Over 500 shops</span>
-        </div>
-      </div>
       <div class="pricing-grid">
-        <div class="price-card reveal">
-          <div class="price-name">Starter</div>
-          <div class="price-amount">RM 29<span>/mo</span></div>
-          <p class="price-desc">For small print shops just getting started</p>
-          <a href="/register" class="btn btn-outline btn-full">Schedule a demo</a>
-          <ul class="price-features">
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 1 team member</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 100 orders/mo</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Online store</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Basic dashboard</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Email support</li>
-          </ul>
+        <div class="pricing-left">
+          <h2 class="pricing-title">Flexible pricing</h2>
+          <!-- Plan selector -->
+          <div class="pricing-plans">
+            <div class="pricing-plan active" data-plan="starter">
+              <div class="pricing-plan-name">Starter</div>
+              <div class="pricing-plan-desc">For early-stage teams</div>
+              <span class="pricing-plan-radio"></span>
+            </div>
+            <div class="pricing-plan" data-plan="growth">
+              <div class="pricing-plan-name">Growth</div>
+              <div class="pricing-plan-desc">Most popular</div>
+              <span class="pricing-plan-radio"></span>
+            </div>
+            <div class="pricing-plan" data-plan="scale">
+              <div class="pricing-plan-name">Scale</div>
+              <div class="pricing-plan-desc">For fast-scaling startups</div>
+              <span class="pricing-plan-radio"></span>
+            </div>
+          </div>
+          <div class="pricing-rating">
+            <div class="stars">★★★★★</div>
+            <div><strong>4.9 / 5</strong> Rated<br><span style="color:#94a3b8">Over 500 Shops</span></div>
+          </div>
         </div>
-        <div class="price-card price-card-popular reveal">
-          <div class="price-ribbon">POPULAR</div>
-          <div class="price-name">Growth</div>
-          <div class="price-amount">RM 79<span>/mo</span></div>
-          <p class="price-desc">For growing businesses ready to scale</p>
-          <a href="/register" class="btn btn-primary btn-full">Schedule a demo</a>
-          <ul class="price-features">
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 5 team members</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Unlimited orders</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Advanced analytics</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Custom domain</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Priority support</li>
-          </ul>
-        </div>
-        <div class="price-card reveal">
-          <div class="price-name">Scale</div>
-          <div class="price-amount">RM 149<span>/mo</span></div>
-          <p class="price-desc">For large operations and enterprises</p>
-          <a href="/register" class="btn btn-outline btn-full">Schedule a demo</a>
-          <ul class="price-features">
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Unlimited members</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Unlimited orders</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Revenue reports</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> API access</li>
-            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Dedicated support</li>
-          </ul>
+        <div class="pricing-right">
+          <div class="pricing-card" id="pricing-card">
+            <div class="pricing-card-name">Starter</div>
+            <div class="pricing-card-price">RM 29 <span>/ mo</span></div>
+            <p class="pricing-card-desc">Ideal for small print shops who need core features to move forward.</p>
+            <a href="/register" class="btn-dark btn-full">Schedule a demo <span class="btn-arrow">→</span></a>
+            <ul class="pricing-card-features">
+              <li>✓ Access to core features</li>
+              <li>✓ Basic performance reporting</li>
+              <li>✓ Email support</li>
+              <li>✓ Online store included</li>
+              <li>✓ Production board</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ══ SUCCESS STORIES ══ -->
-  <section id="stories" class="section section-white">
+  <section class="section" id="stories">
+    <div class="container" style="text-align:center">
+      <h2 class="section-heading reveal">Success stories</h2>
+      <p class="section-sub reveal">Onsprint has partnered with growing businesses to build foundations for sustainable success. Explore real stories of transformation.</p>
+    </div>
     <div class="container">
-      <div class="reveal" style="margin-bottom:48px">
-        <span class="tag">Case Studies</span>
-        <h2 class="section-title">Success stories</h2>
-        <p class="section-desc" style="max-width:560px">Onsprint has partnered with growing businesses to build foundations for sustainable success.</p>
+      <div class="stories-grid reveal">
+        <div class="story-card" style="background:#c4a882">
+          <div class="story-card-overlay">
+            <span class="story-card-logo">🏢 PrintHub KL</span>
+            <span class="story-card-year">2025</span>
+          </div>
+        </div>
+        <div class="story-card" style="background:#e2725b">
+          <div class="story-card-overlay">
+            <span class="story-card-logo">🏢 QuickPrint JB</span>
+            <span class="story-card-year">2025</span>
+          </div>
+        </div>
+        <div class="story-card" style="background:#7c3aed">
+          <div class="story-card-overlay">
+            <span class="story-card-logo">🏢 DesignWorks</span>
+            <span class="story-card-year">2024</span>
+          </div>
+        </div>
+        <div class="story-card" style="background:#f59e0b">
+          <div class="story-card-overlay">
+            <span class="story-card-logo">🏢 MegaPrint</span>
+            <span class="story-card-year">2024</span>
+          </div>
+        </div>
       </div>
-      <div class="stories-grid">
-        <div class="story-card reveal">
-          <div class="story-year">2025</div>
-          <h3 class="story-title">Helped PrintHub KL scale their production team</h3>
-          <p class="story-desc">Reduced order processing time by 60% with automated workflows.</p>
-          <a href="#" class="story-link">Read more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <div class="stories-details">
+        <div class="story-detail reveal">
+          <h3>PrintHub KL</h3>
+          <p>Helped PrintHub scale their production team and streamline onboarding as they expanded into new markets.</p>
         </div>
-        <div class="story-card reveal">
-          <div class="story-year">2025</div>
-          <h3 class="story-title">QuickPrint JB grew online revenue by 3x</h3>
-          <p class="story-desc">Launched an online store that now handles 40% of all orders.</p>
-          <a href="#" class="story-link">Read more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <div class="story-detail reveal">
+          <h3>QuickPrint JB</h3>
+          <p>Partnered with QuickPrint to set up their first online store and grew revenue by 3x.</p>
         </div>
-        <div class="story-card reveal">
-          <div class="story-year">2024</div>
-          <h3 class="story-title">DesignWorks PJ streamlined their billing</h3>
-          <p class="story-desc">Eliminated manual invoicing and cut payment delays by 80%.</p>
-          <a href="#" class="story-link">Read more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <div class="story-detail reveal">
+          <h3>DesignWorks</h3>
+          <p>Supported DesignWorks in building their client success team and internal delivery process.</p>
         </div>
-        <div class="story-card reveal">
-          <div class="story-year">2024</div>
-          <h3 class="story-title">MegaPrint Penang unified their 3 branches</h3>
-          <p class="story-desc">One dashboard for all locations with real-time production tracking.</p>
-          <a href="#" class="story-link">Read more <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <div class="story-detail reveal">
+          <h3>MegaPrint</h3>
+          <p>Helped MegaPrint optimize cross-branch collaboration between production and sales teams.</p>
         </div>
+      </div>
+      <div style="text-align:center;margin-top:32px">
+        <a href="#" class="btn-outline-dark">Read more</a>
       </div>
     </div>
   </section>
 
   <!-- ══ TESTIMONIALS ══ -->
-  <section class="section section-gray">
+  <section class="section">
     <div class="container">
       <div class="testi-grid">
-        <div class="testi-card reveal">
-          <div class="stars"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-          <p class="testi-text">"Onsprint transformed how we manage orders. The production board alone saved us hours every week. I can finally focus on growing the business."</p>
+        <div class="testi-item reveal">
+          <p class="testi-text">"Onsprint helped us streamline our operations and scale faster than we imagined. Their mix of strategy and execution is unmatched."</p>
           <div class="testi-author">
-            <div class="testi-avatar">AR</div>
-            <div><div class="testi-name">Ahmad Razali</div><div class="testi-role">Owner, PrintHub KL</div></div>
+            <div class="testi-info">
+              <div class="testi-name">Ahmad Razali</div>
+              <div class="testi-role">Owner at PrintHub KL</div>
+            </div>
+            <div class="testi-avatar" style="background:#006AFF">AR</div>
           </div>
         </div>
-        <div class="testi-card reveal">
-          <div class="stars"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-          <p class="testi-text">"Our customers love the online store. We get orders at 2am now. Revenue is up 3x since we started using Onsprint."</p>
+        <div class="testi-item reveal">
+          <p class="testi-text">"Working with Onsprint felt like having an extension of our team. They understood our challenges and delivered real, measurable results."</p>
           <div class="testi-author">
-            <div class="testi-avatar">SN</div>
-            <div><div class="testi-name">Siti Nurhaliza</div><div class="testi-role">Manager, QuickPrint JB</div></div>
+            <div class="testi-info">
+              <div class="testi-name">Siti Nurhaliza</div>
+              <div class="testi-role">Manager at QuickPrint JB</div>
+            </div>
+            <div class="testi-avatar" style="background:#e2725b">SN</div>
           </div>
         </div>
-        <div class="testi-card reveal">
-          <div class="stars"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-          <p class="testi-text">"The best print shop management tool in Malaysia. Simple, fast, and everything is connected. No more spreadsheets."</p>
+        <div class="testi-item reveal">
+          <p class="testi-text">"From the first meeting, Onsprint brought clarity and momentum to our production strategy. We've seen a major improvement in team performance."</p>
           <div class="testi-author">
-            <div class="testi-avatar">LM</div>
-            <div><div class="testi-name">Lee Min Wei</div><div class="testi-role">Owner, DesignWorks PJ</div></div>
+            <div class="testi-info">
+              <div class="testi-name">Lee Min Wei</div>
+              <div class="testi-role">Owner at DesignWorks PJ</div>
+            </div>
+            <div class="testi-avatar" style="background:#7c3aed">LM</div>
           </div>
         </div>
       </div>
@@ -387,55 +424,68 @@
   </section>
 
   <!-- ══ FAQ ══ -->
-  <section id="faq" class="section section-white">
+  <section class="section" id="faq">
     <div class="container">
       <div class="faq-grid">
         <div class="faq-left reveal">
-          <span class="tag">FAQ</span>
-          <h2 class="section-title">Your questions, answered</h2>
-          <p class="section-desc">Get quick answers to the most common questions about our platform and services.</p>
-          <a href="/register" class="btn btn-primary" style="margin-top:24px">Contact us
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </a>
+          <h2 class="faq-title">Your questions, answered</h2>
+          <p class="faq-desc">Get quick answers to the most common questions about our platform and services.</p>
+          <a href="#" class="btn-outline-dark" style="margin-top:20px">Contact us</a>
         </div>
         <div class="faq-right reveal">
           <div class="faq-item">
-            <button class="faq-q">How long does it take to set up?<span class="faq-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
-            <div class="faq-a"><p>Most shops are fully set up within 30 minutes. Import your products, invite your team, and you're ready to go.</p></div>
+            <button class="faq-q">What types of print shops do you work with? <span class="faq-icon">+</span></button>
+            <div class="faq-a"><p>We work with all types — digital printing, offset, large format, apparel, and packaging. Whether you're a one-person shop or a multi-branch operation.</p></div>
           </div>
           <div class="faq-item">
-            <button class="faq-q">Can I migrate from my current system?<span class="faq-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
-            <div class="faq-a"><p>Yes. We can help you import existing customer data, products, and orders. Contact our support team for assistance.</p></div>
+            <button class="faq-q">How long does it take to see results? <span class="faq-icon">+</span></button>
+            <div class="faq-a"><p>Most shops see a noticeable improvement within 2 to 3 weeks. Full onboarding takes about 30 minutes.</p></div>
           </div>
           <div class="faq-item">
-            <button class="faq-q">Is there a free trial?<span class="faq-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
-            <div class="faq-a"><p>Yes! Every plan comes with a 14-day free trial. No credit card required.</p></div>
+            <button class="faq-q">Can Onsprint integrate with my existing tools? <span class="faq-icon">+</span></button>
+            <div class="faq-a"><p>Yes. We integrate with Stripe, Billplz, Google, WhatsApp, and more. Our team can help set up custom integrations too.</p></div>
           </div>
           <div class="faq-item">
-            <button class="faq-q">What payment methods do you support?<span class="faq-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
-            <div class="faq-a"><p>We support FPX, credit/debit cards via Stripe, and Billplz for Malaysian bank transfers.</p></div>
+            <button class="faq-q">Do you offer one-time setup or ongoing support? <span class="faq-icon">+</span></button>
+            <div class="faq-a"><p>Both! You can use Onsprint as a self-serve platform or get ongoing support from our team.</p></div>
           </div>
           <div class="faq-item">
-            <button class="faq-q">Can I customize my online store?<span class="faq-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
-            <div class="faq-a"><p>Absolutely. Set your own branding, colors, logo, domain, and choose which products to display.</p></div>
+            <button class="faq-q">What does onboarding look like? <span class="faq-icon">+</span></button>
+            <div class="faq-a"><p>We guide you through product setup, importing data, inviting your team, and customizing your online store. Most shops are live within an hour.</p></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ══ CTA ══ -->
+  <!-- ══ CTA + CONTACT ══ -->
   <section class="cta-section">
-    <div class="cta-glow"></div>
-    <div class="container" style="position:relative;z-index:1;text-align:center">
-      <div class="reveal">
-        <h2 class="cta-title">Start your journey</h2>
-        <p class="cta-desc">Let's start building something great together.</p>
-        <div class="cta-btns">
-          <a href="/register" class="btn btn-primary btn-lg">Get started free
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </a>
-          <a href="/login" class="btn btn-glass">Log in</a>
+    <div class="container">
+      <div class="cta-grid">
+        <div class="cta-left">
+          <h2 class="cta-title">Start your journey</h2>
+          <p class="cta-desc">Let's start building something great together.</p>
+          <div class="cta-contact">
+            <div class="cta-phone">hello@onsprint.com</div>
+          </div>
+          <div class="cta-rating">
+            <div class="stars" style="color:#fbbf24">★★★★★</div>
+            <div style="font-size:13px"><strong>4.9 / 5</strong> Rated<br><span style="opacity:.6">Over 500 Shops</span></div>
+          </div>
+        </div>
+        <div class="cta-right">
+          <form class="cta-form" onsubmit="return false">
+            <label class="cta-form-label">Name
+              <input type="text" class="cta-form-input" placeholder="Your name">
+            </label>
+            <label class="cta-form-label">Email
+              <input type="email" class="cta-form-input" placeholder="you@company.com">
+            </label>
+            <label class="cta-form-label">Message
+              <textarea class="cta-form-input cta-form-textarea" placeholder="Enter your message..."></textarea>
+            </label>
+            <button type="submit" class="btn-accent btn-full">Submit <span class="btn-arrow">→</span></button>
+          </form>
         </div>
       </div>
     </div>
@@ -444,38 +494,30 @@
   <!-- ══ FOOTER ══ -->
   <footer class="footer">
     <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <div class="footer-logo">
-            <div class="nav-logo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="white" opacity=".7"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="white" opacity=".7"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="white" opacity=".4"/></svg></div>
-            <span>Onsprint</span>
+      <div class="footer-top">
+        <div class="footer-newsletter">
+          <h3>Sign up for our newsletter</h3>
+          <div class="footer-newsletter-form">
+            <input type="email" placeholder="name@email.com" class="footer-newsletter-input">
+            <button class="btn-dark btn-sm">Subscribe</button>
           </div>
-          <p>The all-in-one platform for print shop management. Built in Malaysia, for Malaysia.</p>
+          <div class="footer-socials">
+            <a href="#">𝕏</a>
+            <a href="#">📷</a>
+            <a href="#">🔗</a>
+          </div>
         </div>
-        <div class="footer-col">
-          <div class="footer-col-title">Product</div>
-          <a href="#features">Features</a>
+        <div class="footer-links-group">
+          <div class="footer-links-title">Pages</div>
+          <a href="#">Home</a>
+          <a href="#features">About</a>
           <a href="#pricing">Pricing</a>
           <a href="#stories">Case Studies</a>
-          <a href="/register">Get Started</a>
-        </div>
-        <div class="footer-col">
-          <div class="footer-col-title">Company</div>
-          <a href="#">About</a>
-          <a href="#">Blog</a>
-          <a href="#">Contact</a>
-          <a href="#">Careers</a>
-        </div>
-        <div class="footer-col">
-          <div class="footer-col-title">Legal</div>
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Service</a>
-          <a href="#">Cookie Policy</a>
         </div>
       </div>
       <div class="footer-bottom">
-        <span>Copyright &copy; 2026 Onsprint. All rights reserved.</span>
-        <span>Made with care in Malaysia</span>
+        <div class="footer-email">hello@onsprint.com</div>
+        <div class="footer-copy">Copyright &copy; 2026 Onsprint. All rights reserved.</div>
       </div>
     </div>
   </footer>
