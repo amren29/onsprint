@@ -30,6 +30,14 @@ export default function SuperAdminShops() {
   const [creating, setCreating] = useState(false)
   const [delTarget, setDelTarget] = useState<Shop | null>(null)
 
+  // Bulk selection state
+  const [selected, setSelected] = useState<Set<string>>(new Set())
+  const [showBulkSuspend, setShowBulkSuspend] = useState(false)
+  const [showBulkNotify, setShowBulkNotify] = useState(false)
+  const [notifyTitle, setNotifyTitle] = useState('')
+  const [notifyMessage, setNotifyMessage] = useState('')
+  const [bulkActing, setBulkActing] = useState(false)
+
   useEffect(() => {
     setLoading(true)
     const params = new URLSearchParams()
@@ -47,7 +55,70 @@ export default function SuperAdminShops() {
       .catch(() => setLoading(false))
   }, [search, planFilter, page])
 
+  // Clear selection when shops change
+  useEffect(() => {
+    setSelected(new Set())
+  }, [shops])
+
   const totalPages = Math.ceil(total / 20)
+
+  function toggleSelect(id: string) {
+    setSelected(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  function toggleSelectAll() {
+    if (selected.size === shops.length) {
+      setSelected(new Set())
+    } else {
+      setSelected(new Set(shops.map(s => s.id)))
+    }
+  }
+
+  async function handleBulkSuspend() {
+    setBulkActing(true)
+    const ids = Array.from(selected)
+    for (const id of ids) {
+      await fetch('/api/superadmin/shops', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, suspended: true }),
+      })
+    }
+    setBulkActing(false)
+    setShowBulkSuspend(false)
+    setSelected(new Set())
+    setPage(1)
+    // Trigger refetch
+    setLoading(true)
+    const params = new URLSearchParams()
+    if (search) params.set('search', search)
+    if (planFilter) params.set('plan', planFilter)
+    params.set('page', '1')
+    fetch(`/api/superadmin/shops?${params}`)
+      .then(r => r.json())
+      .then(data => { setShops(data.shops || []); setTotal(data.total || 0); setLoading(false) })
+      .catch(() => setLoading(false))
+  }
+
+  async function handleBulkNotify() {
+    if (!notifyTitle || !notifyMessage) return
+    setBulkActing(true)
+    await fetch('/api/superadmin/notifications', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ shop_ids: Array.from(selected), title: notifyTitle, message: notifyMessage }),
+    })
+    setBulkActing(false)
+    setShowBulkNotify(false)
+    setNotifyTitle('')
+    setNotifyMessage('')
+    setSelected(new Set())
+  }
 
   async function handleDelete() {
     if (!delTarget) return
@@ -111,6 +182,59 @@ export default function SuperAdminShops() {
         </div>
       )}
 
+      {/* Bulk Action Bar */}
+      {selected.size > 0 && (
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 12, padding: '10px 16px',
+          background: 'var(--bg-card)', border: '1px solid var(--accent)',
+          borderRadius: 'var(--r-md)', marginBottom: 0,
+        }}>
+          <span style={{ fontSize: 12.5, color: 'var(--text-primary)', fontWeight: 500 }}>
+            {selected.size} shop{selected.size > 1 ? 's' : ''} selected
+          </span>
+          <div style={{ flex: 1 }} />
+          <button className="btn-secondary" style={{ fontSize: 12 }} onClick={() => setShowBulkNotify(true)}>
+            Send Notification
+          </button>
+          <button className="btn-primary" style={{ fontSize: 12, background: 'var(--warning, #f59e0b)' }} onClick={() => setShowBulkSuspend(true)}>
+            Suspend Selected
+          </button>
+          <button className="btn-ghost" style={{ fontSize: 12 }} onClick={() => setSelected(new Set())}>
+            Clear
+          </button>
+        </div>
+      )}
+
+      {/* Bulk Notify Modal */}
+      {showBulkNotify && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          background: 'rgba(0,0,0,0.4)', zIndex: 9999,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <div className="card" style={{ width: 420, margin: 0 }}>
+            <div className="card-header"><h3 className="card-title">Send Notification to {selected.size} Shop{selected.size > 1 ? 's' : ''}</h3></div>
+            <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <label className="form-group">
+                <span className="form-label">Title *</span>
+                <input value={notifyTitle} onChange={e => setNotifyTitle(e.target.value)} className="form-input" placeholder="Notification title" />
+              </label>
+              <label className="form-group">
+                <span className="form-label">Message *</span>
+                <textarea value={notifyMessage} onChange={e => setNotifyMessage(e.target.value)} className="form-input"
+                  placeholder="Enter your message..." rows={3} style={{ resize: 'vertical' }} />
+              </label>
+              <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+                <button className="btn-secondary" onClick={() => { setShowBulkNotify(false); setNotifyTitle(''); setNotifyMessage('') }}>Cancel</button>
+                <button className="btn-primary" disabled={bulkActing || !notifyTitle || !notifyMessage} onClick={handleBulkNotify}>
+                  {bulkActing ? 'Sending...' : 'Send'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="page-scroll">
         <div className="filter-row">
           <div />
@@ -139,6 +263,14 @@ export default function SuperAdminShops() {
           <table className="data-table">
             <thead>
               <tr>
+                <th style={{ width: 36 }}>
+                  <input
+                    type="checkbox"
+                    checked={shops.length > 0 && selected.size === shops.length}
+                    onChange={toggleSelectAll}
+                    style={{ cursor: 'pointer', accentColor: 'var(--accent)' }}
+                  />
+                </th>
                 <th>Name</th>
                 <th>Slug</th>
                 <th>Plan</th>
@@ -149,15 +281,23 @@ export default function SuperAdminShops() {
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>Loading...</td></tr>
+                <tr><td colSpan={7} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>Loading...</td></tr>
               ) : shops.length === 0 ? (
-                <tr><td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>No shops found</td></tr>
+                <tr><td colSpan={7} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>No shops found</td></tr>
               ) : shops.map(shop => (
                 <tr
                   key={shop.id}
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: 'pointer', background: selected.has(shop.id) ? 'var(--bg-hover)' : undefined }}
                   onClick={() => router.push(`/superadmin/shops/${shop.id}`)}
                 >
+                  <td onClick={e => e.stopPropagation()}>
+                    <input
+                      type="checkbox"
+                      checked={selected.has(shop.id)}
+                      onChange={() => toggleSelect(shop.id)}
+                      style={{ cursor: 'pointer', accentColor: 'var(--accent)' }}
+                    />
+                  </td>
                   <td><div className="cell-name">{shop.name}</div></td>
                   <td><div className="cell-sub">{shop.slug}</div></td>
                   <td>
@@ -215,6 +355,16 @@ export default function SuperAdminShops() {
           confirmLabel="Delete"
           onConfirm={handleDelete}
           onCancel={() => setDelTarget(null)}
+        />
+      )}
+
+      {showBulkSuspend && (
+        <ConfirmModal
+          title={`Suspend ${selected.size} shop${selected.size > 1 ? 's' : ''}?`}
+          message="This will suspend all selected shops. Their users will not be able to access the admin panel."
+          confirmLabel={bulkActing ? 'Suspending...' : 'Suspend All'}
+          onConfirm={handleBulkSuspend}
+          onCancel={() => setShowBulkSuspend(false)}
         />
       )}
     </>

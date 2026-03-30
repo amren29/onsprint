@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import SuperAdminSearch from './SuperAdminSearch'
 
 const MoonIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -30,6 +31,146 @@ const HamburgerIcon = () => (
   </svg>
 )
 
+const BellIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>
+  </svg>
+)
+
+interface SupportTicket {
+  id: string
+  subject: string
+  status: string
+  updated_at: string
+  shops?: { name: string }
+  user_email?: string
+}
+
+function relativeTime(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime()
+  const mins = Math.floor(diff / 60000)
+  if (mins < 1) return 'Just now'
+  if (mins < 60) return `${mins}m ago`
+  const hrs = Math.floor(mins / 60)
+  if (hrs < 24) return `${hrs}h ago`
+  const days = Math.floor(hrs / 24)
+  return `${days}d ago`
+}
+
+function NotificationBell() {
+  const router = useRouter()
+  const [tickets, setTickets] = useState<SupportTicket[]>([])
+  const [open, setOpen] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  function fetchTickets() {
+    fetch('/api/superadmin/support?status=open')
+      .then(r => r.json())
+      .then(data => setTickets(data.tickets || []))
+      .catch(() => {})
+  }
+
+  useEffect(() => {
+    fetchTickets()
+    const interval = setInterval(fetchTickets, 30000)
+    return () => clearInterval(interval)
+  }, [])
+
+  // Click outside to close
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    if (open) document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [open])
+
+  return (
+    <div ref={containerRef} style={{ position: 'relative' }}>
+      <button
+        className="topbar-btn"
+        onClick={() => setOpen(!open)}
+        title="Support tickets"
+        style={{ position: 'relative' }}
+      >
+        <BellIcon />
+        {tickets.length > 0 && (
+          <span style={{
+            position: 'absolute', top: 2, right: 2,
+            minWidth: 14, height: 14, borderRadius: 7,
+            background: 'var(--danger, #ef4444)', color: '#fff',
+            fontSize: 9, fontWeight: 700,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: '0 3px', lineHeight: 1,
+          }}>
+            {tickets.length > 99 ? '99+' : tickets.length}
+          </span>
+        )}
+      </button>
+
+      {open && (
+        <div style={{
+          position: 'absolute', top: '100%', right: 0, marginTop: 8,
+          width: 340, maxHeight: 400,
+          background: 'var(--bg-card)', border: '1px solid var(--border)',
+          borderRadius: 'var(--r-lg, 12px)', overflow: 'hidden',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.15)', zIndex: 1000,
+        }}>
+          <div style={{
+            padding: '10px 14px', borderBottom: '1px solid var(--border)',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          }}>
+            <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-primary)' }}>
+              Open Tickets ({tickets.length})
+            </span>
+            <button
+              className="btn-ghost"
+              style={{ fontSize: 11, padding: '2px 8px' }}
+              onClick={() => { setOpen(false); router.push('/superadmin/support') }}
+            >
+              View All
+            </button>
+          </div>
+
+          <div style={{ maxHeight: 340, overflowY: 'auto' }}>
+            {tickets.length === 0 ? (
+              <div style={{ padding: 20, textAlign: 'center', color: 'var(--text-muted)', fontSize: 12 }}>
+                No open tickets
+              </div>
+            ) : tickets.slice(0, 10).map(ticket => (
+              <div
+                key={ticket.id}
+                onClick={() => { setOpen(false); router.push('/superadmin/support') }}
+                style={{
+                  padding: '10px 14px', cursor: 'pointer',
+                  borderBottom: '1px solid var(--border)',
+                  fontSize: 12.5,
+                }}
+                onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-hover)')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
+                  <span className="cell-name" style={{ flex: 1, fontSize: 12 }}>
+                    {ticket.subject || 'No subject'}
+                  </span>
+                  <span style={{ color: 'var(--text-muted)', fontSize: 10, whiteSpace: 'nowrap' }}>
+                    {relativeTime(ticket.updated_at)}
+                  </span>
+                </div>
+                <div className="cell-sub" style={{ fontSize: 11 }}>
+                  {ticket.shops?.name || 'Unknown shop'} {ticket.user_email ? `· ${ticket.user_email}` : ''}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function SuperAdminTopbar({ onHamburgerClick }: { onHamburgerClick: () => void }) {
   const router = useRouter()
   const [dark, setDark] = useState(false)
@@ -56,6 +197,8 @@ export default function SuperAdminTopbar({ onHamburgerClick }: { onHamburgerClic
         <HamburgerIcon />
       </button>
       <div className="topbar-spacer" />
+      <SuperAdminSearch />
+      <NotificationBell />
       <button className="topbar-btn" onClick={toggleTheme} title="Toggle theme">
         {dark ? <SunIcon /> : <MoonIcon />}
       </button>
