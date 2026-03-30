@@ -151,6 +151,23 @@ ul{list-style:none}
 .pricing-card-features{margin-top:20px;display:flex;flex-direction:column;gap:8px}
 .pricing-card-features li{font-size:13px;color:#475569;display:flex;align-items:center;gap:8px}
 
+/* ── 3-Column Pricing ─────────────────────────────── */
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:940px;margin:40px auto 0;text-align:left}
+.price-card{padding:32px;border-radius:18px;background:#fff;border:1px solid #e2e8f0;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s}
+.price-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.06)}
+.price-card-popular{background:#0f172a;color:#fff;border:none;transform:scale(1.04);box-shadow:0 20px 48px rgba(0,0,0,.12)}
+.price-card-popular:hover{transform:scale(1.04) translateY(-4px);box-shadow:0 24px 56px rgba(0,0,0,.16)}
+.price-card-badge{position:absolute;top:14px;right:-30px;background:#006AFF;color:#fff;font-size:9px;font-weight:700;padding:3px 32px;transform:rotate(45deg);letter-spacing:.04em}
+.price-card-name{font-size:12px;font-weight:700;color:#006AFF;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.price-card-amount{font-size:40px;font-weight:900;letter-spacing:-1px;margin-bottom:6px}
+.price-card-amount span{font-size:14px;font-weight:500;color:#94a3b8}
+.price-card-popular .price-card-amount span{color:rgba(255,255,255,.45)}
+.price-card-desc{font-size:13px;color:#94a3b8;line-height:1.5;margin-bottom:24px}
+.price-card-popular .price-card-desc{color:rgba(255,255,255,.45)}
+.price-card-list{margin-top:24px;display:flex;flex-direction:column;gap:10px}
+.price-card-list li{font-size:13px;color:#475569;display:flex;align-items:center;gap:8px}
+.price-card-popular .price-card-list li{color:rgba(255,255,255,.65)}
+
 /* ── Stories ───────────────────────────────────────── */
 .section-heading{font-size:34px;font-weight:800;letter-spacing:-1px;margin-bottom:12px}
 .section-sub{font-size:15px;color:#64748b;max-width:480px;margin:0 auto 40px;line-height:1.65}
@@ -231,8 +248,9 @@ ul{list-style:none}
   .num-grid{grid-template-columns:1fr}
   .perf-detail-grid{grid-template-columns:1fr}
   .integ-grid{grid-template-columns:1fr}
-  .pricing-section{margin:0 12px;border-radius:18px}
-  .pricing-grid{grid-template-columns:1fr}
+  .price-grid{grid-template-columns:1fr;max-width:400px}
+  .price-card-popular{transform:none}
+  .price-card-popular:hover{transform:translateY(-4px)}
   .stories-grid{grid-template-columns:1fr}
   .stories-details{grid-template-columns:1fr}
   .testi-grid{grid-template-columns:1fr}
