@@ -61,6 +61,33 @@ document.querySelectorAll('.pricing-plan').forEach(plan => {
   })
 })
 
+// ── Billing toggle ──
+let isAnnual = false
+function toggleBilling() {
+  isAnnual = !isAnnual
+  const sw = document.getElementById('billing-switch')
+  const mLabel = document.getElementById('billing-monthly-label')
+  const aLabel = document.getElementById('billing-annual-label')
+
+  if (isAnnual) {
+    sw.classList.add('annual')
+    mLabel.classList.remove('active')
+    aLabel.classList.add('active')
+  } else {
+    sw.classList.remove('annual')
+    mLabel.classList.add('active')
+    aLabel.classList.remove('active')
+  }
+
+  document.querySelectorAll('.price-card-amount[data-monthly]').forEach(el => {
+    const price = isAnnual ? el.dataset.annual : el.dataset.monthly
+    const sub = isAnnual ? el.dataset.annualSub : el.dataset.monthlySub
+    el.innerHTML = price + ' <span>' + sub + '</span>'
+  })
+}
+// Set initial state
+document.getElementById('billing-monthly-label')?.classList.add('active')
+
 // ── Smooth scroll for anchor links ──
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', (e) => {

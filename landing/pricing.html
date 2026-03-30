@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing — Onsprint</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon.svg">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .pricing-page { padding-top: 100px; }
+    .pricing-page-header { text-align: center; margin-bottom: 48px; }
+    .pricing-page-title { font-size: 42px; font-weight: 900; letter-spacing: -1.5px; margin-bottom: 12px; }
+    .pricing-page-sub { font-size: 16px; color: #64748b; max-width: 500px; margin: 0 auto; line-height: 1.7; }
+
+    /* Comparison Table */
+    .compare-table { width: 100%; border-collapse: collapse; margin-top: 64px; }
+    .compare-table th, .compare-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #f0f0f2; font-size: 13px; }
+    .compare-table th { font-weight: 600; color: #0f172a; }
+    .compare-table td { color: #64748b; }
+    .compare-table thead th { padding-bottom: 16px; border-bottom: 2px solid #e2e8f0; vertical-align: bottom; }
+    .compare-table thead th:first-child { font-size: 14px; }
+    .compare-table thead th:not(:first-child) { text-align: center; min-width: 140px; }
+    .compare-table td:not(:first-child) { text-align: center; }
+    .compare-table .plan-header { font-size: 12px; font-weight: 700; color: #006AFF; text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 2px; }
+    .compare-table .plan-price { font-size: 20px; font-weight: 900; color: #0f172a; letter-spacing: -.5px; }
+    .compare-table .plan-price span { font-size: 12px; font-weight: 500; color: #94a3b8; }
+    .compare-table .plan-annual { font-size: 10px; color: #94a3b8; display: block; margin-top: 2px; }
+    .compare-table .section-row td { font-size: 11px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: .06em; background: #f8fafc; padding: 10px 16px; border-bottom: 1px solid #e2e8f0; }
+    .compare-table .check { color: #006AFF; font-weight: 700; font-size: 15px; }
+    .compare-table .dash { color: #e2e8f0; font-size: 16px; }
+    .compare-table tr:hover td { background: #fafbfc; }
+    .compare-table .highlight-col { background: rgba(0,106,255,.02); }
+    .compare-cta { text-align: center; }
+    .compare-cta a { margin: 0 6px; }
+
+    /* FAQ on pricing page */
+    .pricing-faq { margin-top: 80px; max-width: 700px; margin-left: auto; margin-right: auto; }
+    .pricing-faq-title { font-size: 28px; font-weight: 800; text-align: center; margin-bottom: 32px; }
+
+    @media (max-width: 820px) {
+      .compare-wrap { overflow-x: auto; }
+      .compare-table { min-width: 700px; }
+      .pricing-page-title { font-size: 30px; }
+      .price-grid-4 { grid-template-columns: 1fr !important; max-width: 400px !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="nav" id="nav" style="position:fixed">
+    <div class="nav-pill">
+      <a href="index.html" class="nav-brand">
+        <div class="nav-logo-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="white" opacity=".7"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="white" opacity=".7"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="white" opacity=".4"/></svg>
+        </div>
+        Onsprint
+      </a>
+      <div class="nav-links">
+        <a href="index.html#features">Features</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="index.html#faq">FAQ</a>
+      </div>
+      <a href="/register" class="nav-cta">Get started <span class="nav-cta-arrow">→</span></a>
+    </div>
+  </nav>
+
+  <div class="pricing-page">
+    <div class="container">
+      <!-- Header -->
+      <div class="pricing-page-header">
+        <h1 class="pricing-page-title">Choose your plan</h1>
+        <p class="pricing-page-sub">Start free and scale as you grow. All plans include the production board, order management, and online proofing.</p>
+        <!-- Billing toggle -->
+        <div class="billing-toggle" style="margin-top:28px">
+          <span class="billing-label active" id="billing-monthly-label">Monthly</span>
+          <button class="billing-switch" id="billing-switch" onclick="toggleBilling()">
+            <span class="billing-knob"></span>
+          </button>
+          <span class="billing-label" id="billing-annual-label">Annual <span class="billing-save">Save 2 months</span></span>
+        </div>
+      </div>
+
+      <!-- Price Cards -->
+      <div class="price-grid price-grid-4" style="margin-bottom:0">
+        <div class="price-card">
+          <div class="price-card-name">Free</div>
+          <div class="price-card-amount" data-monthly="RM 0" data-annual="RM 0" data-monthly-sub="/ forever" data-annual-sub="/ forever">RM 0 <span>/ forever</span></div>
+          <p class="price-card-desc">Get started with the essentials</p>
+          <a href="/register" class="btn-outline-dark btn-full">Start free</a>
+          <ul class="price-card-list">
+            <li>✓ Unlimited orders</li>
+            <li>✓ Production board</li>
+            <li>✓ Online proofing</li>
+            <li>✓ Auto production status</li>
+            <li>✓ 1 team member</li>
+          </ul>
+        </div>
+        <div class="price-card">
+          <div class="price-card-name">Starter</div>
+          <div class="price-card-amount" data-monthly="RM 199" data-annual="RM 166" data-monthly-sub="/ mo" data-annual-sub="/ mo · billed RM 1,990/yr">RM 199 <span>/ mo</span></div>
+          <p class="price-card-desc">Launch your online store</p>
+          <a href="/register" class="btn-outline-dark btn-full">Get started</a>
+          <ul class="price-card-list">
+            <li>✓ Everything in Free</li>
+            <li>✓ Online store (20 products)</li>
+            <li>✓ File upload</li>
+            <li>✓ Customer portal</li>
+            <li>✓ Payment integration</li>
+            <li class="price-card-fee">1% + RM 2 platform fee</li>
+          </ul>
+        </div>
+        <div class="price-card price-card-popular">
+          <div class="price-card-badge">MOST POPULAR</div>
+          <div class="price-card-name" style="color:#60a5fa">Growth</div>
+          <div class="price-card-amount" data-monthly="RM 399" data-annual="RM 332" data-monthly-sub="/ mo" data-annual-sub="/ mo · billed RM 3,990/yr">RM 399 <span>/ mo</span></div>
+          <p class="price-card-desc">Scale your team and agents</p>
+          <a href="/register" class="btn-dark btn-full">Get started <span class="btn-arrow">→</span></a>
+          <ul class="price-card-list">
+            <li>✓ Everything in Starter</li>
+            <li>✓ Agent topup system</li>
+            <li>✓ Agent portal</li>
+            <li>✓ 10 team members</li>
+            <li>✓ Payment integration</li>
+            <li class="price-card-fee">1% + RM 1.20 platform fee</li>
+          </ul>
+        </div>
+        <div class="price-card">
+          <div class="price-card-name">Pro</div>
+          <div class="price-card-amount" data-monthly="RM 599" data-annual="RM 499" data-monthly-sub="/ mo" data-annual-sub="/ mo · billed RM 5,990/yr">RM 599 <span>/ mo</span></div>
+          <p class="price-card-desc">Everything unlocked</p>
+          <a href="/register" class="btn-outline-dark btn-full">Get started</a>
+          <ul class="price-card-list">
+            <li>✓ Everything in Growth</li>
+            <li>✓ Affiliate system</li>
+            <li>✓ 20 team members</li>
+            <li>✓ Unlimited products</li>
+            <li>✓ All features</li>
+            <li class="price-card-fee">1.5% platform fee only</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Feature Comparison Table -->
+      <div class="compare-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th style="width:30%">Compare plans</th>
+              <th>
+                <span class="plan-header">Free</span>
+                <span class="plan-price">RM 0</span>
+              </th>
+              <th>
+                <span class="plan-header">Starter</span>
+                <span class="plan-price">RM 199 <span>/mo</span></span>
+                <span class="plan-annual">RM 166/mo billed annually</span>
+              </th>
+              <th class="highlight-col">
+                <span class="plan-header">Growth</span>
+                <span class="plan-price">RM 399 <span>/mo</span></span>
+                <span class="plan-annual">RM 332/mo billed annually</span>
+              </th>
+              <th>
+                <span class="plan-header">Pro</span>
+                <span class="plan-price">RM 599 <span>/mo</span></span>
+                <span class="plan-annual">RM 499/mo billed annually</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Orders & Production -->
+            <tr class="section-row"><td colspan="5">Orders & Production</td></tr>
+            <tr><td>Unlimited orders</td><td class="check">✓</td><td class="check">✓</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Production board (Kanban)</td><td class="check">✓</td><td class="check">✓</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>12 production stages</td><td class="check">✓</td><td class="check">✓</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Online proofing</td><td class="check">✓</td><td class="check">✓</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Auto production status updates</td><td class="check">✓</td><td class="check">✓</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Customer management</td><td class="check">✓</td><td class="check">✓</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Invoice generation</td><td class="check">✓</td><td class="check">✓</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+
+            <!-- Online Store -->
+            <tr class="section-row"><td colspan="5">Online Store</td></tr>
+            <tr><td>Online storefront</td><td class="dash">—</td><td class="check">✓</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Products</td><td class="dash">—</td><td>20 products</td><td class="highlight-col">20 products</td><td>Unlimited</td></tr>
+            <tr><td>Customer file upload</td><td class="dash">—</td><td class="check">✓</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Customer portal</td><td class="dash">—</td><td class="check">✓</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Store customization</td><td class="dash">—</td><td class="check">✓</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Custom domain</td><td class="dash">—</td><td class="dash">—</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>SEO settings</td><td class="dash">—</td><td class="dash">—</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+
+            <!-- Payments -->
+            <tr class="section-row"><td colspan="5">Payments & Billing</td></tr>
+            <tr><td>Payment integration (Stripe, Billplz, FPX)</td><td class="dash">—</td><td class="check">✓</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Platform fee per transaction</td><td class="dash">—</td><td>1% + RM 2</td><td class="highlight-col">1% + RM 1.20</td><td>1.5% only</td></tr>
+            <tr><td>Customer wallet & topup</td><td class="dash">—</td><td class="check">✓</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Payment reports</td><td class="dash">—</td><td class="check">✓</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+
+            <!-- Agents -->
+            <tr class="section-row"><td colspan="5">Agents & Affiliates</td></tr>
+            <tr><td>Agent system</td><td class="dash">—</td><td class="dash">—</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Agent topup (wallet)</td><td class="dash">—</td><td class="dash">—</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Agent portal on online store</td><td class="dash">—</td><td class="dash">—</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Affiliate system</td><td class="dash">—</td><td class="dash">—</td><td class="dash highlight-col">—</td><td class="check">✓</td></tr>
+            <tr><td>Affiliate tracking & payouts</td><td class="dash">—</td><td class="dash">—</td><td class="dash highlight-col">—</td><td class="check">✓</td></tr>
+
+            <!-- Team -->
+            <tr class="section-row"><td colspan="5">Team & Collaboration</td></tr>
+            <tr><td>Team members</td><td>1</td><td>1</td><td class="highlight-col">10</td><td>20</td></tr>
+            <tr><td>Role-based permissions</td><td class="dash">—</td><td class="dash">—</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Notifications</td><td class="check">✓</td><td class="check">✓</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Real-time updates</td><td class="check">✓</td><td class="check">✓</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+
+            <!-- Advanced -->
+            <tr class="section-row"><td colspan="5">Advanced Features</td></tr>
+            <tr><td>Stock & inventory management</td><td class="check">✓</td><td class="check">✓</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Supplier management</td><td class="check">✓</td><td class="check">✓</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Analytics & reports</td><td>Basic</td><td>Standard</td><td class="highlight-col">Advanced</td><td>Full</td></tr>
+            <tr><td>Discounts & coupons</td><td class="dash">—</td><td class="dash">—</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Bundles</td><td class="dash">—</td><td class="dash">—</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Membership system</td><td class="dash">—</td><td class="dash">—</td><td class="dash highlight-col">—</td><td class="check">✓</td></tr>
+            <tr><td>Marketing campaigns</td><td class="dash">—</td><td class="dash">—</td><td class="dash highlight-col">—</td><td class="check">✓</td></tr>
+            <tr><td>Content pages</td><td class="dash">—</td><td class="dash">—</td><td class="dash highlight-col">—</td><td class="check">✓</td></tr>
+            <tr><td>Reviews & ratings</td><td class="dash">—</td><td class="dash">—</td><td class="dash highlight-col">—</td><td class="check">✓</td></tr>
+
+            <!-- Support -->
+            <tr class="section-row"><td colspan="5">Support</td></tr>
+            <tr><td>Email support</td><td class="check">✓</td><td class="check">✓</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Priority support</td><td class="dash">—</td><td class="dash">—</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+            <tr><td>Dedicated account manager</td><td class="dash">—</td><td class="dash">—</td><td class="dash highlight-col">—</td><td class="check">✓</td></tr>
+            <tr><td>Onboarding assistance</td><td class="dash">—</td><td class="dash">—</td><td class="check highlight-col">✓</td><td class="check">✓</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CTA -->
+      <div style="text-align:center;padding:48px 0">
+        <h3 style="font-size:24px;font-weight:800;margin-bottom:12px">Ready to get started?</h3>
+        <p style="font-size:14px;color:#64748b;margin-bottom:24px">Start with the Free plan. No credit card required.</p>
+        <div class="compare-cta">
+          <a href="/register" class="btn-dark">Start free <span class="btn-arrow">→</span></a>
+          <a href="index.html#faq" class="btn-outline-dark">Have questions?</a>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="pricing-faq">
+        <h2 class="pricing-faq-title">Frequently asked questions</h2>
+        <div class="faq-item">
+          <button class="faq-q">Can I switch plans anytime? <span class="faq-icon">+</span></button>
+          <div class="faq-a"><p>Yes, you can upgrade or downgrade at any time. When upgrading, you'll be charged the prorated difference. When downgrading, the credit will be applied to your next billing cycle.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">What happens when I hit my product limit? <span class="faq-icon">+</span></button>
+          <div class="faq-a"><p>On the Starter and Growth plans, you can list up to 20 products on your online store. If you need more, upgrade to the Pro plan for unlimited products. Your existing products will always remain accessible.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">How does the platform fee work? <span class="faq-icon">+</span></button>
+          <div class="faq-a"><p>The platform fee is charged per successful transaction through your online store. It's separate from payment gateway fees (Stripe/Billplz). The fee decreases as you upgrade to higher plans. Free plan users don't have an online store, so no platform fee applies.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Do I need to pay for payment gateway separately? <span class="faq-icon">+</span></button>
+          <div class="faq-a"><p>Yes, payment gateways (Stripe, Billplz, FPX) have their own transaction fees which are separate from our platform fee. We don't charge anything extra on top of their fees.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Is there a contract or commitment? <span class="faq-icon">+</span></button>
+          <div class="faq-a"><p>No long-term contracts. Monthly plans can be cancelled anytime. Annual plans are billed upfront for the year and include 2 months free. You can cancel before renewal.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">What's included in the Free plan? <span class="faq-icon">+</span></button>
+          <div class="faq-a"><p>The Free plan includes unlimited orders, the full production board with 12 stages, online proofing (send proofs to customers), automatic production status updates, customer management, and invoice generation. It's a fully functional order management system — just without the online store.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer" style="margin-top:64px">
+    <div class="container">
+      <div class="footer-bottom">
+        <div class="footer-email">hello@onsprint.com</div>
+        <div class="footer-copy">Copyright &copy; 2026 Onsprint. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

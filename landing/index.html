@@ -25,7 +25,7 @@
       <div class="nav-links">
         <a href="#features">About</a>
         <a href="#features">Features</a>
-        <a href="#pricing">Pricing</a>
+        <a href="pricing.html">Pricing</a>
       </div>
       <a href="/register" class="nav-cta">Contact us <span class="nav-cta-arrow">→</span></a>
     </div>
@@ -572,12 +572,20 @@
       <div class="reveal">
         <h2 class="section-heading">Flexible pricing</h2>
         <p class="section-sub">Start free, upgrade when you're ready. No hidden fees.</p>
+        <!-- Billing toggle -->
+        <div class="billing-toggle">
+          <span class="billing-label" id="billing-monthly-label">Monthly</span>
+          <button class="billing-switch" id="billing-switch" onclick="toggleBilling()">
+            <span class="billing-knob"></span>
+          </button>
+          <span class="billing-label" id="billing-annual-label">Annual <span class="billing-save">Save 2 months</span></span>
+        </div>
       </div>
       <div class="price-grid price-grid-4 reveal">
         <!-- Free -->
         <div class="price-card">
           <div class="price-card-name">Free</div>
-          <div class="price-card-amount">RM 0 <span>/ forever</span></div>
+          <div class="price-card-amount" data-monthly="RM 0" data-annual="RM 0" data-monthly-sub="/ forever" data-annual-sub="/ forever">RM 0 <span>/ forever</span></div>
           <p class="price-card-desc">Get started with the essentials — no credit card required</p>
           <a href="/register" class="btn-outline-dark btn-full">Start free</a>
           <ul class="price-card-list">
@@ -591,7 +599,7 @@
         <!-- Starter -->
         <div class="price-card">
           <div class="price-card-name">Starter</div>
-          <div class="price-card-amount">RM 199 <span>/ mo</span></div>
+          <div class="price-card-amount" data-monthly="RM 199" data-annual="RM 166" data-monthly-sub="/ mo" data-annual-sub="/ mo · billed RM 1,990/yr">RM 199 <span>/ mo</span></div>
           <p class="price-card-desc">Launch your online store and start accepting orders</p>
           <a href="/register" class="btn-outline-dark btn-full">Get started</a>
           <ul class="price-card-list">
@@ -607,7 +615,7 @@
         <div class="price-card price-card-popular">
           <div class="price-card-badge">MOST POPULAR</div>
           <div class="price-card-name" style="color:#60a5fa">Growth</div>
-          <div class="price-card-amount">RM 399 <span>/ mo</span></div>
+          <div class="price-card-amount" data-monthly="RM 399" data-annual="RM 332" data-monthly-sub="/ mo" data-annual-sub="/ mo · billed RM 3,990/yr">RM 399 <span>/ mo</span></div>
           <p class="price-card-desc">Scale your team and agent network</p>
           <a href="/register" class="btn-dark btn-full">Get started <span class="btn-arrow">→</span></a>
           <ul class="price-card-list">
@@ -622,7 +630,7 @@
         <!-- Pro -->
         <div class="price-card">
           <div class="price-card-name">Pro</div>
-          <div class="price-card-amount">RM 599 <span>/ mo</span></div>
+          <div class="price-card-amount" data-monthly="RM 599" data-annual="RM 499" data-monthly-sub="/ mo" data-annual-sub="/ mo · billed RM 5,990/yr">RM 599 <span>/ mo</span></div>
           <p class="price-card-desc">Everything unlocked for serious operations</p>
           <a href="/register" class="btn-outline-dark btn-full">Get started</a>
           <ul class="price-card-list">
@@ -765,7 +773,7 @@
           <div class="footer-links-title">Pages</div>
           <a href="#">Home</a>
           <a href="#features">About</a>
-          <a href="#pricing">Pricing</a>
+          <a href="pricing.html">Pricing</a>
           <a href="#stories">Case Studies</a>
         </div>
       </div>
