@@ -84,9 +84,20 @@ function toggleBilling() {
     const sub = isAnnual ? el.dataset.annualSub : el.dataset.monthlySub
     const yearlyTotal = el.dataset.annualTotal || ''
     if (isAnnual && yearlyTotal) {
-      el.innerHTML = yearlyTotal + ' <span>/ yr</span><span class="price-per-month">' + price + '/mo</span>'
+      el.innerHTML = yearlyTotal + ' <span>/ yr</span>'
+      // Add per-month below as sibling
+      let perMonth = el.parentElement.querySelector('.price-per-month')
+      if (!perMonth) {
+        perMonth = document.createElement('div')
+        perMonth.className = 'price-per-month'
+        el.insertAdjacentElement('afterend', perMonth)
+      }
+      perMonth.textContent = price + '/mo'
+      perMonth.style.display = ''
     } else {
       el.innerHTML = price + ' <span>' + sub + '</span>'
+      const perMonth = el.parentElement.querySelector('.price-per-month')
+      if (perMonth) perMonth.style.display = 'none'
     }
   })
 }
