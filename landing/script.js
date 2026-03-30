@@ -28,6 +28,11 @@ document.querySelectorAll('.perf-tab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.perf-tab').forEach(t => t.classList.remove('active'))
     tab.classList.add('active')
+    // Switch panel
+    const key = tab.dataset.tab
+    document.querySelectorAll('.perf-panel').forEach(p => p.classList.remove('active'))
+    const panel = document.querySelector(`.perf-panel[data-panel="${key}"]`)
+    if (panel) panel.classList.add('active')
   })
 })
 

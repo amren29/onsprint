@@ -355,10 +355,11 @@
         <button class="perf-tab" data-tab="team">Team management</button>
       </div>
     </div>
-    <!-- Feature Detail -->
+    <!-- Feature Details (one per tab) -->
     <div class="perf-detail">
       <div class="container">
-        <div class="perf-detail-grid reveal">
+        <!-- Order Management -->
+        <div class="perf-detail-grid reveal perf-panel active" data-panel="portal">
           <div class="perf-detail-card">
             <div class="perf-detail-card-header">Recent Orders</div>
             <div class="perf-detail-card-row active">
@@ -387,6 +388,102 @@
             <div class="perf-detail-label">ORDER MANAGEMENT</div>
             <h3 class="perf-detail-heading">Manage orders from quote to delivery</h3>
             <p class="perf-detail-desc">Create orders, track production status, generate invoices, and manage payments — all from one dashboard. Auto-generated IDs keep everything organized.</p>
+          </div>
+        </div>
+        <!-- Production Board -->
+        <div class="perf-detail-grid perf-panel" data-panel="api">
+          <div class="perf-detail-card">
+            <div class="perf-detail-card-header">Production Board</div>
+            <div class="perf-detail-card-row active">
+              <div class="perf-detail-avatar">01</div>
+              <div>
+                <div class="perf-detail-name">Business Cards x500</div>
+                <div class="perf-detail-sub">Artwork Checking → Printing</div>
+              </div>
+            </div>
+            <div class="perf-detail-card-row">
+              <div class="perf-detail-avatar" style="opacity:.7">02</div>
+              <div>
+                <div class="perf-detail-name">Flyer A3 x200</div>
+                <div class="perf-detail-sub">Ready to Print</div>
+              </div>
+            </div>
+            <div class="perf-detail-card-row">
+              <div class="perf-detail-avatar" style="opacity:.5">03</div>
+              <div>
+                <div class="perf-detail-name">Banner 6ft x2</div>
+                <div class="perf-detail-sub">QC → Ready to Pickup</div>
+              </div>
+            </div>
+          </div>
+          <div class="perf-detail-text">
+            <div class="perf-detail-label">PRODUCTION BOARD</div>
+            <h3 class="perf-detail-heading">Track every job through your pipeline</h3>
+            <p class="perf-detail-desc">Kanban-style board with 12 production stages. Drag cards from artwork checking to delivery. Your team always knows what's next.</p>
+          </div>
+        </div>
+        <!-- Online Store -->
+        <div class="perf-detail-grid perf-panel" data-panel="workflow">
+          <div class="perf-detail-card">
+            <div class="perf-detail-card-header">Store Analytics</div>
+            <div class="perf-detail-card-row active">
+              <div class="perf-detail-avatar">📊</div>
+              <div>
+                <div class="perf-detail-name">Online Orders Today</div>
+                <div class="perf-detail-sub">12 orders · RM 3,400</div>
+              </div>
+            </div>
+            <div class="perf-detail-card-row">
+              <div class="perf-detail-avatar" style="opacity:.7;font-size:14px">👥</div>
+              <div>
+                <div class="perf-detail-name">Store Visitors</div>
+                <div class="perf-detail-sub">89 today · 340 this week</div>
+              </div>
+            </div>
+            <div class="perf-detail-card-row">
+              <div class="perf-detail-avatar" style="opacity:.5;font-size:14px">🛒</div>
+              <div>
+                <div class="perf-detail-name">Cart Conversion</div>
+                <div class="perf-detail-sub">68% checkout rate</div>
+              </div>
+            </div>
+          </div>
+          <div class="perf-detail-text">
+            <div class="perf-detail-label">ONLINE STORE</div>
+            <h3 class="perf-detail-heading">Your own branded storefront</h3>
+            <p class="perf-detail-desc">Customers browse products, upload artwork, and place orders 24/7. Fully customizable with your logo, colors, and domain.</p>
+          </div>
+        </div>
+        <!-- Team Management -->
+        <div class="perf-detail-grid perf-panel" data-panel="team">
+          <div class="perf-detail-card">
+            <div class="perf-detail-card-header">Team Members</div>
+            <div class="perf-detail-card-row active">
+              <div class="perf-detail-avatar">AR</div>
+              <div>
+                <div class="perf-detail-name">Ahmad R. · Owner</div>
+                <div class="perf-detail-sub">Full access</div>
+              </div>
+            </div>
+            <div class="perf-detail-card-row">
+              <div class="perf-detail-avatar" style="opacity:.7">FK</div>
+              <div>
+                <div class="perf-detail-name">Farah K. · Designer</div>
+                <div class="perf-detail-sub">Orders, Production</div>
+              </div>
+            </div>
+            <div class="perf-detail-card-row">
+              <div class="perf-detail-avatar" style="opacity:.5">DL</div>
+              <div>
+                <div class="perf-detail-name">Daniel L. · Operator</div>
+                <div class="perf-detail-sub">Production only</div>
+              </div>
+            </div>
+          </div>
+          <div class="perf-detail-text">
+            <div class="perf-detail-label">TEAM MANAGEMENT</div>
+            <h3 class="perf-detail-heading">Role-based access for your team</h3>
+            <p class="perf-detail-desc">Invite team members and assign permissions. Each person sees only what they need — designers see artwork, operators see production, owners see everything.</p>
           </div>
         </div>
       </div>

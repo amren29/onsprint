@@ -205,6 +205,8 @@ ul{list-style:none}
 .perf-detail-label{font-size:10px;font-weight:700;color:#006AFF;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
 .perf-detail-heading{font-size:26px;font-weight:800;letter-spacing:-.5px;margin-bottom:14px;line-height:1.25}
 .perf-detail-desc{font-size:14px;color:#64748b;line-height:1.7}
+.perf-panel{display:none}
+.perf-panel.active{display:grid}
 
 /* ── Integrations ─────────────────────────────────── */
 .integ-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
