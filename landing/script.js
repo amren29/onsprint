@@ -84,7 +84,7 @@ function toggleBilling() {
     const sub = isAnnual ? el.dataset.annualSub : el.dataset.monthlySub
     const yearlyTotal = el.dataset.annualTotal || ''
     if (isAnnual && yearlyTotal) {
-      el.innerHTML = '<span class="price-annual-total">' + yearlyTotal + '/yr</span>' + price + ' <span>' + sub + '</span>'
+      el.innerHTML = yearlyTotal + ' <span>/ yr</span><span class="price-per-month">' + price + '/mo</span>'
     } else {
       el.innerHTML = price + ' <span>' + sub + '</span>'
     }
