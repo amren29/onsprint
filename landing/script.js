@@ -1,17 +1,19 @@
-// ── Scroll reveal ──
-const reveals = document.querySelectorAll('.reveal')
+// ── Scroll reveal (supports .reveal, .reveal-left, .reveal-right, .reveal-scale) ──
+const revealClasses = ['.reveal', '.reveal-left', '.reveal-right', '.reveal-scale']
+const allReveals = document.querySelectorAll(revealClasses.join(','))
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       const parent = entry.target.parentElement
-      const siblings = parent ? Array.from(parent.querySelectorAll(':scope > .reveal')) : []
+      const selector = revealClasses.join(',')
+      const siblings = parent ? Array.from(parent.querySelectorAll(':scope > ' + revealClasses.map(c => c).join(', :scope > '))) : []
       const idx = siblings.indexOf(entry.target)
-      setTimeout(() => entry.target.classList.add('visible'), idx * 80)
+      setTimeout(() => entry.target.classList.add('visible'), idx * 100)
       observer.unobserve(entry.target)
     }
   })
-}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' })
-reveals.forEach(el => observer.observe(el))
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' })
+allReveals.forEach(el => observer.observe(el))
 
 // ── FAQ accordion ──
 document.querySelectorAll('.faq-q').forEach(btn => {
@@ -116,4 +118,46 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       window.scrollTo({ top, behavior: 'smooth' })
     }
   })
+})
+
+// ── Parallax on hero cards (subtle mouse follow) ──
+const heroVisual = document.querySelector('.hero-visual')
+if (heroVisual) {
+  document.addEventListener('mousemove', (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 12
+    const y = (e.clientY / window.innerHeight - 0.5) * 8
+    const main = heroVisual.querySelector('.hero-card-main')
+    const stats = heroVisual.querySelector('.hero-card-stats')
+    if (main) main.style.transform = `translate(${x * 0.6}px, ${y * 0.6}px)`
+    if (stats) stats.style.transform = `translate(${-x * 0.8}px, ${-y * 0.8}px)`
+  })
+}
+
+// ── Navbar shadow on scroll ──
+const navPill = document.querySelector('.nav-pill')
+if (navPill) {
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 100) {
+      navPill.style.boxShadow = '0 4px 24px rgba(0,0,0,0.1)'
+    } else {
+      navPill.style.boxShadow = '0 2px 16px rgba(0,0,0,0.06)'
+    }
+  }, { passive: true })
+}
+
+// ── Counter animation for stats ──
+document.querySelectorAll('.stats-number').forEach(el => {
+  const target = el.textContent
+  const obs = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      // Simple typewriter effect
+      el.style.opacity = '0'
+      setTimeout(() => {
+        el.style.transition = 'opacity 0.5s ease'
+        el.style.opacity = '1'
+      }, 100)
+      obs.disconnect()
+    }
+  }, { threshold: 0.5 })
+  obs.observe(el)
 })
