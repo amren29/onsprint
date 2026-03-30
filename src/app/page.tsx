@@ -3,271 +3,224 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 
-/* ── CSS Animations ──────────────────────────────────── */
-const LANDING_CSS = `
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  @keyframes scaleIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-  }
-  @keyframes float1 {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(3deg); }
-  }
-  @keyframes float2 {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-15px) rotate(-2deg); }
-  }
-  @keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 0.8; }
-  }
-  @keyframes slideInLeft {
-    from { opacity: 0; transform: translateX(-40px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
-  @keyframes slideInRight {
-    from { opacity: 0; transform: translateX(40px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-  .landing * { box-sizing: border-box; }
-  .landing a { text-decoration: none; color: inherit; }
-  .landing button { cursor: pointer; border: none; background: none; font-family: inherit; }
-  .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
-  .fade-up.visible { opacity: 1; transform: translateY(0); }
-  .landing-btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 14px 32px; border-radius: 12px; font-size: 15px; font-weight: 600;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .landing-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,106,255,0.25); }
-  .landing-btn-primary { background: #006AFF; color: #fff; }
-  .landing-btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(8px); }
-  .landing-btn-secondary:hover { background: rgba(255,255,255,0.15); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
-  .landing-btn-outline { background: #fff; color: #0f172a; border: 1px solid #e2e8f0; }
-  .landing-btn-outline:hover { border-color: #006AFF; box-shadow: 0 8px 24px rgba(0,106,255,0.1); }
-  .landing-section { padding: 100px 24px; max-width: 1200px; margin: 0 auto; }
-  @media (max-width: 768px) {
-    .landing-section { padding: 60px 16px; }
-    .hero-grid { grid-template-columns: 1fr !important; text-align: center; }
-    .hero-visual { display: none !important; }
-    .feature-grid { grid-template-columns: 1fr !important; }
-    .pricing-grid { grid-template-columns: 1fr !important; }
-    .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
-    .footer-grid { grid-template-columns: 1fr !important; text-align: center; }
-    .hero-buttons { justify-content: center; }
-    .cta-buttons { flex-direction: column; align-items: center; }
+/* ── Animations ──────────────────────────────────────── */
+const CSS = `
+  @keyframes fadeUp { from { opacity:0; transform:translateY(28px) } to { opacity:1; transform:translateY(0) } }
+  @keyframes float1 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+  @keyframes float2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px) rotate(-1deg)} }
+  @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+  @keyframes pulse { 0%,100%{opacity:.5} 50%{opacity:1} }
+  .lp * { box-sizing:border-box; margin:0; padding:0 }
+  .lp a { text-decoration:none; color:inherit }
+  .lp button { cursor:pointer; border:none; background:none; font-family:inherit; font-size:inherit }
+  .lp img { max-width:100%; display:block }
+  .lp-section { max-width:1140px; margin:0 auto; padding:100px 24px }
+  .lp-btn { display:inline-flex; align-items:center; gap:8px; font-weight:600; border-radius:10px; transition:transform .2s,box-shadow .2s,background .2s }
+  .lp-btn:hover { transform:translateY(-2px) }
+  .lp-btn-p { background:#006AFF; color:#fff; padding:13px 30px; font-size:14px }
+  .lp-btn-p:hover { box-shadow:0 8px 24px rgba(0,106,255,.25) }
+  .lp-btn-s { background:rgba(255,255,255,.08); color:#fff; border:1px solid rgba(255,255,255,.15); padding:13px 28px; font-size:14px; backdrop-filter:blur(6px) }
+  .lp-btn-s:hover { background:rgba(255,255,255,.14) }
+  .lp-btn-o { background:#fff; color:#0f172a; border:1.5px solid #e2e8f0; padding:13px 28px; font-size:14px }
+  .lp-btn-o:hover { border-color:#006AFF; box-shadow:0 6px 20px rgba(0,106,255,.08) }
+  .lp-tag { display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:600; padding:5px 14px; border-radius:100px }
+  .fade-section { opacity:0; transform:translateY(28px); transition:opacity .7s ease,transform .7s ease }
+  .fade-section.vis { opacity:1; transform:translateY(0) }
+  @media(max-width:820px){
+    .hero-g{grid-template-columns:1fr!important;text-align:center}
+    .hero-v{display:none!important}
+    .hero-btns{justify-content:center}
+    .feat-g,.price-g,.testi-g,.stories-g,.footer-g{grid-template-columns:1fr!important}
+    .num-g{grid-template-columns:1fr!important}
+    .stats-g{grid-template-columns:repeat(2,1fr)!important}
+    .cta-btns{flex-direction:column;align-items:center}
+    .lp-section{padding:64px 16px}
+    .faq-cols{grid-template-columns:1fr!important}
   }
 `
 
-/* ── Scroll Animation Hook ───────────────────────────── */
-function useInView(threshold = 0.15) {
+/* ── Scroll reveal hook ──────────────────────────────── */
+function useFade(threshold = 0.12) {
   const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
+  const [vis, setVis] = useState(false)
   useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect() } }, { threshold })
-    obs.observe(el)
-    return () => obs.disconnect()
+    const el = ref.current; if (!el) return
+    const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVis(true); o.disconnect() } }, { threshold })
+    o.observe(el); return () => o.disconnect()
   }, [threshold])
-  return { ref, visible }
+  return { ref, cls: vis ? 'fade-section vis' : 'fade-section' }
+}
+function Fade({ children, delay = 0, style }: { children: React.ReactNode; delay?: number; style?: React.CSSProperties }) {
+  const { ref, cls } = useFade()
+  return <div ref={ref} className={cls} style={{ transitionDelay: `${delay}s`, ...style }}>{children}</div>
 }
 
-function FadeUp({ children, delay = 0, style }: { children: React.ReactNode; delay?: number; style?: React.CSSProperties }) {
-  const { ref, visible } = useInView()
+/* ── Icons ────────────────────────────────────────────── */
+const Arrow = () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+const Check = () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#006AFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+const Star = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" strokeWidth="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+const ChevDown = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+
+/* ── Data ─────────────────────────────────────────────── */
+const NUM_FEATURES = [
+  { num: '01', title: 'Easy setup', desc: 'Get started in minutes. Import your products, invite your team, and start managing orders right away.' },
+  { num: '02', title: 'Collaborate', desc: 'Assign jobs, track progress, and keep everyone aligned with real-time production updates.' },
+  { num: '03', title: 'Track growth', desc: 'Revenue reports, order analytics, and customer insights to help you scale your business.' },
+]
+
+const PERF_FEATURES = [
+  { title: 'Production Pipeline', desc: 'Kanban-style board with 12 stages. Drag orders from artwork checking to delivery.' },
+  { title: 'Automated Invoicing', desc: 'Auto-generate invoices, track payments, and manage customer wallets in one place.' },
+  { title: 'Online Storefront', desc: 'Your own branded store where customers browse products, upload artwork, and order 24/7.' },
+  { title: 'Team Permissions', desc: 'Role-based access control. Each team member sees only what they need to do their job.' },
+]
+
+const INTEGRATIONS = ['Stripe', 'Billplz', 'Google', 'WhatsApp', 'Supabase', 'Cloudflare']
+
+const PLANS = [
+  { name: 'Starter', price: 29, desc: 'For small print shops just getting started', features: ['1 team member', '100 orders/mo', 'Online store', 'Basic dashboard', 'Email support'] },
+  { name: 'Growth', price: 79, desc: 'For growing businesses ready to scale', features: ['5 team members', 'Unlimited orders', 'Advanced analytics', 'Custom domain', 'Priority support'], popular: true },
+  { name: 'Scale', price: 149, desc: 'For large operations and enterprises', features: ['Unlimited members', 'Unlimited orders', 'Revenue reports', 'API access', 'Dedicated support'] },
+]
+
+const STORIES = [
+  { title: 'Helped PrintHub KL scale their production team', year: '2025', desc: 'Reduced order processing time by 60% with automated workflows.' },
+  { title: 'QuickPrint JB grew online revenue by 3x', year: '2025', desc: 'Launched an online store that now handles 40% of all orders.' },
+  { title: 'DesignWorks PJ streamlined their billing', year: '2024', desc: 'Eliminated manual invoicing and cut payment delays by 80%.' },
+  { title: 'MegaPrint Penang unified their 3 branches', year: '2024', desc: 'One dashboard for all locations with real-time production tracking.' },
+]
+
+const TESTIMONIALS = [
+  { name: 'Ahmad Razali', role: 'Owner, PrintHub KL', text: 'Onsprint transformed how we manage orders. The production board alone saved us hours every week. I can finally focus on growing the business.' },
+  { name: 'Siti Nurhaliza', role: 'Manager, QuickPrint JB', text: 'Our customers love the online store. We get orders at 2am now. Revenue is up 3x since we started using Onsprint.' },
+  { name: 'Lee Min Wei', role: 'Owner, DesignWorks PJ', text: 'The best print shop management tool in Malaysia. Simple, fast, and everything is connected. No more spreadsheets.' },
+]
+
+const FAQS = [
+  { q: 'How long does it take to set up?', a: 'Most shops are fully set up within 30 minutes. Import your products, invite your team, and you\'re ready to go. Our onboarding checklist guides you through every step.' },
+  { q: 'Can I migrate from my current system?', a: 'Yes. We can help you import existing customer data, products, and orders. Contact our support team and we\'ll walk you through the migration process.' },
+  { q: 'Is there a free trial?', a: 'Yes! Every plan comes with a 14-day free trial. No credit card required. You can explore all features before committing.' },
+  { q: 'What payment methods do you support?', a: 'We support FPX (online banking), credit/debit cards via Stripe, and Billplz for Malaysian bank transfers. Your customers can pay however they prefer.' },
+  { q: 'Can I customize my online store?', a: 'Absolutely. You can set your own branding, colors, logo, domain, and choose which products to display. The store editor gives you full control.' },
+]
+
+/* ── FAQ Accordion ───────────────────────────────────── */
+function FaqItem({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false)
   return (
-    <div ref={ref} style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(30px)', transition: `opacity 0.7s ease ${delay}s, transform 0.7s ease ${delay}s`, ...style }}>
-      {children}
+    <div style={{ borderBottom: '1px solid #e2e8f0' }}>
+      <button onClick={() => setOpen(!open)} style={{ width: '100%', padding: '20px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', textAlign: 'left', fontSize: 15, fontWeight: 600, color: '#0f172a' }}>
+        {q}
+        <span style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .25s ease', color: '#94a3b8', flexShrink: 0, marginLeft: 16 }}><ChevDown /></span>
+      </button>
+      <div style={{ maxHeight: open ? 200 : 0, overflow: 'hidden', transition: 'max-height .3s ease' }}>
+        <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.7, paddingBottom: 20 }}>{a}</p>
+      </div>
     </div>
   )
 }
 
-/* ── Icons ────────────────────────────────────────────── */
-const CheckIcon = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#006AFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-const ArrowRight = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-const StarIcon = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" strokeWidth="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-
-/* ── Feature Data ────────────────────────────────────── */
-const FEATURES = [
-  {
-    icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#006AFF" strokeWidth="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>,
-    title: 'Smart Dashboard',
-    desc: 'Real-time revenue, orders, and performance metrics at a glance. Everything you need to run your shop.',
-  },
-  {
-    icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#006AFF" strokeWidth="1.8"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>,
-    title: 'Order Management',
-    desc: 'Create, track, and fulfill orders with auto-generated IDs. From quote to delivery in one flow.',
-  },
-  {
-    icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#006AFF" strokeWidth="1.8"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>,
-    title: 'Production Board',
-    desc: 'Kanban-style board with 12 production stages. Drag cards from artwork to delivery.',
-  },
-  {
-    icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#006AFF" strokeWidth="1.8"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>,
-    title: 'Online Store',
-    desc: 'Your own branded e-commerce store. Customers browse, upload artwork, and order 24/7.',
-  },
-  {
-    icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#006AFF" strokeWidth="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>,
-    title: 'Finance Suite',
-    desc: 'Invoices, payments, wallet top-ups, and financial reports — all connected to your orders.',
-  },
-  {
-    icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#006AFF" strokeWidth="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>,
-    title: 'Team Management',
-    desc: 'Invite team members with role-based permissions. Everyone sees only what they need.',
-  },
-]
-
-const PLANS = [
-  { name: 'Starter', price: 29, desc: 'For small print shops', features: ['1 team member', '100 orders/mo', 'Basic dashboard', 'Online store', 'Email support'] },
-  { name: 'Pro', price: 79, desc: 'For growing businesses', features: ['5 team members', 'Unlimited orders', 'Advanced analytics', 'Custom domain', 'Priority support'], popular: true },
-  { name: 'Business', price: 149, desc: 'For large operations', features: ['Unlimited members', 'Unlimited orders', 'Revenue reports', 'API access', 'Dedicated support'] },
-]
-
-const TESTIMONIALS = [
-  { name: 'Ahmad R.', role: 'Owner, PrintHub KL', text: 'Onsprint transformed how we manage orders. The production board alone saved us hours every week.', avatar: 'AR' },
-  { name: 'Siti N.', role: 'Manager, QuickPrint JB', text: 'Our customers love the online store. We get orders 24/7 now without any phone calls.', avatar: 'SN' },
-  { name: 'Lee M.', role: 'Owner, DesignWorks PJ', text: 'The best print shop management tool in Malaysia. Simple, fast, and everything is connected.', avatar: 'LM' },
-]
-
 /* ── Page ─────────────────────────────────────────────── */
 export default function LandingPage() {
-  const [scrollY, setScrollY] = useState(0)
-  const [mobileMenu, setMobileMenu] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    const handle = () => setScrollY(window.scrollY)
-    window.addEventListener('scroll', handle, { passive: true })
-    return () => window.removeEventListener('scroll', handle)
+    const h = () => setScrolled(window.scrollY > 50)
+    window.addEventListener('scroll', h, { passive: true })
+    return () => window.removeEventListener('scroll', h)
   }, [])
 
   return (
-    <div className="landing" style={{ fontFamily: "'Fira Sans', 'Inter', system-ui, -apple-system, sans-serif", color: '#0f172a', background: '#fff', overflowX: 'hidden' }}>
-      <style>{LANDING_CSS}</style>
+    <div className="lp" style={{ fontFamily: "'Fira Sans', system-ui, -apple-system, sans-serif", color: '#0f172a', background: '#fff', overflowX: 'hidden' }}>
+      <style>{CSS}</style>
 
-      {/* ── Navbar ── */}
+      {/* ══ NAVBAR ══ */}
       <nav style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-        background: scrollY > 50 ? 'rgba(255,255,255,0.85)' : 'transparent',
-        backdropFilter: scrollY > 50 ? 'blur(16px)' : 'none',
-        borderBottom: scrollY > 50 ? '1px solid rgba(0,0,0,0.06)' : 'none',
-        transition: 'all 0.3s ease',
+        background: scrolled ? 'rgba(255,255,255,.88)' : 'transparent',
+        backdropFilter: scrolled ? 'blur(16px) saturate(180%)' : 'none',
+        WebkitBackdropFilter: scrolled ? 'blur(16px) saturate(180%)' : 'none',
+        borderBottom: scrolled ? '1px solid rgba(0,0,0,.05)' : '1px solid transparent',
+        transition: 'all .35s ease',
       }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', height: 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ maxWidth: 1140, margin: '0 auto', padding: '0 24px', height: 68, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 34, height: 34, background: '#006AFF', borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="white" opacity="0.7"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="white" opacity="0.7"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="white" opacity="0.4"/></svg>
+            <div style={{ width: 32, height: 32, background: '#006AFF', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="white" opacity=".7"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="white" opacity=".7"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="white" opacity=".4"/></svg>
             </div>
-            <span style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-0.5px' }}>Onsprint</span>
+            <span style={{ fontSize: 17, fontWeight: 800, letterSpacing: '-.4px', color: scrolled ? '#0f172a' : '#fff' }}>Onsprint</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
-            <div style={{ display: 'flex', gap: 28, fontSize: 14, fontWeight: 500, color: '#64748b' }} className="nav-links">
-              <a href="#features" style={{ transition: 'color 0.15s' }} onMouseEnter={e => (e.currentTarget.style.color = '#0f172a')} onMouseLeave={e => (e.currentTarget.style.color = '#64748b')}>Features</a>
-              <a href="#pricing" style={{ transition: 'color 0.15s' }} onMouseEnter={e => (e.currentTarget.style.color = '#0f172a')} onMouseLeave={e => (e.currentTarget.style.color = '#64748b')}>Pricing</a>
-              <a href="#testimonials" style={{ transition: 'color 0.15s' }} onMouseEnter={e => (e.currentTarget.style.color = '#0f172a')} onMouseLeave={e => (e.currentTarget.style.color = '#64748b')}>Testimonials</a>
-            </div>
-            <div style={{ display: 'flex', gap: 8 }}>
-              <Link href="/login" style={{ padding: '8px 18px', fontSize: 13, fontWeight: 600, color: '#64748b', borderRadius: 8, transition: 'color 0.15s' }}>Log In</Link>
-              <Link href="/register" className="landing-btn landing-btn-primary" style={{ padding: '8px 22px', fontSize: 13 }}>Get Started Free</Link>
-            </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 28, fontSize: 13.5, fontWeight: 500 }}>
+            {['Features', 'Pricing', 'Case Studies', 'FAQ'].map(t => (
+              <a key={t} href={`#${t.toLowerCase().replace(' ', '-')}`} style={{ color: scrolled ? '#64748b' : 'rgba(255,255,255,.65)', transition: 'color .15s' }}
+                onMouseEnter={e => (e.currentTarget.style.color = scrolled ? '#0f172a' : '#fff')}
+                onMouseLeave={e => (e.currentTarget.style.color = scrolled ? '#64748b' : 'rgba(255,255,255,.65)')}>{t}</a>
+            ))}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <Link href="/login" style={{ padding: '8px 16px', fontSize: 13, fontWeight: 600, color: scrolled ? '#64748b' : 'rgba(255,255,255,.7)', borderRadius: 8 }}>Log In</Link>
+            <Link href="/register" className="lp-btn lp-btn-p" style={{ padding: '9px 20px', fontSize: 13 }}>Get Started</Link>
           </div>
         </div>
       </nav>
 
-      {/* ── Hero ── */}
-      <section style={{
-        minHeight: '100vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden',
-        background: 'linear-gradient(135deg, #0a1628 0%, #0f2044 30%, #132d5e 60%, #0a1628 100%)',
-      }}>
-        {/* Animated gradient orbs */}
-        <div style={{ position: 'absolute', top: '10%', left: '15%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,106,255,0.15) 0%, transparent 70%)', animation: 'float1 8s ease-in-out infinite', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: '10%', right: '10%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%)', animation: 'float2 10s ease-in-out infinite', pointerEvents: 'none' }} />
-        {/* Grid pattern */}
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '60px 60px', pointerEvents: 'none' }} />
+      {/* ══ HERO ══ */}
+      <section style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', background: 'linear-gradient(160deg, #0a1525 0%, #0d1f3c 40%, #11285a 70%, #0a1525 100%)', position: 'relative', overflow: 'hidden' }}>
+        {/* Decorative orbs */}
+        <div style={{ position: 'absolute', top: '8%', left: '12%', width: 420, height: 420, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,106,255,.12) 0%, transparent 70%)', animation: 'float1 9s ease-in-out infinite', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: '5%', right: '8%', width: 340, height: 340, borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,.08) 0%, transparent 70%)', animation: 'float2 11s ease-in-out infinite', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px)', backgroundSize: '56px 56px', pointerEvents: 'none' }} />
 
-        <div className="landing-section hero-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'center', position: 'relative', zIndex: 1, paddingTop: 120 }}>
+        <div className="lp-section hero-g" style={{ display: 'grid', gridTemplateColumns: '1.1fr .9fr', gap: 56, alignItems: 'center', paddingTop: 110, position: 'relative', zIndex: 1 }}>
           <div>
-            <div style={{ animation: 'fadeUp 0.8s ease both' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(0,106,255,0.15)', border: '1px solid rgba(0,106,255,0.3)', borderRadius: 100, padding: '6px 16px', marginBottom: 24 }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80', animation: 'pulse 2s infinite' }} />
-                <span style={{ fontSize: 12, fontWeight: 600, color: '#60a5fa', letterSpacing: '0.02em' }}>Now available in Malaysia</span>
-              </div>
-            </div>
-            <h1 style={{ fontSize: 56, fontWeight: 900, color: '#fff', lineHeight: 1.1, letterSpacing: '-1.5px', margin: '0 0 20px', animation: 'fadeUp 0.8s ease 0.1s both' }}>
-              Run your print shop<br />
-              <span style={{ background: 'linear-gradient(90deg, #006AFF, #60a5fa, #a78bfa)', backgroundClip: 'text', WebkitBackgroundClip: 'text', color: 'transparent', backgroundSize: '200% auto', animation: 'gradientShift 4s ease infinite' }}>
-                like a pro.
+            <div style={{ animation: 'fadeUp .7s ease both' }}>
+              <span className="lp-tag" style={{ background: 'rgba(0,106,255,.12)', border: '1px solid rgba(0,106,255,.25)', color: '#60a5fa', marginBottom: 24, display: 'inline-flex' }}>
+                <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#4ade80', animation: 'pulse 2s infinite' }} />
+                Now available in Malaysia
               </span>
+            </div>
+            <h1 style={{ fontSize: 52, fontWeight: 900, color: '#fff', lineHeight: 1.08, letterSpacing: '-1.5px', marginBottom: 20, animation: 'fadeUp .7s ease .08s both' }}>
+              The modern way to<br />manage your print shop
             </h1>
-            <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, margin: '0 0 36px', maxWidth: 480, animation: 'fadeUp 0.8s ease 0.2s both' }}>
+            <p style={{ fontSize: 17, color: 'rgba(255,255,255,.55)', lineHeight: 1.75, maxWidth: 460, marginBottom: 36, animation: 'fadeUp .7s ease .16s both' }}>
               Orders, production, payments, and your own online store — all in one platform built for Malaysian print shops.
             </p>
-            <div className="hero-buttons" style={{ display: 'flex', gap: 12, animation: 'fadeUp 0.8s ease 0.3s both' }}>
-              <Link href="/register" className="landing-btn landing-btn-primary" style={{ fontSize: 16, padding: '16px 36px' }}>
-                Start Free Trial <ArrowRight />
-              </Link>
-              <a href="#features" className="landing-btn landing-btn-secondary">
-                See Features
-              </a>
+            <div className="hero-btns" style={{ display: 'flex', gap: 10, animation: 'fadeUp .7s ease .24s both' }}>
+              <Link href="/register" className="lp-btn lp-btn-p" style={{ padding: '14px 32px', fontSize: 15 }}>Start free trial <Arrow /></Link>
+              <a href="#features" className="lp-btn lp-btn-s">See how it works</a>
             </div>
-            <div style={{ display: 'flex', gap: 24, marginTop: 40, animation: 'fadeUp 0.8s ease 0.4s both' }}>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}><span style={{ fontWeight: 700, color: '#fff', fontSize: 18 }}>500+</span><br />Print shops</div>
-              <div style={{ width: 1, background: 'rgba(255,255,255,0.1)' }} />
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}><span style={{ fontWeight: 700, color: '#fff', fontSize: 18 }}>50K+</span><br />Orders processed</div>
-              <div style={{ width: 1, background: 'rgba(255,255,255,0.1)' }} />
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}><span style={{ fontWeight: 700, color: '#fff', fontSize: 18 }}>4.9</span><br /><span style={{ display: 'flex', gap: 2 }}><StarIcon /><StarIcon /><StarIcon /><StarIcon /><StarIcon /></span></div>
+            {/* Rating badge */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 40, animation: 'fadeUp .7s ease .32s both' }}>
+              <div style={{ display: 'flex', gap: 2 }}><Star /><Star /><Star /><Star /><Star /></div>
+              <span style={{ fontSize: 12, color: 'rgba(255,255,255,.45)' }}>4.9 / 5 Rated · <strong style={{ color: 'rgba(255,255,255,.7)' }}>Over 500 shops</strong></span>
             </div>
           </div>
-
-          {/* Hero Visual */}
-          <div className="hero-visual" style={{ animation: 'scaleIn 0.8s ease 0.3s both' }}>
-            <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 20, border: '1px solid rgba(255,255,255,0.1)', padding: 20, backdropFilter: 'blur(12px)' }}>
-              {/* Mini dashboard mockup */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 16 }}>
-                {[{ label: 'Revenue', value: 'RM 48,250', color: '#4ade80' }, { label: 'Orders', value: '156', color: '#60a5fa' }, { label: 'Customers', value: '89', color: '#fbbf24' }].map(s => (
-                  <div key={s.label} style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 12, padding: '12px 14px' }}>
-                    <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 4 }}>{s.label}</div>
-                    <div style={{ fontSize: 18, fontWeight: 800, color: s.color }}>{s.value}</div>
+          {/* Dashboard mockup */}
+          <div className="hero-v" style={{ animation: 'fadeUp .8s ease .2s both' }}>
+            <div style={{ background: 'rgba(255,255,255,.04)', borderRadius: 18, border: '1px solid rgba(255,255,255,.08)', padding: 18, backdropFilter: 'blur(10px)', animation: 'float1 7s ease-in-out infinite' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 14 }}>
+                {[{ l: 'Revenue', v: 'RM 48,250', c: '#4ade80' }, { l: 'Orders', v: '156', c: '#60a5fa' }, { l: 'Customers', v: '89', c: '#fbbf24' }].map(s => (
+                  <div key={s.l} style={{ background: 'rgba(255,255,255,.05)', borderRadius: 10, padding: '11px 13px' }}>
+                    <div style={{ fontSize: 9, color: 'rgba(255,255,255,.35)', marginBottom: 3, textTransform: 'uppercase', letterSpacing: '.05em', fontWeight: 600 }}>{s.l}</div>
+                    <div style={{ fontSize: 17, fontWeight: 800, color: s.c }}>{s.v}</div>
                   </div>
                 ))}
               </div>
-              {/* Mini chart */}
-              <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 12, padding: '12px 14px', marginBottom: 12 }}>
-                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 8 }}>Revenue Trend</div>
-                <svg width="100%" height="60" viewBox="0 0 300 60">
-                  <polyline points="0,50 30,40 60,45 90,30 120,35 150,20 180,25 210,15 240,18 270,8 300,5" fill="none" stroke="#006AFF" strokeWidth="2" strokeLinecap="round" />
-                  <polyline points="0,50 30,40 60,45 90,30 120,35 150,20 180,25 210,15 240,18 270,8 300,5" fill="url(#grad)" stroke="none" />
-                  <defs><linearGradient id="grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#006AFF" stopOpacity="0.3" /><stop offset="100%" stopColor="#006AFF" stopOpacity="0" /></linearGradient></defs>
+              <div style={{ background: 'rgba(255,255,255,.03)', borderRadius: 10, padding: '11px 13px', marginBottom: 12 }}>
+                <div style={{ fontSize: 9, color: 'rgba(255,255,255,.35)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '.05em', fontWeight: 600 }}>Revenue Trend</div>
+                <svg width="100%" height="50" viewBox="0 0 300 50" preserveAspectRatio="none">
+                  <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#006AFF" stopOpacity=".25"/><stop offset="100%" stopColor="#006AFF" stopOpacity="0"/></linearGradient></defs>
+                  <path d="M0,42 Q30,38 60,36 T120,28 T180,22 T240,14 T300,6" fill="none" stroke="#006AFF" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M0,42 Q30,38 60,36 T120,28 T180,22 T240,14 T300,6 L300,50 L0,50Z" fill="url(#g)"/>
                 </svg>
               </div>
-              {/* Mini order list */}
-              {[{ id: 'ORD-0042', name: 'Ahmad R.', status: 'Printing', color: '#60a5fa' }, { id: 'ORD-0041', name: 'Siti N.', status: 'Ready', color: '#4ade80' }, { id: 'ORD-0040', name: 'Lee M.', status: 'Design', color: '#fbbf24' }].map(o => (
-                <div key={o.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+              {[{ id: 'ORD-0042', n: 'Ahmad R.', s: 'Printing', c: '#60a5fa' }, { id: 'ORD-0041', n: 'Siti N.', s: 'Ready', c: '#4ade80' }, { id: 'ORD-0040', n: 'Lee M.', s: 'Design', c: '#fbbf24' }].map((o, i) => (
+                <div key={o.id} style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', borderTop: i === 0 ? '1px solid rgba(255,255,255,.05)' : 'none', borderBottom: '1px solid rgba(255,255,255,.05)' }}>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,0.9)' }}>{o.id}</div>
-                    <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>{o.name}</div>
+                    <div style={{ fontSize: 11.5, fontWeight: 600, color: 'rgba(255,255,255,.85)' }}>{o.id}</div>
+                    <div style={{ fontSize: 10, color: 'rgba(255,255,255,.35)' }}>{o.n}</div>
                   </div>
-                  <span style={{ fontSize: 9, fontWeight: 600, color: o.color, background: o.color + '22', padding: '2px 8px', borderRadius: 10 }}>{o.status}</span>
+                  <span style={{ fontSize: 9, fontWeight: 600, color: o.c, background: o.c + '1a', padding: '2px 8px', borderRadius: 8 }}>{o.s}</span>
                 </div>
               ))}
             </div>
@@ -275,211 +228,263 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Trusted By (Marquee) ── */}
-      <section style={{ background: '#f8fafc', borderTop: '1px solid #f0f0f2', borderBottom: '1px solid #f0f0f2', padding: '32px 0', overflow: 'hidden' }}>
-        <div style={{ textAlign: 'center', fontSize: 11, fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 20 }}>
-          Trusted by print shops across Malaysia
-        </div>
-        <div style={{ display: 'flex', animation: 'marquee 20s linear infinite', width: 'max-content' }}>
-          {[...Array(2)].map((_, rep) => (
-            <div key={rep} style={{ display: 'flex', gap: 60, paddingRight: 60 }}>
-              {['PrintHub KL', 'QuickPrint JB', 'DesignWorks PJ', 'MegaPrint Penang', 'ArtPress Melaka', 'ProPrint Ipoh', 'Digital Works KK', 'CreativePrint Shah Alam'].map(name => (
-                <div key={name + rep} style={{ fontSize: 16, fontWeight: 700, color: '#cbd5e1', whiteSpace: 'nowrap' }}>{name}</div>
-              ))}
-            </div>
-          ))}
+      {/* ══ NUMBERED FEATURES (01 02 03) ══ */}
+      <section id="features" style={{ background: '#fff', borderBottom: '1px solid #f0f0f2' }}>
+        <div className="lp-section">
+          <div className="num-g" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 40 }}>
+            {NUM_FEATURES.map((f, i) => (
+              <Fade key={f.num} delay={i * .1}>
+                <div>
+                  <div style={{ fontSize: 48, fontWeight: 900, color: '#f0f0f2', letterSpacing: '-2px', lineHeight: 1, marginBottom: 14 }}>{f.num}</div>
+                  <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8, letterSpacing: '-.3px' }}>{f.title}</h3>
+                  <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.7 }}>{f.desc}</p>
+                </div>
+              </Fade>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── Features ── */}
-      <section id="features" style={{ background: '#fff' }}>
-        <div className="landing-section">
-          <FadeUp>
-            <div style={{ textAlign: 'center', marginBottom: 64 }}>
-              <span style={{ fontSize: 12, fontWeight: 700, color: '#006AFF', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Features</span>
-              <h2 style={{ fontSize: 40, fontWeight: 900, margin: '12px 0 16px', letterSpacing: '-1px' }}>Everything you need to run your shop</h2>
-              <p style={{ fontSize: 17, color: '#64748b', maxWidth: 560, margin: '0 auto', lineHeight: 1.7 }}>
-                From order intake to delivery, Onsprint handles your entire workflow so you can focus on printing.
+      {/* ══ BUILT FOR HIGH PERFORMANCE ══ */}
+      <section style={{ background: '#fafbfc' }}>
+        <div className="lp-section">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }} className="feat-g">
+            <Fade>
+              <div>
+                <span className="lp-tag" style={{ background: '#eff6ff', color: '#006AFF', marginBottom: 20 }}>Performance</span>
+                <h2 style={{ fontSize: 36, fontWeight: 900, lineHeight: 1.15, letterSpacing: '-1px', marginBottom: 16 }}>Built for high performance</h2>
+                <p style={{ fontSize: 15, color: '#64748b', lineHeight: 1.75, marginBottom: 32 }}>
+                  Onsprint gives your team everything it needs to stay aligned, track performance, and scale with confidence — all in one place.
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                  {PERF_FEATURES.map(f => (
+                    <div key={f.title} style={{ display: 'flex', gap: 12 }}>
+                      <div style={{ width: 20, height: 20, borderRadius: 6, background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}><Check /></div>
+                      <div>
+                        <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 2 }}>{f.title}</div>
+                        <div style={{ fontSize: 13, color: '#64748b', lineHeight: 1.6 }}>{f.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Fade>
+            <Fade delay={.15}>
+              <div style={{ background: '#0f172a', borderRadius: 18, padding: 24, color: '#fff' }}>
+                <div style={{ fontSize: 10, fontWeight: 600, color: 'rgba(255,255,255,.4)', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 16 }}>Centralized access for teams</div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  {[{ l: 'Active Jobs', v: '34', c: '#60a5fa' }, { l: 'Completed', v: '128', c: '#4ade80' }, { l: 'Revenue', v: 'RM 48K', c: '#fbbf24' }, { l: 'Team', v: '8', c: '#a78bfa' }].map(s => (
+                    <div key={s.l} style={{ background: 'rgba(255,255,255,.06)', borderRadius: 10, padding: '12px 14px' }}>
+                      <div style={{ fontSize: 9, color: 'rgba(255,255,255,.4)', marginBottom: 3 }}>{s.l}</div>
+                      <div style={{ fontSize: 20, fontWeight: 800, color: s.c }}>{s.v}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Fade>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ INTEGRATIONS ══ */}
+      <section style={{ background: '#fff', borderTop: '1px solid #f0f0f2', borderBottom: '1px solid #f0f0f2' }}>
+        <div className="lp-section" style={{ textAlign: 'center' }}>
+          <Fade>
+            <span className="lp-tag" style={{ background: '#eff6ff', color: '#006AFF', marginBottom: 20 }}>Integrations</span>
+            <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: '-.8px', marginBottom: 10 }}>Powerful integrations</h2>
+            <p style={{ fontSize: 15, color: '#64748b', maxWidth: 480, margin: '0 auto 40px', lineHeight: 1.7 }}>
+              Seamlessly integrate with your favorite tools to streamline workflows and keep everything in sync.
+            </p>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 20, flexWrap: 'wrap', marginBottom: 32 }}>
+              {INTEGRATIONS.map(name => (
+                <div key={name} style={{ width: 100, height: 56, background: '#f8fafc', border: '1px solid #f0f0f2', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 600, color: '#64748b', transition: 'border-color .2s, transform .2s' }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = '#006AFF'; e.currentTarget.style.transform = 'translateY(-3px)' }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#f0f0f2'; e.currentTarget.style.transform = 'translateY(0)' }}>
+                  {name}
+                </div>
+              ))}
+            </div>
+            <Link href="/register" className="lp-btn lp-btn-p">Get started <Arrow /></Link>
+          </Fade>
+        </div>
+      </section>
+
+      {/* ══ PRICING ══ */}
+      <section id="pricing" style={{ background: '#fafbfc' }}>
+        <div className="lp-section">
+          <Fade>
+            <div style={{ textAlign: 'center', marginBottom: 52 }}>
+              <span className="lp-tag" style={{ background: '#eff6ff', color: '#006AFF', marginBottom: 20 }}>Pricing</span>
+              <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: '-1px', marginBottom: 10 }}>Flexible pricing</h2>
+              <p style={{ fontSize: 15, color: '#64748b' }}>Simple, transparent pricing with no hidden fees.</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'center', marginTop: 16 }}>
+                <div style={{ display: 'flex', gap: 2 }}><Star /><Star /><Star /><Star /><Star /></div>
+                <span style={{ fontSize: 12, color: '#94a3b8' }}>4.9 / 5 Rated · Over 500 shops</span>
+              </div>
+            </div>
+          </Fade>
+          <div className="price-g" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20, maxWidth: 940, margin: '0 auto' }}>
+            {PLANS.map((p, i) => (
+              <Fade key={p.name} delay={i * .08}>
+                <div style={{
+                  padding: 32, borderRadius: 18,
+                  background: p.popular ? '#0f172a' : '#fff',
+                  color: p.popular ? '#fff' : '#0f172a',
+                  border: p.popular ? 'none' : '1px solid #e2e8f0',
+                  boxShadow: p.popular ? '0 20px 48px rgba(0,0,0,.12)' : 'none',
+                  position: 'relative', overflow: 'hidden',
+                  transform: p.popular ? 'scale(1.04)' : 'none',
+                }}>
+                  {p.popular && <div style={{ position: 'absolute', top: 14, right: -30, background: '#006AFF', color: '#fff', fontSize: 9, fontWeight: 700, padding: '3px 32px', transform: 'rotate(45deg)', letterSpacing: '.04em' }}>POPULAR</div>}
+                  <div style={{ fontSize: 12, fontWeight: 700, color: p.popular ? '#60a5fa' : '#006AFF', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '.06em' }}>{p.name}</div>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 3, marginBottom: 4 }}>
+                    <span style={{ fontSize: 40, fontWeight: 900, letterSpacing: '-1px' }}>RM {p.price}</span>
+                    <span style={{ fontSize: 13, color: p.popular ? 'rgba(255,255,255,.45)' : '#94a3b8' }}>/mo</span>
+                  </div>
+                  <p style={{ fontSize: 13, color: p.popular ? 'rgba(255,255,255,.45)' : '#94a3b8', marginBottom: 24, lineHeight: 1.5 }}>{p.desc}</p>
+                  <Link href="/register" className={`lp-btn ${p.popular ? 'lp-btn-p' : 'lp-btn-o'}`} style={{ width: '100%', justifyContent: 'center', padding: 12, fontSize: 13.5, marginBottom: 24 }}>
+                    Schedule a demo
+                  </Link>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {p.features.map(f => (
+                      <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: p.popular ? 'rgba(255,255,255,.65)' : '#475569' }}>
+                        <Check /> {f}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </Fade>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══ SUCCESS STORIES ══ */}
+      <section id="case-studies" style={{ background: '#fff' }}>
+        <div className="lp-section">
+          <Fade>
+            <div style={{ marginBottom: 48 }}>
+              <span className="lp-tag" style={{ background: '#eff6ff', color: '#006AFF', marginBottom: 20 }}>Case Studies</span>
+              <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: '-1px', marginBottom: 10 }}>Success stories</h2>
+              <p style={{ fontSize: 15, color: '#64748b', maxWidth: 560, lineHeight: 1.7 }}>
+                Onsprint has partnered with growing businesses to build foundations for sustainable success. Explore real stories of transformation.
               </p>
             </div>
-          </FadeUp>
-          <div className="feature-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
-            {FEATURES.map((f, i) => (
-              <FadeUp key={f.title} delay={i * 0.1}>
+          </Fade>
+          <div className="stories-g" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
+            {STORIES.map((s, i) => (
+              <Fade key={s.title} delay={i * .08}>
                 <div style={{
                   padding: 28, borderRadius: 16, border: '1px solid #f0f0f2', background: '#fff',
-                  transition: 'transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s',
-                  cursor: 'default',
-                }} onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.08)'; e.currentTarget.style.borderColor = '#006AFF' }}
-                   onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#f0f0f2' }}>
-                  <div style={{ width: 48, height: 48, borderRadius: 12, background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>{f.icon}</div>
-                  <h3 style={{ fontSize: 17, fontWeight: 700, margin: '0 0 8px', letterSpacing: '-0.3px' }}>{f.title}</h3>
-                  <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.6, margin: 0 }}>{f.desc}</p>
+                  transition: 'border-color .2s, transform .2s, box-shadow .2s', cursor: 'default',
+                }} onMouseEnter={e => { e.currentTarget.style.borderColor = '#006AFF'; e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(0,0,0,.06)' }}
+                   onMouseLeave={e => { e.currentTarget.style.borderColor = '#f0f0f2'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: '#94a3b8', marginBottom: 10 }}>{s.year}</div>
+                  <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 8, letterSpacing: '-.2px', lineHeight: 1.35 }}>{s.title}</h3>
+                  <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.65, marginBottom: 14 }}>{s.desc}</p>
+                  <span style={{ fontSize: 12, fontWeight: 600, color: '#006AFF', display: 'inline-flex', alignItems: 'center', gap: 4 }}>Read more <Arrow /></span>
                 </div>
-              </FadeUp>
+              </Fade>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Stats ── */}
-      <section style={{ background: '#0f172a', color: '#fff' }}>
-        <div className="landing-section">
-          <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32, textAlign: 'center' }}>
-            {[{ value: '500+', label: 'Print Shops' }, { value: 'RM 2M+', label: 'Revenue Processed' }, { value: '50K+', label: 'Orders Managed' }, { value: '99.9%', label: 'Uptime' }].map((s, i) => (
-              <FadeUp key={s.label} delay={i * 0.1}>
-                <div style={{ fontSize: 42, fontWeight: 900, letterSpacing: '-1px', background: 'linear-gradient(135deg, #fff, #60a5fa)', backgroundClip: 'text', WebkitBackgroundClip: 'text', color: 'transparent' }}>{s.value}</div>
-                <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginTop: 6 }}>{s.label}</div>
-              </FadeUp>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Testimonials ── */}
-      <section id="testimonials" style={{ background: '#f8fafc' }}>
-        <div className="landing-section">
-          <FadeUp>
-            <div style={{ textAlign: 'center', marginBottom: 56 }}>
-              <span style={{ fontSize: 12, fontWeight: 700, color: '#006AFF', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Testimonials</span>
-              <h2 style={{ fontSize: 36, fontWeight: 900, margin: '12px 0', letterSpacing: '-0.5px' }}>Loved by print shops</h2>
-            </div>
-          </FadeUp>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }} className="feature-grid">
+      {/* ══ TESTIMONIALS ══ */}
+      <section style={{ background: '#fafbfc' }}>
+        <div className="lp-section">
+          <div className="testi-g" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
             {TESTIMONIALS.map((t, i) => (
-              <FadeUp key={t.name} delay={i * 0.1}>
+              <Fade key={t.name} delay={i * .08}>
                 <div style={{ padding: 28, borderRadius: 16, background: '#fff', border: '1px solid #f0f0f2' }}>
-                  <div style={{ display: 'flex', gap: 3, marginBottom: 16 }}><StarIcon /><StarIcon /><StarIcon /><StarIcon /><StarIcon /></div>
-                  <p style={{ fontSize: 14, color: '#475569', lineHeight: 1.7, margin: '0 0 20px' }}>"{t.text}"</p>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#006AFF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 12, fontWeight: 700 }}>{t.avatar}</div>
+                  <div style={{ display: 'flex', gap: 2, marginBottom: 16 }}><Star /><Star /><Star /><Star /><Star /></div>
+                  <p style={{ fontSize: 14, color: '#475569', lineHeight: 1.7, marginBottom: 20 }}>"{t.text}"</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, borderTop: '1px solid #f0f0f2', paddingTop: 16 }}>
+                    <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#006AFF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 11, fontWeight: 700 }}>
+                      {t.name.split(' ').map(w => w[0]).join('')}
+                    </div>
                     <div>
                       <div style={{ fontSize: 13, fontWeight: 700 }}>{t.name}</div>
                       <div style={{ fontSize: 11, color: '#94a3b8' }}>{t.role}</div>
                     </div>
                   </div>
                 </div>
-              </FadeUp>
+              </Fade>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Pricing ── */}
-      <section id="pricing" style={{ background: '#fff' }}>
-        <div className="landing-section">
-          <FadeUp>
-            <div style={{ textAlign: 'center', marginBottom: 56 }}>
-              <span style={{ fontSize: 12, fontWeight: 700, color: '#006AFF', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Pricing</span>
-              <h2 style={{ fontSize: 36, fontWeight: 900, margin: '12px 0', letterSpacing: '-0.5px' }}>Simple, transparent pricing</h2>
-              <p style={{ fontSize: 16, color: '#64748b' }}>No hidden fees. Cancel anytime.</p>
-            </div>
-          </FadeUp>
-          <div className="pricing-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, maxWidth: 960, margin: '0 auto' }}>
-            {PLANS.map((p, i) => (
-              <FadeUp key={p.name} delay={i * 0.1}>
-                <div style={{
-                  padding: 32, borderRadius: 20,
-                  background: p.popular ? 'linear-gradient(135deg, #0f172a, #1e293b)' : '#fff',
-                  color: p.popular ? '#fff' : '#0f172a',
-                  border: p.popular ? 'none' : '1px solid #e2e8f0',
-                  position: 'relative', overflow: 'hidden',
-                  transform: p.popular ? 'scale(1.05)' : 'none',
-                  boxShadow: p.popular ? '0 24px 48px rgba(0,0,0,0.15)' : 'none',
-                }}>
-                  {p.popular && (
-                    <div style={{ position: 'absolute', top: 16, right: -28, background: '#006AFF', color: '#fff', fontSize: 10, fontWeight: 700, padding: '4px 32px', transform: 'rotate(45deg)', letterSpacing: '0.05em' }}>POPULAR</div>
-                  )}
-                  <div style={{ fontSize: 13, fontWeight: 600, color: p.popular ? '#60a5fa' : '#006AFF', marginBottom: 4 }}>{p.name}</div>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 4 }}>
-                    <span style={{ fontSize: 42, fontWeight: 900, letterSpacing: '-1px' }}>RM {p.price}</span>
-                    <span style={{ fontSize: 14, color: p.popular ? 'rgba(255,255,255,0.5)' : '#94a3b8' }}>/mo</span>
-                  </div>
-                  <p style={{ fontSize: 13, color: p.popular ? 'rgba(255,255,255,0.5)' : '#94a3b8', margin: '0 0 24px' }}>{p.desc}</p>
-                  <Link href="/register" className={`landing-btn ${p.popular ? 'landing-btn-primary' : 'landing-btn-outline'}`} style={{ width: '100%', justifyContent: 'center', padding: '12px', fontSize: 14 }}>
-                    Get Started
-                  </Link>
-                  <div style={{ marginTop: 24, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    {p.features.map(f => (
-                      <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: p.popular ? 'rgba(255,255,255,0.7)' : '#475569' }}>
-                        <CheckIcon /> {f}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </FadeUp>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ── */}
-      <section style={{
-        background: 'linear-gradient(135deg, #006AFF 0%, #0055d4 50%, #3b82f6 100%)',
-        position: 'relative', overflow: 'hidden',
-      }}>
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(255,255,255,0.05) 0%, transparent 50%)', pointerEvents: 'none' }} />
-        <div className="landing-section" style={{ textAlign: 'center', position: 'relative', zIndex: 1 }}>
-          <FadeUp>
-            <h2 style={{ fontSize: 40, fontWeight: 900, color: '#fff', margin: '0 0 16px', letterSpacing: '-0.5px' }}>
-              Ready to modernize your print shop?
-            </h2>
-            <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.7)', maxWidth: 480, margin: '0 auto 36px', lineHeight: 1.7 }}>
-              Join hundreds of print shops already using Onsprint. Start free, no credit card required.
-            </p>
-            <div className="cta-buttons" style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
-              <Link href="/register" className="landing-btn" style={{ background: '#fff', color: '#006AFF', fontSize: 16, padding: '16px 40px' }}>
-                Start Free Trial <ArrowRight />
-              </Link>
-              <Link href="/login" className="landing-btn landing-btn-secondary" style={{ fontSize: 16, padding: '16px 32px' }}>
-                Log In
-              </Link>
-            </div>
-          </FadeUp>
-        </div>
-      </section>
-
-      {/* ── Footer ── */}
-      <footer style={{ background: '#0f172a', color: 'rgba(255,255,255,0.6)', padding: '64px 24px 32px' }}>
-        <div className="footer-grid" style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, marginBottom: 48 }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-              <div style={{ width: 30, height: 30, background: '#006AFF', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="white" opacity="0.7"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="white" opacity="0.7"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="white" opacity="0.4"/></svg>
+      {/* ══ FAQ ══ */}
+      <section id="faq" style={{ background: '#fff' }}>
+        <div className="lp-section">
+          <div className="faq-cols" style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 64, alignItems: 'start' }}>
+            <Fade>
+              <div>
+                <span className="lp-tag" style={{ background: '#eff6ff', color: '#006AFF', marginBottom: 20 }}>FAQ</span>
+                <h2 style={{ fontSize: 32, fontWeight: 900, letterSpacing: '-.8px', marginBottom: 12 }}>Your questions, answered</h2>
+                <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.7, marginBottom: 24 }}>
+                  Get quick answers to the most common questions about our platform and services.
+                </p>
+                <Link href="/register" className="lp-btn lp-btn-p" style={{ fontSize: 13 }}>Contact us <Arrow /></Link>
               </div>
-              <span style={{ fontSize: 16, fontWeight: 800, color: '#fff' }}>Onsprint</span>
-            </div>
-            <p style={{ fontSize: 13, lineHeight: 1.7, maxWidth: 280 }}>
-              The all-in-one platform for print shop management. Built in Malaysia, for Malaysia.
-            </p>
-          </div>
-          <div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>Product</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 13 }}>
-              <a href="#features">Features</a>
-              <a href="#pricing">Pricing</a>
-              <Link href="/register">Get Started</Link>
-            </div>
-          </div>
-          <div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>Company</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 13 }}>
-              <a href="#">About</a>
-              <a href="#">Blog</a>
-              <a href="#">Contact</a>
-            </div>
-          </div>
-          <div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>Legal</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 13 }}>
-              <a href="#">Privacy Policy</a>
-              <a href="#">Terms of Service</a>
-            </div>
+            </Fade>
+            <Fade delay={.1}>
+              <div style={{ borderTop: '1px solid #e2e8f0' }}>
+                {FAQS.map(f => <FaqItem key={f.q} q={f.q} a={f.a} />)}
+              </div>
+            </Fade>
           </div>
         </div>
-        <div style={{ maxWidth: 1200, margin: '0 auto', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 24, display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+      </section>
+
+      {/* ══ CTA ══ */}
+      <section style={{ background: '#0f172a', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,106,255,.1) 0%, transparent 60%)', pointerEvents: 'none' }} />
+        <div className="lp-section" style={{ textAlign: 'center', position: 'relative', zIndex: 1, padding: '80px 24px' }}>
+          <Fade>
+            <h2 style={{ fontSize: 38, fontWeight: 900, color: '#fff', marginBottom: 14, letterSpacing: '-1px' }}>Start your journey</h2>
+            <p style={{ fontSize: 16, color: 'rgba(255,255,255,.5)', maxWidth: 420, margin: '0 auto 32px', lineHeight: 1.7 }}>
+              Let&apos;s start building something great together.
+            </p>
+            <div className="cta-btns" style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+              <Link href="/register" className="lp-btn lp-btn-p" style={{ padding: '14px 36px', fontSize: 15 }}>Get started free <Arrow /></Link>
+              <Link href="/login" className="lp-btn lp-btn-s" style={{ padding: '14px 28px', fontSize: 15 }}>Log in</Link>
+            </div>
+          </Fade>
+        </div>
+      </section>
+
+      {/* ══ FOOTER ══ */}
+      <footer style={{ background: '#080e1a', color: 'rgba(255,255,255,.5)', padding: '56px 24px 28px' }}>
+        <div className="footer-g" style={{ maxWidth: 1140, margin: '0 auto', display: 'grid', gridTemplateColumns: '2.2fr 1fr 1fr 1fr', gap: 40, marginBottom: 40 }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+              <div style={{ width: 28, height: 28, background: '#006AFF', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="white" opacity=".7"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="white" opacity=".7"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="white" opacity=".4"/></svg>
+              </div>
+              <span style={{ fontSize: 15, fontWeight: 800, color: '#fff' }}>Onsprint</span>
+            </div>
+            <p style={{ fontSize: 13, lineHeight: 1.7, maxWidth: 260 }}>The all-in-one platform for print shop management. Built in Malaysia, for Malaysia.</p>
+          </div>
+          {[
+            { label: 'Product', links: [['Features', '#features'], ['Pricing', '#pricing'], ['Case Studies', '#case-studies'], ['Get Started', '/register']] },
+            { label: 'Company', links: [['About', '#'], ['Blog', '#'], ['Contact', '#'], ['Careers', '#']] },
+            { label: 'Legal', links: [['Privacy Policy', '#'], ['Terms of Service', '#'], ['Cookie Policy', '#']] },
+          ].map(col => (
+            <div key={col.label}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,.3)', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 14 }}>{col.label}</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 13 }}>
+                {col.links.map(([text, href]) => (
+                  <a key={text} href={href} style={{ transition: 'color .15s' }} onMouseEnter={e => (e.currentTarget.style.color = '#fff')} onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,.5)')}>{text}</a>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div style={{ maxWidth: 1140, margin: '0 auto', borderTop: '1px solid rgba(255,255,255,.06)', paddingTop: 20, display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'rgba(255,255,255,.3)' }}>
           <span>Copyright &copy; 2026 Onsprint. All rights reserved.</span>
-          <span>Made in Malaysia</span>
+          <span>Made with care in Malaysia</span>
         </div>
       </footer>
     </div>
