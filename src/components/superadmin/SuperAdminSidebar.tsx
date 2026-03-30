@@ -63,6 +63,46 @@ const SettingsIcon = () => (
     <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
   </svg>
 )
+const SupportIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+  </svg>
+)
+const EmailIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+  </svg>
+)
+const FlagIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>
+  </svg>
+)
+const WhitelabelIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+  </svg>
+)
+const RevenueShareIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
+  </svg>
+)
+const OnboardIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+  </svg>
+)
+const ExportIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+  </svg>
+)
+const MaintenanceIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+  </svg>
+)
 const BackIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
@@ -74,6 +114,7 @@ const NAV_SECTIONS = [
     items: [
       { href: '/superadmin', label: 'Dashboard', icon: DashboardIcon, exact: true },
       { href: '/superadmin/analytics', label: 'Analytics', icon: AnalyticsIcon },
+      { href: '/superadmin/onboarding', label: 'Onboarding', icon: OnboardIcon },
     ],
   },
   {
@@ -82,6 +123,7 @@ const NAV_SECTIONS = [
       { href: '/superadmin/shops', label: 'Shops', icon: ShopIcon },
       { href: '/superadmin/orders', label: 'Orders', icon: OrdersIcon },
       { href: '/superadmin/users', label: 'Users', icon: UsersIcon },
+      { href: '/superadmin/support', label: 'Support', icon: SupportIcon },
     ],
   },
   {
@@ -89,13 +131,17 @@ const NAV_SECTIONS = [
     items: [
       { href: '/superadmin/subscriptions', label: 'Subscriptions', icon: SubsIcon },
       { href: '/superadmin/billing', label: 'Billing', icon: BillingIcon },
+      { href: '/superadmin/revenue-share', label: 'Revenue Share', icon: RevenueShareIcon },
     ],
   },
   {
-    label: 'Communication',
+    label: 'Platform',
     items: [
       { href: '/superadmin/announcements', label: 'Announcements', icon: AnnouncementIcon },
+      { href: '/superadmin/email-templates', label: 'Email Templates', icon: EmailIcon },
       { href: '/superadmin/catalog', label: 'Catalog', icon: CatalogIcon },
+      { href: '/superadmin/feature-flags', label: 'Feature Flags', icon: FlagIcon },
+      { href: '/superadmin/whitelabel', label: 'Whitelabel', icon: WhitelabelIcon },
     ],
   },
   {
@@ -103,6 +149,8 @@ const NAV_SECTIONS = [
     items: [
       { href: '/superadmin/audit', label: 'Audit Log', icon: AuditIcon },
       { href: '/superadmin/health', label: 'Health', icon: HealthIcon },
+      { href: '/superadmin/maintenance', label: 'Maintenance', icon: MaintenanceIcon },
+      { href: '/superadmin/exports', label: 'Exports', icon: ExportIcon },
       { href: '/superadmin/settings', label: 'Settings', icon: SettingsIcon },
     ],
   },
