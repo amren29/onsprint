@@ -54,11 +54,11 @@ export default function SuperAdminAnnouncements() {
           <div className="card-header"><h3 className="card-title">New Announcement</h3></div>
           <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
             <div style={{ display: 'flex', gap: 8 }}>
-              <div style={{ flex: 1 }}>
+              <label className="form-group" style={{ flex: 1 }}>
                 <span className="form-label">Title</span>
                 <input type="text" placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} className="form-input" />
-              </div>
-              <div>
+              </label>
+              <div className="form-group">
                 <span className="form-label">Type</span>
                 <CustomSelect
                   value={type}
@@ -73,7 +73,7 @@ export default function SuperAdminAnnouncements() {
                 />
               </div>
             </div>
-            <div>
+            <div className="form-group">
               <span className="form-label">Message</span>
               <textarea placeholder="Message to all shops..." value={message} onChange={e => setMessage(e.target.value)} className="form-input" rows={3} style={{ resize: 'vertical' }} />
             </div>

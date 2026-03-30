@@ -228,7 +228,7 @@ export default function SuperAdminShopDetail() {
             </div>
             <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
               <div style={{ display: 'flex', gap: 8 }}>
-                <div style={{ flex: 1 }}>
+                <label className="form-group" style={{ flex: 1 }}>
                   <span className="form-label">Title</span>
                   <input
                     type="text"
@@ -237,8 +237,8 @@ export default function SuperAdminShopDetail() {
                     onChange={e => setNotifTitle(e.target.value)}
                     className="form-input"
                   />
-                </div>
-                <div>
+                </label>
+                <div className="form-group">
                   <span className="form-label">Type</span>
                   <CustomSelect
                     value={notifType}
@@ -253,7 +253,7 @@ export default function SuperAdminShopDetail() {
                   />
                 </div>
               </div>
-              <div>
+              <div className="form-group">
                 <span className="form-label">Message</span>
                 <textarea
                   placeholder="Message..."
@@ -336,10 +336,10 @@ export default function SuperAdminShopDetail() {
           </div>
           {showTransfer && (
             <div style={{ padding: 16, display: 'flex', gap: 8, alignItems: 'flex-end' }}>
-              <div style={{ flex: 1 }}>
+              <label className="form-group" style={{ flex: 1 }}>
                 <span className="form-label">New Owner Email</span>
                 <input value={transferEmail} onChange={e => setTransferEmail(e.target.value)} className="form-input" placeholder="newowner@email.com" />
-              </div>
+              </label>
               <button className="btn-primary" onClick={transferOwnership} disabled={saving || !transferEmail}>
                 {saving ? '...' : 'Transfer'}
               </button>

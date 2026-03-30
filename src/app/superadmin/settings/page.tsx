@@ -123,7 +123,7 @@ export default function SuperAdminSettings() {
             </tbody>
           </table>
           <div style={{ padding: '12px 16px', borderTop: '1px solid var(--border)', display: 'flex', gap: 8, alignItems: 'center' }}>
-            <div>
+            <label className="form-group">
               <span className="form-label">Admin Email</span>
               <input
                 type="email"
@@ -134,7 +134,7 @@ export default function SuperAdminSettings() {
                 style={{ width: 260 }}
                 onKeyDown={e => e.key === 'Enter' && addAdmin()}
               />
-            </div>
+            </label>
             <button className="btn-primary" onClick={addAdmin} disabled={adding || !newEmail} style={{ alignSelf: 'flex-end' }}>
               {adding ? '...' : 'Add Admin'}
             </button>

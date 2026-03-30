@@ -85,11 +85,11 @@ export default function SuperAdminBilling() {
             <div className="card">
               <div className="card-header"><h3 className="card-title">Create Coupon</h3></div>
               <div style={{ padding: 16, display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'flex-end' }}>
-                <div>
+                <label className="form-group">
                   <span className="form-label">Code</span>
                   <input value={code} onChange={e => setCode(e.target.value)} className="form-input" style={{ width: 120 }} placeholder="SAVE20" />
-                </div>
-                <div>
+                </label>
+                <div className="form-group">
                   <span className="form-label">Type</span>
                   <CustomSelect
                     value={discountType}
@@ -101,14 +101,14 @@ export default function SuperAdminBilling() {
                     style={{ width: 100 }}
                   />
                 </div>
-                <div>
+                <label className="form-group">
                   <span className="form-label">Value</span>
                   <input type="number" value={discountValue} onChange={e => setDiscountValue(e.target.value)} className="form-input" style={{ width: 80 }} placeholder="20" />
-                </div>
-                <div>
+                </label>
+                <label className="form-group">
                   <span className="form-label">Max Uses</span>
                   <input type="number" value={maxUses} onChange={e => setMaxUses(e.target.value)} className="form-input" style={{ width: 80 }} placeholder="100" />
-                </div>
+                </label>
                 <button className="btn-primary" onClick={createCoupon} disabled={creating || !code || !discountValue}>
                   {creating ? '...' : 'Create'}
                 </button>

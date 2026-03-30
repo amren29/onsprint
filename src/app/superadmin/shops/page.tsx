@@ -61,16 +61,16 @@ export default function SuperAdminShops() {
       {showCreate && (
         <div className="card" style={{ marginBottom: 0 }}>
           <div className="card-header"><h3 className="card-title">Create New Shop</h3></div>
-          <div style={{ padding: 16, display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'flex-end' }}>
-            <div>
+          <div style={{ padding: 16, display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'flex-end' }}>
+            <label className="form-group" style={{ width: 180 }}>
               <span className="form-label">Shop Name *</span>
-              <input value={newName} onChange={e => setNewName(e.target.value)} className="form-input" style={{ width: 180 }} placeholder="My Print Shop" />
-            </div>
-            <div>
+              <input value={newName} onChange={e => setNewName(e.target.value)} className="form-input" placeholder="My Print Shop" />
+            </label>
+            <label className="form-group" style={{ width: 200 }}>
               <span className="form-label">Owner Email</span>
-              <input value={newEmail} onChange={e => setNewEmail(e.target.value)} className="form-input" style={{ width: 200 }} placeholder="owner@email.com" />
-            </div>
-            <div>
+              <input value={newEmail} onChange={e => setNewEmail(e.target.value)} className="form-input" placeholder="owner@email.com" />
+            </label>
+            <div className="form-group" style={{ width: 130 }}>
               <span className="form-label">Plan</span>
               <CustomSelect
                 value={newPlan}
@@ -82,7 +82,6 @@ export default function SuperAdminShops() {
                   { value: 'pro', label: 'Pro' },
                   { value: 'business', label: 'Business' },
                 ]}
-                style={{ width: 110 }}
               />
             </div>
             <button className="btn-primary" disabled={creating || !newName} onClick={async () => {
