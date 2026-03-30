@@ -276,23 +276,65 @@
   <section class="section">
     <div class="container">
       <div class="num-grid">
+        <!-- 01 - Onboarding mockup -->
         <div class="num-item reveal">
           <div class="num-label">01</div>
-          <div class="num-img"></div>
+          <div class="num-img">
+            <div class="num-mini-app">
+              <div class="num-mini-row"><span class="num-mini-check done"></span><span>Add your first product</span></div>
+              <div class="num-mini-row"><span class="num-mini-check done"></span><span>Create your first order</span></div>
+              <div class="num-mini-row"><span class="num-mini-check"></span><span>Customize your store</span></div>
+              <div class="num-mini-row"><span class="num-mini-check"></span><span>Set up payments</span></div>
+              <div class="num-mini-progress"><div class="num-mini-progress-bar" style="width:50%"></div></div>
+            </div>
+          </div>
           <h3 class="num-title">Easy setup</h3>
           <p class="num-desc">Create your workspace and invite your team. Get everything ready in minutes.</p>
         </div>
+        <!-- 02 - Kanban mockup -->
         <div class="num-item reveal">
           <div class="num-label">02</div>
           <div class="num-img">
-            <div class="num-img-badge">Dashboard</div>
+            <div class="num-mini-app">
+              <div class="num-mini-header">Production Board</div>
+              <div class="num-mini-cols">
+                <div class="num-mini-col">
+                  <div class="num-mini-col-h">New</div>
+                  <div class="num-mini-card accent">Business Cards</div>
+                  <div class="num-mini-card">Flyer A3</div>
+                </div>
+                <div class="num-mini-col">
+                  <div class="num-mini-col-h">Printing</div>
+                  <div class="num-mini-card">Banner 6ft</div>
+                </div>
+                <div class="num-mini-col">
+                  <div class="num-mini-col-h">Done</div>
+                  <div class="num-mini-card">Poster A2</div>
+                </div>
+              </div>
+            </div>
           </div>
           <h3 class="num-title">Collaborate</h3>
           <p class="num-desc">Assign tasks and keep communication clear. Everyone stays aligned.</p>
         </div>
+        <!-- 03 - Analytics mockup -->
         <div class="num-item reveal">
           <div class="num-label">03</div>
-          <div class="num-img"></div>
+          <div class="num-img">
+            <div class="num-mini-app">
+              <div class="num-mini-header">Revenue</div>
+              <div class="num-mini-amount">RM 48,250</div>
+              <div class="num-mini-bars">
+                <div class="num-mini-bar" style="height:20px"></div>
+                <div class="num-mini-bar" style="height:30px"></div>
+                <div class="num-mini-bar" style="height:25px"></div>
+                <div class="num-mini-bar" style="height:40px"></div>
+                <div class="num-mini-bar" style="height:35px"></div>
+                <div class="num-mini-bar" style="height:45px"></div>
+                <div class="num-mini-bar" style="height:38px"></div>
+              </div>
+            </div>
+          </div>
           <h3 class="num-title">Track growth</h3>
           <p class="num-desc">Use dashboards to monitor progress, trends, and what matters most.</p>
         </div>
@@ -307,9 +349,9 @@
       <p class="perf-subtitle reveal">Onsprint gives your team everything it needs to stay aligned, track performance, and scale with confidence — all in one place.</p>
       <!-- Tab pills -->
       <div class="perf-tabs reveal">
-        <button class="perf-tab active" data-tab="portal">Client portal</button>
-        <button class="perf-tab" data-tab="api">API tracking</button>
-        <button class="perf-tab" data-tab="workflow">Workflow automation</button>
+        <button class="perf-tab active" data-tab="portal">Order management</button>
+        <button class="perf-tab" data-tab="api">Production board</button>
+        <button class="perf-tab" data-tab="workflow">Online store</button>
         <button class="perf-tab" data-tab="team">Team management</button>
       </div>
     </div>
@@ -318,33 +360,33 @@
       <div class="container">
         <div class="perf-detail-grid reveal">
           <div class="perf-detail-card">
-            <div class="perf-detail-card-header">Customer Portal</div>
+            <div class="perf-detail-card-header">Recent Orders</div>
             <div class="perf-detail-card-row active">
-              <div class="perf-detail-avatar" style="background:#006AFF">AR</div>
+              <div class="perf-detail-avatar">AR</div>
               <div>
-                <div class="perf-detail-name">Ahmad R.</div>
-                <div class="perf-detail-sub">3 active orders</div>
+                <div class="perf-detail-name">ORD0024 · Ahmad R.</div>
+                <div class="perf-detail-sub">Business Cards x500 · RM 450</div>
               </div>
             </div>
             <div class="perf-detail-card-row">
-              <div class="perf-detail-avatar" style="background:#006AFF;opacity:.5">SN</div>
+              <div class="perf-detail-avatar" style="opacity:.7">SN</div>
               <div>
-                <div class="perf-detail-name">Siti N.</div>
-                <div class="perf-detail-sub">1 pending</div>
+                <div class="perf-detail-name">ORD0023 · Siti N.</div>
+                <div class="perf-detail-sub">Flyer A3 x200 · RM 1,200</div>
               </div>
             </div>
             <div class="perf-detail-card-row">
-              <div class="perf-detail-avatar" style="background:#006AFF;opacity:.7">LM</div>
+              <div class="perf-detail-avatar" style="opacity:.5">LM</div>
               <div>
-                <div class="perf-detail-name">Lee M.</div>
-                <div class="perf-detail-sub">Completed</div>
+                <div class="perf-detail-name">ORD0022 · Lee M.</div>
+                <div class="perf-detail-sub">Banner 6ft x2 · RM 680</div>
               </div>
             </div>
           </div>
           <div class="perf-detail-text">
-            <div class="perf-detail-label">CLIENT PORTAL</div>
-            <h3 class="perf-detail-heading">Centralized access for teams and clients</h3>
-            <p class="perf-detail-desc">Securely share progress, files, feedback, and timelines with stakeholders. Keep everyone on the same page without switching platforms.</p>
+            <div class="perf-detail-label">ORDER MANAGEMENT</div>
+            <h3 class="perf-detail-heading">Manage orders from quote to delivery</h3>
+            <p class="perf-detail-desc">Create orders, track production status, generate invoices, and manage payments — all from one dashboard. Auto-generated IDs keep everything organized.</p>
           </div>
         </div>
       </div>
