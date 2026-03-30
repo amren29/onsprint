@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Features — Onsprint</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon.svg">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .features-page{padding-top:100px}
+    .features-hero{text-align:center;padding-bottom:56px}
+    .features-hero-title{font-size:42px;font-weight:900;letter-spacing:-1.5px;margin-bottom:14px}
+    .features-hero-desc{font-size:16px;color:#64748b;max-width:540px;margin:0 auto;line-height:1.7}
+
+    /* Feature Section (alternating left-right) */
+    .feat-section{padding:64px 0;border-top:1px solid #f0f0f2}
+    .feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+    .feat-grid.reverse .feat-text{order:2}
+    .feat-grid.reverse .feat-visual{order:1}
+    .feat-label{font-size:10px;font-weight:700;color:#006AFF;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+    .feat-heading{font-size:28px;font-weight:800;letter-spacing:-.5px;margin-bottom:12px;line-height:1.2}
+    .feat-desc{font-size:14px;color:#64748b;line-height:1.7;margin-bottom:20px}
+    .feat-list{display:flex;flex-direction:column;gap:10px}
+    .feat-list-item{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#475569;line-height:1.55}
+    .feat-list-check{width:18px;height:18px;border-radius:5px;background:#eff6ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+
+    /* Feature Visual (mini mockup card) */
+    .feat-mock{background:#f8fafc;border:1px solid #f0f0f2;border-radius:16px;padding:24px;min-height:280px;display:flex;flex-direction:column;justify-content:center}
+    .feat-mock-dark{background:#0f172a;border-color:#1e293b;color:#fff}
+    .feat-mock-header{font-size:10px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px}
+    .feat-mock-dark .feat-mock-header{color:rgba(255,255,255,.4)}
+    .feat-mock-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0f2;font-size:12px}
+    .feat-mock-dark .feat-mock-row{border-color:rgba(255,255,255,.06)}
+    .feat-mock-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .feat-mock-badge{font-size:9px;font-weight:600;padding:2px 8px;border-radius:8px;margin-left:auto}
+    .feat-mock-stat{text-align:center;padding:12px}
+    .feat-mock-stat-value{font-size:24px;font-weight:800;letter-spacing:-.5px}
+    .feat-mock-stat-label{font-size:10px;color:#94a3b8;margin-top:2px}
+    .feat-mock-bar-row{display:flex;gap:4px;align-items:flex-end;height:50px;margin-top:8px}
+    .feat-mock-bar{flex:1;background:#006AFF;border-radius:2px 2px 0 0;opacity:.6}
+    .feat-mock-bar:nth-child(even){opacity:.3}
+
+    /* All Features Grid */
+    .all-feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+    .all-feat-card{background:#fff;border:1px solid #f0f0f2;border-radius:14px;padding:24px;transition:transform .2s,box-shadow .2s}
+    .all-feat-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.05)}
+    .all-feat-card-title{font-size:14px;font-weight:700;margin-bottom:6px}
+    .all-feat-card-desc{font-size:12px;color:#64748b;line-height:1.6}
+
+    @media(max-width:820px){
+      .feat-grid{grid-template-columns:1fr}
+      .feat-grid.reverse .feat-text{order:1}
+      .feat-grid.reverse .feat-visual{order:2}
+      .feat-visual{display:none}
+      .all-feat-grid{grid-template-columns:1fr}
+      .features-hero-title{font-size:30px}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="nav" id="nav" style="position:fixed">
+    <div class="nav-pill">
+      <a href="index.html" class="nav-brand">
+        <div class="nav-logo-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="white" opacity=".7"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="white" opacity=".7"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="white" opacity=".4"/></svg>
+        </div>
+        Onsprint
+      </a>
+      <div class="nav-links">
+        <a href="features.html">Features</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="index.html#contact">Contact us</a>
+      </div>
+      <a href="/register" class="nav-cta">Get started <span class="nav-cta-arrow">→</span></a>
+    </div>
+  </nav>
+
+  <div class="features-page">
+    <div class="container">
+      <!-- Hero -->
+      <div class="features-hero">
+        <span class="tag">Features</span>
+        <h1 class="features-hero-title">Everything your print shop needs</h1>
+        <p class="features-hero-desc">From managing orders to running your online store, Onsprint handles your entire workflow so you can focus on what you do best — printing.</p>
+      </div>
+    </div>
+
+    <!-- ══ FEATURE 1: Order Management ══ -->
+    <div class="feat-section">
+      <div class="container">
+        <div class="feat-grid">
+          <div class="feat-text">
+            <div class="feat-label">Order Management</div>
+            <h2 class="feat-heading">Manage every order from quote to delivery</h2>
+            <p class="feat-desc">Create orders in seconds with auto-generated IDs, track status changes, and keep your customers updated — all from one place.</p>
+            <div class="feat-list">
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Auto-generated order IDs (ORD0001, ORD0002...)</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Multi-item orders with pricing breakdown</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Status tracking: Pending → Confirmed → Completed</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Invoice generation and payment tracking</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Customer history and repeat orders</div>
+            </div>
+          </div>
+          <div class="feat-visual">
+            <div class="feat-mock">
+              <div class="feat-mock-header">Recent Orders</div>
+              <div class="feat-mock-row"><div class="feat-mock-dot" style="background:#006AFF"></div><span style="font-weight:600">ORD0024</span><span style="color:#94a3b8;margin-left:8px">Ahmad R.</span><span class="feat-mock-badge" style="color:#006AFF;background:#eff6ff">Confirmed</span></div>
+              <div class="feat-mock-row"><div class="feat-mock-dot" style="background:#f59e0b"></div><span style="font-weight:600">ORD0023</span><span style="color:#94a3b8;margin-left:8px">Siti N.</span><span class="feat-mock-badge" style="color:#f59e0b;background:#fffbeb">Pending</span></div>
+              <div class="feat-mock-row"><div class="feat-mock-dot" style="background:#16a34a"></div><span style="font-weight:600">ORD0022</span><span style="color:#94a3b8;margin-left:8px">Lee M.</span><span class="feat-mock-badge" style="color:#16a34a;background:#f0fdf4">Completed</span></div>
+              <div class="feat-mock-row"><div class="feat-mock-dot" style="background:#006AFF"></div><span style="font-weight:600">ORD0021</span><span style="color:#94a3b8;margin-left:8px">Farah A.</span><span class="feat-mock-badge" style="color:#006AFF;background:#eff6ff">Confirmed</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ FEATURE 2: Production Board ══ -->
+    <div class="feat-section">
+      <div class="container">
+        <div class="feat-grid reverse">
+          <div class="feat-text">
+            <div class="feat-label">Production Board</div>
+            <h2 class="feat-heading">Track every job through your pipeline</h2>
+            <p class="feat-desc">A Kanban-style board with 12 production stages — from artwork checking all the way to delivery. Your team always knows what's next.</p>
+            <div class="feat-list">
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>12 stages: New Order → Artwork → Printing → QC → Done</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Drag-and-drop cards between columns</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Auto-notify customers when status changes</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Real-time team visibility</div>
+            </div>
+          </div>
+          <div class="feat-visual">
+            <div class="feat-mock-dark feat-mock">
+              <div class="feat-mock-header">Production Board</div>
+              <div style="display:flex;gap:10px">
+                <div style="flex:1"><div style="font-size:9px;color:rgba(255,255,255,.4);margin-bottom:6px;font-weight:600">NEW</div><div style="background:rgba(255,255,255,.06);border-radius:6px;padding:8px;font-size:10px;margin-bottom:4px">Business Cards</div><div style="background:rgba(255,255,255,.06);border-radius:6px;padding:8px;font-size:10px">Flyer A3</div></div>
+                <div style="flex:1"><div style="font-size:9px;color:rgba(255,255,255,.4);margin-bottom:6px;font-weight:600">PRINTING</div><div style="background:rgba(0,106,255,.15);border:1px solid rgba(0,106,255,.25);border-radius:6px;padding:8px;font-size:10px;color:#60a5fa">Banner 6ft</div></div>
+                <div style="flex:1"><div style="font-size:9px;color:rgba(255,255,255,.4);margin-bottom:6px;font-weight:600">DONE</div><div style="background:rgba(74,222,128,.1);border-radius:6px;padding:8px;font-size:10px;color:#4ade80">Poster A2</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ FEATURE 3: Online Store ══ -->
+    <div class="feat-section">
+      <div class="container">
+        <div class="feat-grid">
+          <div class="feat-text">
+            <div class="feat-label">Online Store</div>
+            <h2 class="feat-heading">Your own branded storefront</h2>
+            <p class="feat-desc">Let customers browse your products, upload artwork, and place orders 24/7. Fully customizable with your logo, colors, and domain.</p>
+            <div class="feat-list">
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Product catalog with pricing tiers</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Customer file upload (artwork, designs)</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Online proofing with customer approval</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Payment integration (Stripe, Billplz, FPX)</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Customer portal with order history</div>
+            </div>
+          </div>
+          <div class="feat-visual">
+            <div class="feat-mock">
+              <div class="feat-mock-header">Store Products</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div style="background:#fff;border:1px solid #f0f0f2;border-radius:8px;padding:12px"><div style="height:50px;background:#f0f0f2;border-radius:6px;margin-bottom:8px"></div><div style="font-size:11px;font-weight:600">Business Cards</div><div style="font-size:10px;color:#94a3b8">From RM 45</div></div>
+                <div style="background:#fff;border:1px solid #f0f0f2;border-radius:8px;padding:12px"><div style="height:50px;background:#f0f0f2;border-radius:6px;margin-bottom:8px"></div><div style="font-size:11px;font-weight:600">Flyers</div><div style="font-size:10px;color:#94a3b8">From RM 80</div></div>
+                <div style="background:#fff;border:1px solid #f0f0f2;border-radius:8px;padding:12px"><div style="height:50px;background:#f0f0f2;border-radius:6px;margin-bottom:8px"></div><div style="font-size:11px;font-weight:600">Banners</div><div style="font-size:10px;color:#94a3b8">From RM 120</div></div>
+                <div style="background:#fff;border:1px solid #f0f0f2;border-radius:8px;padding:12px"><div style="height:50px;background:#f0f0f2;border-radius:6px;margin-bottom:8px"></div><div style="font-size:11px;font-weight:600">Stickers</div><div style="font-size:10px;color:#94a3b8">From RM 35</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ FEATURE 4: Payments ══ -->
+    <div class="feat-section">
+      <div class="container">
+        <div class="feat-grid reverse">
+          <div class="feat-text">
+            <div class="feat-label">Payments & Finance</div>
+            <h2 class="feat-heading">Get paid faster, track everything</h2>
+            <p class="feat-desc">Accept online payments, generate invoices, manage customer wallets, and see your revenue reports — all connected to your orders.</p>
+            <div class="feat-list">
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Stripe, Billplz, FPX integration</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Auto invoice generation</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Customer wallet top-up system</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Revenue and expense reports</div>
+            </div>
+          </div>
+          <div class="feat-visual">
+            <div class="feat-mock">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+                <div class="feat-mock-stat"><div class="feat-mock-stat-value">RM 48,250</div><div class="feat-mock-stat-label">Total Revenue</div></div>
+                <div class="feat-mock-stat"><div class="feat-mock-stat-value">156</div><div class="feat-mock-stat-label">Orders</div></div>
+              </div>
+              <div class="feat-mock-bar-row">
+                <div class="feat-mock-bar" style="height:20px"></div>
+                <div class="feat-mock-bar" style="height:32px"></div>
+                <div class="feat-mock-bar" style="height:28px"></div>
+                <div class="feat-mock-bar" style="height:42px"></div>
+                <div class="feat-mock-bar" style="height:38px"></div>
+                <div class="feat-mock-bar" style="height:50px"></div>
+                <div class="feat-mock-bar" style="height:45px"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ FEATURE 5: Team ══ -->
+    <div class="feat-section">
+      <div class="container">
+        <div class="feat-grid">
+          <div class="feat-text">
+            <div class="feat-label">Team Management</div>
+            <h2 class="feat-heading">Your whole team, one platform</h2>
+            <p class="feat-desc">Invite team members with role-based permissions. Designers see artwork, operators see production, owners see everything.</p>
+            <div class="feat-list">
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Up to 20 team members (Pro plan)</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Role-based permissions</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Real-time notifications</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Activity tracking per member</div>
+            </div>
+          </div>
+          <div class="feat-visual">
+            <div class="feat-mock-dark feat-mock">
+              <div class="feat-mock-header">Team Members</div>
+              <div class="feat-mock-row"><div style="width:24px;height:24px;border-radius:50%;background:#006AFF;display:flex;align-items:center;justify-content:center;color:#fff;font-size:8px;font-weight:700">AR</div><span style="font-weight:600">Ahmad R.</span><span style="color:rgba(255,255,255,.4);margin-left:4px">Owner</span><span class="feat-mock-badge" style="color:#4ade80;background:rgba(74,222,128,.1)">Full access</span></div>
+              <div class="feat-mock-row"><div style="width:24px;height:24px;border-radius:50%;background:#006AFF;opacity:.7;display:flex;align-items:center;justify-content:center;color:#fff;font-size:8px;font-weight:700">FK</div><span style="font-weight:600">Farah K.</span><span style="color:rgba(255,255,255,.4);margin-left:4px">Designer</span><span class="feat-mock-badge" style="color:#60a5fa;background:rgba(96,165,250,.1)">Orders, Design</span></div>
+              <div class="feat-mock-row"><div style="width:24px;height:24px;border-radius:50%;background:#006AFF;opacity:.5;display:flex;align-items:center;justify-content:center;color:#fff;font-size:8px;font-weight:700">DL</div><span style="font-weight:600">Daniel L.</span><span style="color:rgba(255,255,255,.4);margin-left:4px">Operator</span><span class="feat-mock-badge" style="color:#fbbf24;background:rgba(251,191,36,.1)">Production</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ FEATURE 6: Agents & Affiliates ══ -->
+    <div class="feat-section">
+      <div class="container">
+        <div class="feat-grid reverse">
+          <div class="feat-text">
+            <div class="feat-label">Agents & Affiliates</div>
+            <h2 class="feat-heading">Grow your sales network</h2>
+            <p class="feat-desc">Let agents order on behalf of customers with prepaid wallets. Set up affiliate programs to reward referrals and grow your reach.</p>
+            <div class="feat-list">
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Agent wallet top-up system</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Agent portal on your online store</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Affiliate tracking and commission payouts</div>
+              <div class="feat-list-item"><div class="feat-list-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#006AFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>Agent performance reports</div>
+            </div>
+          </div>
+          <div class="feat-visual">
+            <div class="feat-mock">
+              <div class="feat-mock-header">Agent Dashboard</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+                <div class="feat-mock-stat"><div class="feat-mock-stat-value" style="color:#006AFF">12</div><div class="feat-mock-stat-label">Active Agents</div></div>
+                <div class="feat-mock-stat"><div class="feat-mock-stat-value" style="color:#16a34a">RM 8,400</div><div class="feat-mock-stat-label">Agent Revenue</div></div>
+              </div>
+              <div class="feat-mock-row"><div class="feat-mock-dot" style="background:#006AFF"></div><span style="font-weight:600">Agent Ali</span><span style="color:#94a3b8;margin-left:8px">RM 2,400</span><span class="feat-mock-badge" style="color:#16a34a;background:#f0fdf4">Active</span></div>
+              <div class="feat-mock-row"><div class="feat-mock-dot" style="background:#006AFF;opacity:.6"></div><span style="font-weight:600">Agent Sara</span><span style="color:#94a3b8;margin-left:8px">RM 1,800</span><span class="feat-mock-badge" style="color:#16a34a;background:#f0fdf4">Active</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ALL FEATURES GRID ══ -->
+    <div class="feat-section" style="border-top:none;background:#f8fafc;padding:64px 0">
+      <div class="container" style="text-align:center">
+        <span class="tag">And more</span>
+        <h2 class="section-heading">Everything else included</h2>
+        <p class="section-sub" style="margin-bottom:0">Every plan comes packed with features to run your business.</p>
+        <div class="all-feat-grid">
+          <div class="all-feat-card"><div class="all-feat-card-title">Customer Management</div><div class="all-feat-card-desc">Track customer history, contact info, and order patterns. Auto-generated IDs keep everything organized.</div></div>
+          <div class="all-feat-card"><div class="all-feat-card-title">Stock & Inventory</div><div class="all-feat-card-desc">Monitor stock levels, get low-stock alerts, and track material usage across your production.</div></div>
+          <div class="all-feat-card"><div class="all-feat-card-title">Supplier Management</div><div class="all-feat-card-desc">Keep track of your material suppliers, purchase orders, and pricing history.</div></div>
+          <div class="all-feat-card"><div class="all-feat-card-title">Online Proofing</div><div class="all-feat-card-desc">Send proofs to customers for approval before printing. They approve or request changes online.</div></div>
+          <div class="all-feat-card"><div class="all-feat-card-title">Dark Mode</div><div class="all-feat-card-desc">Full dark mode support across the entire dashboard. Easy on the eyes for long workdays.</div></div>
+          <div class="all-feat-card"><div class="all-feat-card-title">Mobile Responsive</div><div class="all-feat-card-desc">Access your dashboard from any device. Works perfectly on phones, tablets, and desktops.</div></div>
+          <div class="all-feat-card"><div class="all-feat-card-title">Real-time Notifications</div><div class="all-feat-card-desc">Get notified instantly when orders come in, payments are received, or tasks need attention.</div></div>
+          <div class="all-feat-card"><div class="all-feat-card-title">Discounts & Coupons</div><div class="all-feat-card-desc">Create discount codes for your online store. Set percentage or fixed discounts with expiry dates.</div></div>
+          <div class="all-feat-card"><div class="all-feat-card-title">Analytics & Reports</div><div class="all-feat-card-desc">Revenue charts, order trends, customer insights, and production metrics to help you grow.</div></div>
+          <div class="all-feat-card"><div class="all-feat-card-title">Membership System</div><div class="all-feat-card-desc">Create membership tiers for your loyal customers with special pricing and benefits.</div></div>
+          <div class="all-feat-card"><div class="all-feat-card-title">Global Search</div><div class="all-feat-card-desc">Find any order, customer, or product instantly with Cmd+K search across your entire shop.</div></div>
+          <div class="all-feat-card"><div class="all-feat-card-title">Order Tracking</div><div class="all-feat-card-desc">Your customers can track their order status online without contacting you.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div style="text-align:center;padding:64px 24px;background:#fff">
+      <h3 style="font-size:28px;font-weight:800;margin-bottom:12px;letter-spacing:-.5px">Ready to streamline your print shop?</h3>
+      <p style="font-size:14px;color:#64748b;margin-bottom:28px">Start free — no credit card required.</p>
+      <a href="/register" class="btn-dark">Get started free <span class="btn-arrow">→</span></a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div class="footer-email">hello@onsprint.com</div>
+        <div class="footer-copy">Copyright &copy; 2026 Onsprint. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

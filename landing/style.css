@@ -83,13 +83,12 @@ ul{list-style:none}
 .stats-divider{width:1px;height:40px;background:#e2e8f0;flex-shrink:0}
 
 /* ── How It Works ─────────────────────────────────── */
-.steps-grid{display:flex;align-items:flex-start;justify-content:center;gap:0}
-.step-item{flex:1;max-width:260px;text-align:center;padding:0 16px}
-.step-number{width:28px;height:28px;border-radius:50%;background:#006AFF;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
-.step-icon{width:56px;height:56px;border-radius:16px;background:#eff6ff;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
-.step-title{font-size:16px;font-weight:700;margin-bottom:8px}
-.step-desc{font-size:13px;color:#64748b;line-height:1.65}
-.step-connector{display:flex;align-items:center;padding-top:56px;flex-shrink:0}
+.steps-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.step-card{background:#fff;border:1px solid #f0f0f2;border-radius:16px;padding:28px;text-align:left;transition:transform .2s,box-shadow .2s}
+.step-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.05)}
+.step-card-num{font-size:12px;font-weight:600;color:#cbd5e1;margin-bottom:14px}
+.step-card-title{font-size:16px;font-weight:700;margin-bottom:8px}
+.step-card-desc{font-size:13px;color:#64748b;line-height:1.65}
 
 /* ── Logos Marquee ────────────────────────────────── */
 .logos-section{padding:28px 0;border-top:1px solid #f0f0f2;overflow:hidden}
@@ -388,8 +387,7 @@ ul{list-style:none}
   .stats-grid{flex-wrap:wrap;gap:24px}
   .stats-divider{display:none}
   .stats-item{flex:none;width:45%}
-  .steps-grid{flex-direction:column;gap:24px;align-items:center}
-  .step-connector{display:none}
+  .steps-cards{grid-template-columns:1fr}
   .num-grid{grid-template-columns:1fr}
   .perf-detail-grid{grid-template-columns:1fr}
   .integ-grid{grid-template-columns:1fr}
