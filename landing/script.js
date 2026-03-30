@@ -82,7 +82,12 @@ function toggleBilling() {
   document.querySelectorAll('.price-card-amount[data-monthly]').forEach(el => {
     const price = isAnnual ? el.dataset.annual : el.dataset.monthly
     const sub = isAnnual ? el.dataset.annualSub : el.dataset.monthlySub
-    el.innerHTML = price + ' <span>' + sub + '</span>'
+    const yearlyTotal = el.dataset.annualTotal || ''
+    if (isAnnual && yearlyTotal) {
+      el.innerHTML = '<span class="price-annual-total">' + yearlyTotal + '/yr</span>' + price + ' <span>' + sub + '</span>'
+    } else {
+      el.innerHTML = price + ' <span>' + sub + '</span>'
+    }
   })
 }
 // Set initial state
