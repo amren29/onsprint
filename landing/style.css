@@ -257,7 +257,7 @@ ul{list-style:none}
 
 /* ── 3-Column Pricing ─────────────────────────────── */
 .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:940px;margin:40px auto 0;text-align:left}
-.price-grid-4{grid-template-columns:repeat(4,1fr);max-width:1100px}
+.price-grid-4{grid-template-columns:repeat(4,1fr);max-width:100%}
 /* Billing toggle */
 .billing-toggle{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:24px}
 .billing-label{font-size:13px;font-weight:500;color:#94a3b8;transition:color .2s}
@@ -273,11 +273,10 @@ ul{list-style:none}
 .price-card-popular:hover{transform:scale(1.04) translateY(-4px);box-shadow:0 24px 56px rgba(0,0,0,.16)}
 .price-card-badge{position:absolute;top:14px;right:-30px;background:#006AFF;color:#fff;font-size:9px;font-weight:700;padding:3px 32px;transform:rotate(45deg);letter-spacing:.04em}
 .price-card-name{font-size:12px;font-weight:700;color:#006AFF;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
-.price-card-amount{font-size:40px;font-weight:900;letter-spacing:-1px;margin-bottom:6px}
-.price-card-amount span{font-size:14px;font-weight:500;color:#94a3b8}
-.price-per-month{font-size:12px;font-weight:500;color:#94a3b8;margin-bottom:4px}
+.price-card-amount{font-size:36px;font-weight:900;letter-spacing:-1px;margin-bottom:2px;min-height:44px;white-space:nowrap}
+.price-card-amount span{font-size:13px;font-weight:500;color:#94a3b8}
+.price-per-month{font-size:13px;font-weight:500;color:#94a3b8;margin-top:0;margin-bottom:6px}
 .price-card-popular .price-per-month{color:rgba(255,255,255,.45)}
-.price-card-amount{min-height:48px}
 .price-card-popular .price-card-amount span{color:rgba(255,255,255,.45)}
 .price-card-desc{font-size:13px;color:#94a3b8;line-height:1.5;margin-bottom:24px}
 .price-card-popular .price-card-desc{color:rgba(255,255,255,.45)}
