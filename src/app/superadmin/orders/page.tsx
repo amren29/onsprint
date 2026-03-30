@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import CustomSelect from '@/components/CustomSelect'
 
 interface OrderRow {
   id: string
@@ -67,18 +68,18 @@ export default function SuperAdminOrders() {
             <input value={search} onChange={e => { setSearch(e.target.value); setPage(1) }} placeholder="Search order # or customer..."
               style={{ border: 'none', outline: 'none', background: 'transparent', fontSize: 12.5, color: 'var(--text-primary)', width: 200 }} />
           </div>
-          <select
+          <CustomSelect
             value={statusFilter}
-            onChange={e => { setStatusFilter(e.target.value); setPage(1) }}
-            className="form-input"
+            onChange={v => { setStatusFilter(v); setPage(1) }}
+            options={[
+              { value: '', label: 'All Status' },
+              { value: 'Pending', label: 'Pending' },
+              { value: 'Confirmed', label: 'Confirmed' },
+              { value: 'Completed', label: 'Completed' },
+              { value: 'Cancelled', label: 'Cancelled' },
+            ]}
             style={{ width: 140 }}
-          >
-            <option value="">All Status</option>
-            <option value="Pending">Pending</option>
-            <option value="Confirmed">Confirmed</option>
-            <option value="Completed">Completed</option>
-            <option value="Cancelled">Cancelled</option>
-          </select>
+          />
         </div>
       </div>
 

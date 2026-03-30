@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import CustomSelect from '@/components/CustomSelect'
 
 interface Shop {
   id: string
@@ -71,9 +72,18 @@ export default function SuperAdminShops() {
             </div>
             <div>
               <span className="form-label">Plan</span>
-              <select value={newPlan} onChange={e => setNewPlan(e.target.value)} className="form-input" style={{ width: 110 }}>
-                <option value="free">Free</option><option value="trial">Trial</option><option value="starter">Starter</option><option value="pro">Pro</option><option value="business">Business</option>
-              </select>
+              <CustomSelect
+                value={newPlan}
+                onChange={v => setNewPlan(v)}
+                options={[
+                  { value: 'free', label: 'Free' },
+                  { value: 'trial', label: 'Trial' },
+                  { value: 'starter', label: 'Starter' },
+                  { value: 'pro', label: 'Pro' },
+                  { value: 'business', label: 'Business' },
+                ]}
+                style={{ width: 110 }}
+              />
             </div>
             <button className="btn-primary" disabled={creating || !newName} onClick={async () => {
               setCreating(true)
@@ -98,19 +108,19 @@ export default function SuperAdminShops() {
             <input value={search} onChange={e => { setSearch(e.target.value); setPage(1) }} placeholder="Search shops..."
               style={{ border: 'none', outline: 'none', background: 'transparent', fontSize: 12.5, color: 'var(--text-primary)', width: 180 }} />
           </div>
-          <select
+          <CustomSelect
             value={planFilter}
-            onChange={e => { setPlanFilter(e.target.value); setPage(1) }}
-            className="form-input"
+            onChange={v => { setPlanFilter(v); setPage(1) }}
+            options={[
+              { value: '', label: 'All Plans' },
+              { value: 'free', label: 'Free' },
+              { value: 'trial', label: 'Trial' },
+              { value: 'starter', label: 'Starter' },
+              { value: 'pro', label: 'Pro' },
+              { value: 'business', label: 'Business' },
+            ]}
             style={{ width: 130 }}
-          >
-            <option value="">All Plans</option>
-            <option value="free">Free</option>
-            <option value="trial">Trial</option>
-            <option value="starter">Starter</option>
-            <option value="pro">Pro</option>
-            <option value="business">Business</option>
-          </select>
+          />
         </div>
       </div>
 

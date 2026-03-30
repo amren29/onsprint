@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import CustomSelect from '@/components/CustomSelect'
 
 export default function SuperAdminAnnouncements() {
   const [announcements, setAnnouncements] = useState<any[]>([])
@@ -59,12 +60,17 @@ export default function SuperAdminAnnouncements() {
               </div>
               <div>
                 <span className="form-label">Type</span>
-                <select value={type} onChange={e => setType(e.target.value)} className="form-input" style={{ width: 110 }}>
-                  <option value="info">Info</option>
-                  <option value="success">Success</option>
-                  <option value="warning">Warning</option>
-                  <option value="danger">Urgent</option>
-                </select>
+                <CustomSelect
+                  value={type}
+                  onChange={v => setType(v)}
+                  options={[
+                    { value: 'info', label: 'Info' },
+                    { value: 'success', label: 'Success' },
+                    { value: 'warning', label: 'Warning' },
+                    { value: 'danger', label: 'Urgent' },
+                  ]}
+                  style={{ width: 110 }}
+                />
               </div>
             </div>
             <div>

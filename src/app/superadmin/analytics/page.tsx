@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import CustomSelect from '@/components/CustomSelect'
 
 const fmtRM = (n: number) => `RM ${(n || 0).toLocaleString('en-MY', { minimumFractionDigits: 2 })}`
 
@@ -41,12 +42,17 @@ export default function SuperAdminAnalytics() {
         </div>
         <div className="page-actions">
           {(tab === 'revenue' || tab === 'leaderboard') && (
-            <select value={period} onChange={e => setPeriod(e.target.value)} className="form-input" style={{ width: 100 }}>
-              <option value="7d">7 days</option>
-              <option value="30d">30 days</option>
-              <option value="90d">90 days</option>
-              <option value="1y">1 year</option>
-            </select>
+            <CustomSelect
+              value={period}
+              onChange={v => setPeriod(v)}
+              options={[
+                { value: '7d', label: '7 days' },
+                { value: '30d', label: '30 days' },
+                { value: '90d', label: '90 days' },
+                { value: '1y', label: '1 year' },
+              ]}
+              style={{ width: 100 }}
+            />
           )}
         </div>
       </div>

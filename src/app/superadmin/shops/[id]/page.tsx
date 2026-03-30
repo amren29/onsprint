@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import CustomSelect from '@/components/CustomSelect'
 
 interface ShopDetail {
   shop: any
@@ -185,18 +186,18 @@ export default function SuperAdminShopDetail() {
             <div className="stat-card-label">Plan</div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <select
+            <CustomSelect
               value={selectedPlan}
-              onChange={e => setSelectedPlan(e.target.value)}
-              className="form-input"
+              onChange={v => setSelectedPlan(v)}
+              options={[
+                { value: 'free', label: 'Free' },
+                { value: 'trial', label: 'Trial' },
+                { value: 'starter', label: 'Starter' },
+                { value: 'pro', label: 'Pro' },
+                { value: 'business', label: 'Business' },
+              ]}
               style={{ width: 120, fontSize: 13 }}
-            >
-              <option value="free">Free</option>
-              <option value="trial">Trial</option>
-              <option value="starter">Starter</option>
-              <option value="pro">Pro</option>
-              <option value="business">Business</option>
-            </select>
+            />
             {selectedPlan !== (shop.plan || 'free') && (
               <button className="btn-primary" onClick={changePlan} disabled={saving} style={{ fontSize: 12, padding: '5px 12px' }}>
                 {saving ? '...' : 'Save'}
@@ -239,12 +240,17 @@ export default function SuperAdminShopDetail() {
                 </div>
                 <div>
                   <span className="form-label">Type</span>
-                  <select value={notifType} onChange={e => setNotifType(e.target.value)} className="form-input" style={{ width: 100 }}>
-                    <option value="info">Info</option>
-                    <option value="success">Success</option>
-                    <option value="warning">Warning</option>
-                    <option value="danger">Danger</option>
-                  </select>
+                  <CustomSelect
+                    value={notifType}
+                    onChange={v => setNotifType(v)}
+                    options={[
+                      { value: 'info', label: 'Info' },
+                      { value: 'success', label: 'Success' },
+                      { value: 'warning', label: 'Warning' },
+                      { value: 'danger', label: 'Danger' },
+                    ]}
+                    style={{ width: 100 }}
+                  />
                 </div>
               </div>
               <div>

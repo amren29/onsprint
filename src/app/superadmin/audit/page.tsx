@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import CustomSelect from '@/components/CustomSelect'
 
 export default function SuperAdminAudit() {
   const [logs, setLogs] = useState<any[]>([])
@@ -35,15 +36,20 @@ export default function SuperAdminAudit() {
       <div className="filter-row">
         <div className="filter-bar" />
         <div className="filter-right">
-          <select value={actionFilter} onChange={e => { setActionFilter(e.target.value); setPage(1) }} className="form-input" style={{ width: 200 }}>
-            <option value="">All Actions</option>
-            <option value="shop_created">Shop Created</option>
-            <option value="shop_deleted">Shop Deleted</option>
-            <option value="shop_ownership_transferred">Ownership Transfer</option>
-            <option value="coupon_created">Coupon Created</option>
-            <option value="coupon_deactivated">Coupon Deactivated</option>
-            <option value="announcement_sent">Announcement Sent</option>
-          </select>
+          <CustomSelect
+            value={actionFilter}
+            onChange={v => { setActionFilter(v); setPage(1) }}
+            options={[
+              { value: '', label: 'All Actions' },
+              { value: 'shop_created', label: 'Shop Created' },
+              { value: 'shop_deleted', label: 'Shop Deleted' },
+              { value: 'shop_ownership_transferred', label: 'Ownership Transfer' },
+              { value: 'coupon_created', label: 'Coupon Created' },
+              { value: 'coupon_deactivated', label: 'Coupon Deactivated' },
+              { value: 'announcement_sent', label: 'Announcement Sent' },
+            ]}
+            style={{ width: 200 }}
+          />
         </div>
       </div>
 

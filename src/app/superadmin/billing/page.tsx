@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import CustomSelect from '@/components/CustomSelect'
 
 type Tab = 'payments' | 'coupons'
 const fmtRM = (n: number) => `RM ${(n || 0).toLocaleString('en-MY', { minimumFractionDigits: 2 })}`
@@ -90,10 +91,15 @@ export default function SuperAdminBilling() {
                 </div>
                 <div>
                   <span className="form-label">Type</span>
-                  <select value={discountType} onChange={e => setDiscountType(e.target.value)} className="form-input" style={{ width: 100 }}>
-                    <option value="percent">Percent</option>
-                    <option value="fixed">Fixed (RM)</option>
-                  </select>
+                  <CustomSelect
+                    value={discountType}
+                    onChange={v => setDiscountType(v)}
+                    options={[
+                      { value: 'percent', label: 'Percent' },
+                      { value: 'fixed', label: 'Fixed (RM)' },
+                    ]}
+                    style={{ width: 100 }}
+                  />
                 </div>
                 <div>
                   <span className="form-label">Value</span>
