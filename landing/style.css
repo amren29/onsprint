@@ -214,21 +214,21 @@ ul{list-style:none}
 .integ-desc{font-size:14px;color:#64748b;line-height:1.7;max-width:400px}
 .integ-checklist{margin-top:28px;display:flex;flex-direction:column;gap:8px;font-size:13px;color:#64748b}
 /* Orbit animation */
-.integ-orbit{position:relative;width:320px;height:320px;margin:0 auto}
+.integ-orbit{position:relative;width:400px;height:400px;margin:0 auto}
 .integ-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2}
-.integ-ring{position:absolute;top:50%;left:50%;width:240px;height:240px;transform:translate(-50%,-50%);border:1.5px dashed #e2e8f0;border-radius:50%}
-.integ-orbit-items{position:absolute;inset:0;animation:orbitSpin 20s linear infinite}
-.integ-orbit-item{position:absolute;width:48px;height:48px;background:#fff;border:1px solid #f0f0f2;border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.06);transition:transform .2s,box-shadow .2s}
-.integ-orbit-item:hover{transform:scale(1.15);box-shadow:0 6px 24px rgba(0,106,255,.12)}
+.integ-ring{display:none}
+.integ-orbit-items{position:absolute;inset:0;animation:orbitSpin 24s linear infinite}
+.integ-orbit-item{position:absolute;width:56px;height:56px;background:#fff;border:1px solid #f0f0f2;border-radius:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.06);transition:box-shadow .2s}
+.integ-orbit-item:hover{box-shadow:0 8px 28px rgba(0,106,255,.14)}
 /* Counter-rotate items so they stay upright */
-.integ-orbit-item svg{animation:orbitCounterSpin 20s linear infinite}
-/* Position each item around the orbit */
-.integ-orbit-item:nth-child(1){top:0;left:50%;transform:translate(-50%,-50%)}
-.integ-orbit-item:nth-child(2){top:20%;right:0;transform:translate(50%,-50%)}
-.integ-orbit-item:nth-child(3){bottom:20%;right:0;transform:translate(50%,50%)}
-.integ-orbit-item:nth-child(4){bottom:0;left:50%;transform:translate(-50%,50%)}
-.integ-orbit-item:nth-child(5){bottom:20%;left:0;transform:translate(-50%,50%)}
-.integ-orbit-item:nth-child(6){top:20%;left:0;transform:translate(-50%,-50%)}
+.integ-orbit-item>*{animation:orbitCounterSpin 24s linear infinite}
+/* Position each item around the circle (evenly spaced at 60deg intervals) */
+.integ-orbit-item:nth-child(1){top:2%;left:50%;margin-left:-28px}
+.integ-orbit-item:nth-child(2){top:18%;right:2%;margin-right:0}
+.integ-orbit-item:nth-child(3){bottom:18%;right:2%}
+.integ-orbit-item:nth-child(4){bottom:2%;left:50%;margin-left:-28px}
+.integ-orbit-item:nth-child(5){bottom:18%;left:2%}
+.integ-orbit-item:nth-child(6){top:18%;left:2%}
 @keyframes orbitSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 @keyframes orbitCounterSpin{0%{transform:rotate(0deg)}100%{transform:rotate(-360deg)}}
 
