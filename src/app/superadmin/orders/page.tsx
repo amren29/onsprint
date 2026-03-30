@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import CustomSelect from '@/components/CustomSelect'
+import RowMenu from '@/components/RowMenu'
+import ViewModal, { ViewRow, SectionLabel } from '@/components/ViewModal'
 
 interface OrderRow {
   id: string
@@ -31,6 +33,7 @@ export default function SuperAdminOrders() {
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [loading, setLoading] = useState(true)
+  const [viewTarget, setViewTarget] = useState<OrderRow | null>(null)
 
   useEffect(() => {
     setLoading(true)
@@ -93,15 +96,16 @@ export default function SuperAdminOrders() {
                 <th>Status</th>
                 <th>Total</th>
                 <th>Date</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>Loading...</td></tr>
+                <tr><td colSpan={7} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>Loading...</td></tr>
               ) : orders.length === 0 ? (
-                <tr><td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>No orders found</td></tr>
+                <tr><td colSpan={7} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>No orders found</td></tr>
               ) : orders.map(order => (
-                <tr key={order.id}>
+                <tr key={order.id} style={{ cursor: 'pointer' }} onClick={() => setViewTarget(order)}>
                   <td><div className="cell-name">{order.seq_id || order.id.slice(0, 8)}</div></td>
                   <td>
                     <Link href={`/superadmin/shops/${order.shop_id}`} style={{ color: 'var(--accent)' }}>
@@ -116,6 +120,11 @@ export default function SuperAdminOrders() {
                   </td>
                   <td><div className="cell-name">{fmtRM(order.grand_total)}</div></td>
                   <td><div className="cell-sub">{new Date(order.created_at).toLocaleDateString()}</div></td>
+                  <td onClick={e => e.stopPropagation()}>
+                    <RowMenu items={[
+                      { label: 'View', action: () => setViewTarget(order) },
+                    ]} />
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -130,6 +139,22 @@ export default function SuperAdminOrders() {
           </div>
         )}
       </div>
+
+      {viewTarget && (
+        <ViewModal
+          title={`Order ${viewTarget.seq_id || viewTarget.id.slice(0, 8)}`}
+          status={viewTarget.status}
+          onClose={() => setViewTarget(null)}
+        >
+          <SectionLabel>Order Details</SectionLabel>
+          <ViewRow label="Order #" value={viewTarget.seq_id || viewTarget.id.slice(0, 8)} />
+          <ViewRow label="Shop" value={(viewTarget.shops as any)?.name || viewTarget.shop_id.slice(0, 8)} />
+          <ViewRow label="Customer" value={viewTarget.customer_name || '—'} />
+          <ViewRow label="Status" value={viewTarget.status} />
+          <ViewRow label="Total" value={fmtRM(viewTarget.grand_total)} accent />
+          <ViewRow label="Date" value={new Date(viewTarget.created_at).toLocaleString()} />
+        </ViewModal>
+      )}
     </>
   )
 }

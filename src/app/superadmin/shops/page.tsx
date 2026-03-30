@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import CustomSelect from '@/components/CustomSelect'
+import RowMenu from '@/components/RowMenu'
+import ConfirmModal from '@/components/ConfirmModal'
 
 interface Shop {
   id: string
@@ -26,6 +28,7 @@ export default function SuperAdminShops() {
   const [newEmail, setNewEmail] = useState('')
   const [newPlan, setNewPlan] = useState('free')
   const [creating, setCreating] = useState(false)
+  const [delTarget, setDelTarget] = useState<Shop | null>(null)
 
   useEffect(() => {
     setLoading(true)
@@ -45,6 +48,15 @@ export default function SuperAdminShops() {
   }, [search, planFilter, page])
 
   const totalPages = Math.ceil(total / 20)
+
+  async function handleDelete() {
+    if (!delTarget) return
+    await fetch(`/api/superadmin/shops/${delTarget.id}`, {
+      method: 'DELETE',
+    })
+    setDelTarget(null)
+    setPage(1)
+  }
 
   return (
     <>
@@ -132,13 +144,14 @@ export default function SuperAdminShops() {
                 <th>Plan</th>
                 <th>Created</th>
                 <th>Status</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={5} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>Loading...</td></tr>
+                <tr><td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>Loading...</td></tr>
               ) : shops.length === 0 ? (
-                <tr><td colSpan={5} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>No shops found</td></tr>
+                <tr><td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>No shops found</td></tr>
               ) : shops.map(shop => (
                 <tr
                   key={shop.id}
@@ -159,6 +172,12 @@ export default function SuperAdminShops() {
                     ) : (
                       <span className="badge badge-success">Active</span>
                     )}
+                  </td>
+                  <td onClick={e => e.stopPropagation()}>
+                    <RowMenu items={[
+                      { label: 'View', action: () => router.push(`/superadmin/shops/${shop.id}`) },
+                      { label: 'Delete', action: () => setDelTarget(shop), danger: true },
+                    ]} />
                   </td>
                 </tr>
               ))}
@@ -188,6 +207,16 @@ export default function SuperAdminShops() {
           </div>
         )}
       </div>
+
+      {delTarget && (
+        <ConfirmModal
+          title={`Delete "${delTarget.name}"?`}
+          message="This will soft-delete the shop. This action cannot be easily undone."
+          confirmLabel="Delete"
+          onConfirm={handleDelete}
+          onCancel={() => setDelTarget(null)}
+        />
+      )}
     </>
   )
 }

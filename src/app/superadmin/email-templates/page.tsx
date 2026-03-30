@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import RowMenu from '@/components/RowMenu'
+import ConfirmModal from '@/components/ConfirmModal'
 
 export default function SuperAdminEmailTemplates() {
   const [templates, setTemplates] = useState<any[]>([])
@@ -11,6 +13,7 @@ export default function SuperAdminEmailTemplates() {
   const [subject, setSubject] = useState('')
   const [body, setBody] = useState('')
   const [saving, setSaving] = useState(false)
+  const [delTarget, setDelTarget] = useState<any>(null)
 
   function load() {
     fetch('/api/superadmin/email-templates')
@@ -43,12 +46,13 @@ export default function SuperAdminEmailTemplates() {
     setEditing(null); setSaving(false); load()
   }
 
-  async function remove(id: string) {
-    if (!confirm('Delete this template?')) return
+  async function handleDelete() {
+    if (!delTarget) return
     await fetch('/api/superadmin/email-templates', {
       method: 'DELETE', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ id: delTarget.id }),
     })
+    setDelTarget(null)
     load()
   }
 
@@ -113,9 +117,11 @@ export default function SuperAdminEmailTemplates() {
                   <td><div className="cell-sub">{t.name}</div></td>
                   <td><div className="cell-sub">{t.subject}</div></td>
                   <td><div className="cell-sub">{new Date(t.updated_at).toLocaleDateString()}</div></td>
-                  <td style={{ display: 'flex', gap: 4 }}>
-                    <button className="btn-ghost" style={{ fontSize: 11, color: 'var(--accent)' }} onClick={() => startEdit(t)}>Edit</button>
-                    <button className="btn-ghost" style={{ fontSize: 11, color: 'var(--negative)' }} onClick={() => remove(t.id)}>Delete</button>
+                  <td onClick={e => e.stopPropagation()}>
+                    <RowMenu items={[
+                      { label: 'Edit', action: () => startEdit(t) },
+                      { label: 'Delete', action: () => setDelTarget(t), danger: true },
+                    ]} />
                   </td>
                 </tr>
               ))}
@@ -123,6 +129,16 @@ export default function SuperAdminEmailTemplates() {
           </table>
         </div>
       </div>
+
+      {delTarget && (
+        <ConfirmModal
+          title={`Delete "${delTarget.name}"?`}
+          message="This template will be permanently deleted."
+          confirmLabel="Delete"
+          onConfirm={handleDelete}
+          onCancel={() => setDelTarget(null)}
+        />
+      )}
     </>
   )
 }

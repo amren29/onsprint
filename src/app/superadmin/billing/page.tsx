@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import CustomSelect from '@/components/CustomSelect'
+import RowMenu from '@/components/RowMenu'
+import ConfirmModal from '@/components/ConfirmModal'
 
 type Tab = 'payments' | 'coupons'
 const fmtRM = (n: number) => `RM ${(n || 0).toLocaleString('en-MY', { minimumFractionDigits: 2 })}`
@@ -18,6 +20,7 @@ export default function SuperAdminBilling() {
   const [discountValue, setDiscountValue] = useState('')
   const [maxUses, setMaxUses] = useState('')
   const [creating, setCreating] = useState(false)
+  const [deactivateTarget, setDeactivateTarget] = useState<any>(null)
 
   function loadData() {
     setLoading(true)
@@ -51,13 +54,14 @@ export default function SuperAdminBilling() {
     setCreating(false)
   }
 
-  async function deactivateCoupon(id: string) {
-    if (!confirm('Deactivate this coupon?')) return
+  async function handleDeactivate() {
+    if (!deactivateTarget) return
     await fetch('/api/superadmin/billing/coupons', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ id: deactivateTarget.id }),
     })
+    setDeactivateTarget(null)
     loadData()
   }
 
@@ -125,11 +129,11 @@ export default function SuperAdminBilling() {
                       <td>{c.used_count}</td>
                       <td>{c.max_uses || '—'}</td>
                       <td><span className={`badge ${c.active ? 'badge-success' : 'badge-pending'}`}>{c.active ? 'Active' : 'Inactive'}</span></td>
-                      <td>
+                      <td onClick={e => e.stopPropagation()}>
                         {c.active && (
-                          <button className="btn-ghost" style={{ fontSize: 11, color: 'var(--negative)' }} onClick={() => deactivateCoupon(c.id)}>
-                            Deactivate
-                          </button>
+                          <RowMenu items={[
+                            { label: 'Deactivate', action: () => setDeactivateTarget(c), danger: true },
+                          ]} />
                         )}
                       </td>
                     </tr>
@@ -160,6 +164,16 @@ export default function SuperAdminBilling() {
           </div>
         )}
       </div>
+
+      {deactivateTarget && (
+        <ConfirmModal
+          title={`Deactivate "${deactivateTarget.code}"?`}
+          message="This coupon will no longer be usable."
+          confirmLabel="Deactivate"
+          onConfirm={handleDeactivate}
+          onCancel={() => setDeactivateTarget(null)}
+        />
+      )}
     </>
   )
 }

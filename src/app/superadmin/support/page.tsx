@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import CustomSelect from '@/components/CustomSelect'
+import RowMenu from '@/components/RowMenu'
+import ConfirmModal from '@/components/ConfirmModal'
 
 export default function SuperAdminSupport() {
   const router = useRouter()
@@ -11,6 +13,7 @@ export default function SuperAdminSupport() {
   const [page, setPage] = useState(1)
   const [statusFilter, setStatusFilter] = useState('')
   const [loading, setLoading] = useState(true)
+  const [closeTarget, setCloseTarget] = useState<any>(null)
 
   useEffect(() => {
     setLoading(true)
@@ -22,6 +25,17 @@ export default function SuperAdminSupport() {
       .then(r => r.json()).then(d => { setTickets(d.tickets || []); setTotal(d.total || 0); setLoading(false) })
       .catch(() => setLoading(false))
   }, [statusFilter, page])
+
+  async function handleCloseTicket() {
+    if (!closeTarget) return
+    await fetch(`/api/superadmin/support`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: closeTarget.id, status: 'closed' }),
+    })
+    setCloseTarget(null)
+    setPage(1)
+  }
 
   const totalPages = Math.ceil(total / 20)
 
@@ -55,12 +69,12 @@ export default function SuperAdminSupport() {
 
         <div className="card">
           <table className="data-table">
-            <thead><tr><th>Subject</th><th>Shop</th><th>User</th><th>Priority</th><th>Status</th><th>Updated</th></tr></thead>
+            <thead><tr><th>Subject</th><th>Shop</th><th>User</th><th>Priority</th><th>Status</th><th>Updated</th><th></th></tr></thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>Loading...</td></tr>
+                <tr><td colSpan={7} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>Loading...</td></tr>
               ) : tickets.length === 0 ? (
-                <tr><td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>No tickets</td></tr>
+                <tr><td colSpan={7} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: 40 }}>No tickets</td></tr>
               ) : tickets.map(t => (
                 <tr key={t.id} style={{ cursor: 'pointer' }} onClick={() => router.push(`/superadmin/support/${t.id}`)}>
                   <td><div className="cell-name">{t.subject}</div></td>
@@ -69,6 +83,12 @@ export default function SuperAdminSupport() {
                   <td><span className={`badge badge-${t.priority === 'urgent' ? 'warning' : t.priority === 'high' ? 'info' : 'pending'}`}>{t.priority}</span></td>
                   <td><span className={`badge badge-${t.status === 'open' ? 'warning' : t.status === 'resolved' ? 'success' : 'info'}`}>{t.status}</span></td>
                   <td><div className="cell-sub">{new Date(t.updated_at).toLocaleString()}</div></td>
+                  <td onClick={e => e.stopPropagation()}>
+                    <RowMenu items={[
+                      { label: 'View', action: () => router.push(`/superadmin/support/${t.id}`) },
+                      ...(t.status !== 'closed' ? [{ label: 'Close Ticket', action: () => setCloseTarget(t), danger: true }] : []),
+                    ]} />
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -83,6 +103,16 @@ export default function SuperAdminSupport() {
           </div>
         )}
       </div>
+
+      {closeTarget && (
+        <ConfirmModal
+          title={`Close ticket "${closeTarget.subject}"?`}
+          message="This ticket will be marked as closed."
+          confirmLabel="Close Ticket"
+          onConfirm={handleCloseTicket}
+          onCancel={() => setCloseTarget(null)}
+        />
+      )}
     </>
   )
 }

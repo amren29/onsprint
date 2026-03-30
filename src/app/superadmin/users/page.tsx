@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import RowMenu from '@/components/RowMenu'
+import ViewModal, { ViewRow, SectionLabel } from '@/components/ViewModal'
 
 type Tab = 'shop_admins' | 'store_customers' | 'platform_admins'
 
@@ -20,6 +22,7 @@ export default function SuperAdminUsers() {
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(true)
   const [resetting, setResetting] = useState<string | null>(null)
+  const [viewTarget, setViewTarget] = useState<UserRow | null>(null)
 
   useEffect(() => {
     setLoading(true)
@@ -87,7 +90,7 @@ export default function SuperAdminUsers() {
                 <th>{tab === 'store_customers' ? 'Shop' : 'Shop(s)'}</th>
                 <th>Created</th>
                 <th>Last Sign In</th>
-                <th>Actions</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -116,15 +119,11 @@ export default function SuperAdminUsers() {
                       ? new Date(user.last_sign_in_at).toLocaleDateString()
                       : 'Never'}
                   </div></td>
-                  <td>
-                    <button
-                      className="btn-ghost"
-                      style={{ fontSize: 11, color: 'var(--accent)' }}
-                      onClick={() => resetPassword(user.id, user.email)}
-                      disabled={resetting === user.id}
-                    >
-                      {resetting === user.id ? '...' : 'Reset Password'}
-                    </button>
+                  <td onClick={e => e.stopPropagation()}>
+                    <RowMenu items={[
+                      { label: 'View', action: () => setViewTarget(user) },
+                      { label: 'Reset Password', action: () => resetPassword(user.id, user.email) },
+                    ]} />
                   </td>
                 </tr>
               ))}
@@ -138,6 +137,21 @@ export default function SuperAdminUsers() {
           <button className="btn-secondary" onClick={() => setPage(p => p + 1)} disabled={users.length < 20}>Next</button>
         </div>
       </div>
+
+      {viewTarget && (
+        <ViewModal
+          title={viewTarget.email}
+          subtitle={viewTarget.name || undefined}
+          onClose={() => setViewTarget(null)}
+        >
+          <SectionLabel>User Details</SectionLabel>
+          <ViewRow label="Email" value={viewTarget.email} />
+          <ViewRow label="Name" value={viewTarget.name || '—'} />
+          <ViewRow label="Shop(s)" value={viewTarget.shops.length > 0 ? viewTarget.shops.map(s => (s.shops as any)?.name || s.shop_id.slice(0, 8)).join(', ') : 'No shop'} />
+          <ViewRow label="Created" value={new Date(viewTarget.created_at).toLocaleString()} />
+          <ViewRow label="Last Sign In" value={viewTarget.last_sign_in_at ? new Date(viewTarget.last_sign_in_at).toLocaleString() : 'Never'} />
+        </ViewModal>
+      )}
     </>
   )
 }

@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import RowMenu from '@/components/RowMenu'
+import ConfirmModal from '@/components/ConfirmModal'
 
 export default function SuperAdminMaintenance() {
   const [windows, setWindows] = useState<any[]>([])
@@ -11,6 +13,7 @@ export default function SuperAdminMaintenance() {
   const [startsAt, setStartsAt] = useState('')
   const [endsAt, setEndsAt] = useState('')
   const [creating, setCreating] = useState(false)
+  const [delTarget, setDelTarget] = useState<any>(null)
 
   function load() {
     fetch('/api/superadmin/maintenance')
@@ -36,12 +39,13 @@ export default function SuperAdminMaintenance() {
     load()
   }
 
-  async function remove(id: string) {
-    if (!confirm('Delete this maintenance window?')) return
+  async function handleDelete() {
+    if (!delTarget) return
     await fetch('/api/superadmin/maintenance', {
       method: 'DELETE', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ id: delTarget.id }),
     })
+    setDelTarget(null)
     load()
   }
 
@@ -114,11 +118,11 @@ export default function SuperAdminMaintenance() {
                         : w.active ? <span className="badge badge-info">Scheduled</span>
                         : <span className="badge badge-pending">Disabled</span>}
                     </td>
-                    <td style={{ display: 'flex', gap: 4 }}>
-                      <button className="btn-ghost" style={{ fontSize: 11, color: 'var(--accent)' }} onClick={() => toggle(w.id, w.active)}>
-                        {w.active ? 'Disable' : 'Enable'}
-                      </button>
-                      <button className="btn-ghost" style={{ fontSize: 11, color: 'var(--negative)' }} onClick={() => remove(w.id)}>Delete</button>
+                    <td onClick={e => e.stopPropagation()}>
+                      <RowMenu items={[
+                        { label: w.active ? 'Disable' : 'Enable', action: () => toggle(w.id, w.active) },
+                        { label: 'Delete', action: () => setDelTarget(w), danger: true },
+                      ]} />
                     </td>
                   </tr>
                 )
@@ -127,6 +131,16 @@ export default function SuperAdminMaintenance() {
           </table>
         </div>
       </div>
+
+      {delTarget && (
+        <ConfirmModal
+          title={`Delete "${delTarget.title}"?`}
+          message="This maintenance window will be permanently deleted."
+          confirmLabel="Delete"
+          onConfirm={handleDelete}
+          onCancel={() => setDelTarget(null)}
+        />
+      )}
     </>
   )
 }

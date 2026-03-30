@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import RowMenu from '@/components/RowMenu'
+import ConfirmModal from '@/components/ConfirmModal'
 
 function Toggle({ on, onChange }: { on: boolean; onChange: (v: boolean) => void }) {
   return (
@@ -24,6 +26,7 @@ export default function SuperAdminFeatureFlags() {
   const [name, setName] = useState('')
   const [desc, setDesc] = useState('')
   const [creating, setCreating] = useState(false)
+  const [delTarget, setDelTarget] = useState<any>(null)
 
   function load() {
     fetch('/api/superadmin/feature-flags')
@@ -48,12 +51,13 @@ export default function SuperAdminFeatureFlags() {
     load()
   }
 
-  async function remove(id: string) {
-    if (!confirm('Delete this flag?')) return
+  async function handleDelete() {
+    if (!delTarget) return
     await fetch('/api/superadmin/feature-flags', {
       method: 'DELETE', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ id: delTarget.id }),
     })
+    setDelTarget(null)
     load()
   }
 
@@ -106,13 +110,27 @@ export default function SuperAdminFeatureFlags() {
                   <td><div className="cell-sub">{f.name}</div></td>
                   <td><div className="cell-sub">{f.description || '—'}</div></td>
                   <td><Toggle on={f.enabled_default} onChange={() => toggle(f)} /></td>
-                  <td><button className="btn-ghost" style={{ fontSize: 11, color: 'var(--negative)' }} onClick={() => remove(f.id)}>Delete</button></td>
+                  <td onClick={e => e.stopPropagation()}>
+                    <RowMenu items={[
+                      { label: 'Delete', action: () => setDelTarget(f), danger: true },
+                    ]} />
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       </div>
+
+      {delTarget && (
+        <ConfirmModal
+          title={`Delete "${delTarget.name}"?`}
+          message="This feature flag will be permanently deleted."
+          confirmLabel="Delete"
+          onConfirm={handleDelete}
+          onCancel={() => setDelTarget(null)}
+        />
+      )}
     </>
   )
 }
