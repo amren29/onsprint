@@ -121,33 +121,164 @@
   </section>
 
 
-  <!-- ══ APP PREVIEW ══ -->
+  <!-- ══ APP PREVIEW (Full Dashboard Mockup) ══ -->
   <section class="section" id="features">
     <div class="container">
-      <div class="app-preview reveal">
-        <div class="app-mockup">
-          <div class="app-sidebar">
-            <div class="app-sidebar-dot"></div>
-            <div class="app-sidebar-line"></div>
-            <div class="app-sidebar-line"></div>
-            <div class="app-sidebar-line short"></div>
+      <div class="reveal">
+        <div class="dashboard-mockup">
+          <!-- Sidebar -->
+          <div class="dm-sidebar">
+            <div class="dm-sidebar-brand">
+              <div class="dm-sidebar-logo">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1.5" fill="white" opacity=".7"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="white" opacity=".7"/><rect x="14" y="14" width="7" height="7" rx="1.5" fill="white" opacity=".4"/></svg>
+              </div>
+              <span>Onsprint</span>
+            </div>
+            <div class="dm-sidebar-nav">
+              <div class="dm-nav-item active">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                Dashboard
+              </div>
+              <div class="dm-nav-item">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+                Orders
+              </div>
+              <div class="dm-nav-item">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                Customers
+              </div>
+              <div class="dm-nav-item">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                Payments
+              </div>
+              <div class="dm-nav-item">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/></svg>
+                Products
+              </div>
+              <div class="dm-nav-section">Production</div>
+              <div class="dm-nav-item">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                Printing Board
+              </div>
+            </div>
+            <div class="dm-sidebar-user">
+              <div class="dm-sidebar-avatar">AR</div>
+              <div>
+                <div class="dm-sidebar-username">Ahmad R.</div>
+                <div class="dm-sidebar-email">ahmad@printhub.my</div>
+              </div>
+            </div>
           </div>
-          <div class="app-main">
-            <div class="app-main-title">Production Board ✏️</div>
-            <div class="app-columns">
-              <div class="app-col">
-                <div class="app-col-header">New</div>
-                <div class="app-col-card">Business Cards</div>
-                <div class="app-col-card">Flyer A3</div>
+          <!-- Main Content -->
+          <div class="dm-main">
+            <!-- Topbar -->
+            <div class="dm-topbar">
+              <div class="dm-search">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <span>Search...</span>
+                <span class="dm-search-kbd">⌘K</span>
               </div>
-              <div class="app-col">
-                <div class="app-col-header">In Progress</div>
-                <div class="app-col-card">Banner 6ft</div>
-                <div class="app-col-card">Stickers x500</div>
+              <div class="dm-topbar-right">
+                <div class="dm-topbar-icon">🌙</div>
+                <div class="dm-topbar-icon">🔔<span class="dm-notif-dot"></span></div>
               </div>
-              <div class="app-col">
-                <div class="app-col-header">Done</div>
-                <div class="app-col-card">Poster A2</div>
+            </div>
+            <!-- Page Header -->
+            <div class="dm-page">
+              <div class="dm-page-header">
+                <div>
+                  <div class="dm-page-title">Dashboard</div>
+                  <div class="dm-page-sub">Welcome back — 24 orders · 3 active</div>
+                </div>
+              </div>
+              <!-- Hero Card -->
+              <div class="dm-hero-card">
+                <div class="dm-hero-left">
+                  <div class="dm-hero-label">Total Revenue</div>
+                  <div class="dm-hero-amount">RM 48,250.00</div>
+                </div>
+                <div class="dm-hero-actions">
+                  <button class="dm-hero-btn primary">+ New Order</button>
+                  <button class="dm-hero-btn">View Orders</button>
+                </div>
+              </div>
+              <!-- Stat Cards -->
+              <div class="dm-stat-grid">
+                <div class="dm-stat">
+                  <div class="dm-stat-header">
+                    <span class="dm-stat-label">Active Orders</span>
+                    <span class="dm-stat-period">Live</span>
+                  </div>
+                  <div class="dm-stat-value">3</div>
+                  <div class="dm-stat-sub">of 24 total</div>
+                </div>
+                <div class="dm-stat">
+                  <div class="dm-stat-header">
+                    <span class="dm-stat-label">Online Revenue</span>
+                    <span class="dm-stat-period">30 days</span>
+                  </div>
+                  <div class="dm-stat-value">RM 12,400</div>
+                  <div class="dm-stat-sub">8 online orders</div>
+                </div>
+                <div class="dm-stat">
+                  <div class="dm-stat-header">
+                    <span class="dm-stat-label">Low Stock</span>
+                    <span class="dm-stat-period">Alert</span>
+                  </div>
+                  <div class="dm-stat-value">2</div>
+                  <div class="dm-stat-sub">items need restock</div>
+                </div>
+              </div>
+              <!-- Chart + Recent Orders -->
+              <div class="dm-bottom-grid">
+                <div class="dm-chart-card">
+                  <div class="dm-chart-header">
+                    <span>Revenue & Expenses</span>
+                    <span class="dm-chart-tabs">
+                      <span class="dm-chart-tab active">Weekly</span>
+                      <span class="dm-chart-tab">Daily</span>
+                    </span>
+                  </div>
+                  <div class="dm-chart-bars">
+                    <div class="dm-bar" style="height:35px"></div>
+                    <div class="dm-bar" style="height:50px"></div>
+                    <div class="dm-bar" style="height:42px"></div>
+                    <div class="dm-bar" style="height:65px"></div>
+                    <div class="dm-bar" style="height:55px"></div>
+                    <div class="dm-bar" style="height:48px"></div>
+                    <div class="dm-bar" style="height:70px"></div>
+                    <div class="dm-bar" style="height:60px"></div>
+                    <div class="dm-bar" style="height:45px"></div>
+                    <div class="dm-bar" style="height:58px"></div>
+                  </div>
+                </div>
+                <div class="dm-orders-card">
+                  <div class="dm-orders-header">Recent Orders</div>
+                  <div class="dm-order-row">
+                    <div class="dm-order-id">ORD0024</div>
+                    <div class="dm-order-customer">Ahmad R.</div>
+                    <div class="dm-order-amount">RM 450</div>
+                    <span class="dm-badge blue">Confirmed</span>
+                  </div>
+                  <div class="dm-order-row">
+                    <div class="dm-order-id">ORD0023</div>
+                    <div class="dm-order-customer">Siti N.</div>
+                    <div class="dm-order-amount">RM 1,200</div>
+                    <span class="dm-badge amber">Pending</span>
+                  </div>
+                  <div class="dm-order-row">
+                    <div class="dm-order-id">ORD0022</div>
+                    <div class="dm-order-customer">Lee M.</div>
+                    <div class="dm-order-amount">RM 680</div>
+                    <span class="dm-badge blue">Confirmed</span>
+                  </div>
+                  <div class="dm-order-row">
+                    <div class="dm-order-id">ORD0021</div>
+                    <div class="dm-order-customer">Farah A.</div>
+                    <div class="dm-order-amount">RM 320</div>
+                    <span class="dm-badge green">Completed</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
