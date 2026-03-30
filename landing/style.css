@@ -257,6 +257,7 @@ ul{list-style:none}
 
 /* ── 3-Column Pricing ─────────────────────────────── */
 .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:940px;margin:40px auto 0;text-align:left}
+.price-grid-4{grid-template-columns:repeat(4,1fr);max-width:1100px}
 .price-card{padding:32px;border-radius:18px;background:#fff;border:1px solid #e2e8f0;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s}
 .price-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.06)}
 .price-card-popular{background:#0f172a;color:#fff;border:none;transform:scale(1.04);box-shadow:0 20px 48px rgba(0,0,0,.12)}
@@ -271,6 +272,8 @@ ul{list-style:none}
 .price-card-list{margin-top:24px;display:flex;flex-direction:column;gap:10px}
 .price-card-list li{font-size:13px;color:#475569;display:flex;align-items:center;gap:8px}
 .price-card-popular .price-card-list li{color:rgba(255,255,255,.65)}
+.price-card-fee{color:#006AFF!important;font-weight:600;font-size:11px;background:#eff6ff;padding:4px 10px;border-radius:6px;margin-top:4px;display:inline-block}
+.price-card-popular .price-card-fee{background:rgba(0,106,255,.15);color:#60a5fa!important}
 
 /* ── Stories ───────────────────────────────────────── */
 .section-heading{font-size:34px;font-weight:800;letter-spacing:-1px;margin-bottom:12px}
@@ -352,7 +355,7 @@ ul{list-style:none}
   .num-grid{grid-template-columns:1fr}
   .perf-detail-grid{grid-template-columns:1fr}
   .integ-grid{grid-template-columns:1fr}
-  .price-grid{grid-template-columns:1fr;max-width:400px}
+  .price-grid,.price-grid-4{grid-template-columns:1fr;max-width:400px}
   .price-card-popular{transform:none}
   .price-card-popular:hover{transform:translateY(-4px)}
   .stories-grid{grid-template-columns:1fr}
