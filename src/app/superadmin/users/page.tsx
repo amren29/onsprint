@@ -63,22 +63,21 @@ export default function SuperAdminUsers() {
         </div>
       </div>
 
-      <div className="filter-row">
-        <div className="filter-bar">
-          <button className={`filter-tab${tab === 'shop_admins' ? ' active' : ''}`} onClick={() => { setTab('shop_admins'); setPage(1) }}>Shop Admins</button>
-          <button className={`filter-tab${tab === 'store_customers' ? ' active' : ''}`} onClick={() => { setTab('store_customers'); setPage(1) }}>Store Customers</button>
-          <button className={`filter-tab${tab === 'platform_admins' ? ' active' : ''}`} onClick={() => { setTab('platform_admins'); setPage(1) }}>Platform Admins</button>
-        </div>
-        <div className="filter-right">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--r-md)', padding: '6px 12px' }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input value={search} onChange={e => { setSearch(e.target.value); setPage(1) }} placeholder="Search by email or name..."
-              style={{ border: 'none', outline: 'none', background: 'transparent', fontSize: 12.5, color: 'var(--text-primary)', width: 200 }} />
+      <div className="page-scroll">
+        <div className="filter-row">
+          <div className="filter-bar">
+            <button className={`filter-tab${tab === 'shop_admins' ? ' active' : ''}`} onClick={() => { setTab('shop_admins'); setPage(1) }}>Shop Admins</button>
+            <button className={`filter-tab${tab === 'store_customers' ? ' active' : ''}`} onClick={() => { setTab('store_customers'); setPage(1) }}>Store Customers</button>
+            <button className={`filter-tab${tab === 'platform_admins' ? ' active' : ''}`} onClick={() => { setTab('platform_admins'); setPage(1) }}>Platform Admins</button>
+          </div>
+          <div className="filter-right">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 7, background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--r-md)', padding: '6px 12px' }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input value={search} onChange={e => { setSearch(e.target.value); setPage(1) }} placeholder="Search by email or name..."
+                style={{ border: 'none', outline: 'none', background: 'transparent', fontSize: 12.5, color: 'var(--text-primary)', width: 200 }} />
+            </div>
           </div>
         </div>
-      </div>
-
-      <div className="page-scroll">
         <div className="card">
           <table className="data-table">
             <thead>

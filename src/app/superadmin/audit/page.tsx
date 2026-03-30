@@ -33,27 +33,26 @@ export default function SuperAdminAudit() {
         </div>
       </div>
 
-      <div className="filter-row">
-        <div className="filter-bar" />
-        <div className="filter-right">
-          <CustomSelect
-            value={actionFilter}
-            onChange={v => { setActionFilter(v); setPage(1) }}
-            options={[
-              { value: '', label: 'All Actions' },
-              { value: 'shop_created', label: 'Shop Created' },
-              { value: 'shop_deleted', label: 'Shop Deleted' },
-              { value: 'shop_ownership_transferred', label: 'Ownership Transfer' },
-              { value: 'coupon_created', label: 'Coupon Created' },
-              { value: 'coupon_deactivated', label: 'Coupon Deactivated' },
-              { value: 'announcement_sent', label: 'Announcement Sent' },
-            ]}
-            style={{ width: 200 }}
-          />
-        </div>
-      </div>
-
       <div className="page-scroll">
+        <div className="filter-row">
+          <div />
+          <div className="filter-right">
+            <CustomSelect
+              value={actionFilter}
+              onChange={v => { setActionFilter(v); setPage(1) }}
+              options={[
+                { value: '', label: 'All Actions' },
+                { value: 'shop_created', label: 'Shop Created' },
+                { value: 'shop_deleted', label: 'Shop Deleted' },
+                { value: 'shop_ownership_transferred', label: 'Ownership Transfer' },
+                { value: 'coupon_created', label: 'Coupon Created' },
+                { value: 'coupon_deactivated', label: 'Coupon Deactivated' },
+                { value: 'announcement_sent', label: 'Announcement Sent' },
+              ]}
+              style={{ width: 200 }}
+            />
+          </div>
+        </div>
         <div className="card">
           <table className="data-table">
             <thead><tr><th>Time</th><th>Admin</th><th>Action</th><th>Entity</th><th>Details</th></tr></thead>

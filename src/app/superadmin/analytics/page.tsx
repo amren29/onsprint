@@ -57,16 +57,15 @@ export default function SuperAdminAnalytics() {
         </div>
       </div>
 
-      <div className="filter-row">
-        <div className="filter-bar">
-          <button className={`filter-tab${tab === 'revenue' ? ' active' : ''}`} onClick={() => setTab('revenue')}>Revenue</button>
-          <button className={`filter-tab${tab === 'growth' ? ' active' : ''}`} onClick={() => setTab('growth')}>Growth</button>
-          <button className={`filter-tab${tab === 'leaderboard' ? ' active' : ''}`} onClick={() => setTab('leaderboard')}>Leaderboard</button>
-          <button className={`filter-tab${tab === 'churn' ? ' active' : ''}`} onClick={() => setTab('churn')}>Churn</button>
-        </div>
-      </div>
-
       <div className="page-scroll">
+        <div className="filter-row">
+          <div className="filter-bar">
+            <button className={`filter-tab${tab === 'revenue' ? ' active' : ''}`} onClick={() => setTab('revenue')}>Revenue</button>
+            <button className={`filter-tab${tab === 'growth' ? ' active' : ''}`} onClick={() => setTab('growth')}>Growth</button>
+            <button className={`filter-tab${tab === 'leaderboard' ? ' active' : ''}`} onClick={() => setTab('leaderboard')}>Leaderboard</button>
+            <button className={`filter-tab${tab === 'churn' ? ' active' : ''}`} onClick={() => setTab('churn')}>Churn</button>
+          </div>
+        </div>
         {loading ? (
           <div style={{ color: 'var(--text-muted)', padding: 40, textAlign: 'center' }}>Loading...</div>
         ) : tab === 'revenue' && revenueData ? (

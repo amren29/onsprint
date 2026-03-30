@@ -70,14 +70,13 @@ export default function SuperAdminBilling() {
         </div>
       </div>
 
-      <div className="filter-row">
-        <div className="filter-bar">
-          <button className={`filter-tab${tab === 'coupons' ? ' active' : ''}`} onClick={() => setTab('coupons')}>Coupons</button>
-          <button className={`filter-tab${tab === 'payments' ? ' active' : ''}`} onClick={() => setTab('payments')}>Payments</button>
-        </div>
-      </div>
-
       <div className="page-scroll">
+        <div className="filter-row">
+          <div className="filter-bar">
+            <button className={`filter-tab${tab === 'coupons' ? ' active' : ''}`} onClick={() => setTab('coupons')}>Coupons</button>
+            <button className={`filter-tab${tab === 'payments' ? ' active' : ''}`} onClick={() => setTab('payments')}>Payments</button>
+          </div>
+        </div>
         {loading ? (
           <div style={{ color: 'var(--text-muted)', padding: 40, textAlign: 'center' }}>Loading...</div>
         ) : tab === 'coupons' ? (
