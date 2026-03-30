@@ -1,4 +1,5 @@
 import { createServerClient } from '@supabase/ssr'
+import { createClient } from '@supabase/supabase-js'
 import { NextResponse, type NextRequest } from 'next/server'
 
 const PUBLIC_ROUTES = [
@@ -78,15 +79,42 @@ export async function updateSession(request: NextRequest) {
 
   // Redirect logged-in users away from auth pages
   if (user && isAuthPage) {
-    // Check if user has a shop — if not, send to onboarding
+    // Check if user has a shop — if not, check if they're a super admin
     const { data: membership } = await supabase
       .from('shop_members')
       .select('shop_id')
       .eq('user_id', user.id)
       .maybeSingle()
 
+    if (membership?.shop_id) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/dashboard'
+      url.search = ''
+      return NextResponse.redirect(url)
+    }
+
+    // No shop — check if platform admin (use service role to bypass RLS)
+    try {
+      const adminClient = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+      )
+      const { data: platformAdmin } = await adminClient
+        .from('platform_admins')
+        .select('id')
+        .eq('user_id', user.id)
+        .maybeSingle()
+
+      if (platformAdmin) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/superadmin'
+        url.search = ''
+        return NextResponse.redirect(url)
+      }
+    } catch {}
+
     const url = request.nextUrl.clone()
-    url.pathname = membership?.shop_id ? '/dashboard' : '/onboarding'
+    url.pathname = '/onboarding'
     url.search = ''
     return NextResponse.redirect(url)
   }

@@ -32,8 +32,14 @@ export default function AuthCallbackPage() {
           // Has a shop → go to dashboard
           router.replace('/dashboard')
         } else {
-          // No shop → create profile and go to onboarding
-          // First ensure profile exists
+          // No shop — check if super admin
+          const saRes = await fetch('/api/superadmin/me')
+          if (saRes.ok) {
+            router.replace('/superadmin')
+            return
+          }
+
+          // Not a super admin — create profile and go to onboarding
           const { data: profile } = await supabase
             .from('profiles')
             .select('id')
