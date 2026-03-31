@@ -1,23 +1,102 @@
 // @ts-nocheck
-// FROZEN — no new functions. New features should use domain-specific API routes.
-// See REFACTORING-PLAN.md for the migration plan.
 /**
- * Client-safe DB helper — all calls go through /api/db proxy (secure, uses service role key).
- * RLS stays enabled on all tables for security.
+ * Client DB helper — direct Supabase calls (no /api/db proxy).
+ * Uses anon key with RLS for reads, service role bypassed by RLS policies.
  */
+import { createClient } from '@supabase/supabase-js'
 
-async function dbCall(body: Record<string, unknown>) {
-  const res = await fetch('/api/db', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  })
-  const json = await res.json()
-  if (json.error) console.warn('dbCall error:', json.error)
-  return json.data
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
+
+const NO_SHOP_ID_TABLES = ['profiles', 'sequences']
+
+const SEQ_CONFIG: Record<string, { prefix: string; pad: number }> = {
+  customers: { prefix: 'C', pad: 3 },
+  orders: { prefix: 'ORD', pad: 4 },
+  agents: { prefix: 'AG', pad: 2 },
+  payments: { prefix: 'PAY', pad: 4 },
+  products: { prefix: 'CGRP', pad: 2 },
+  categories: { prefix: 'CAT', pad: 3 },
+  bundles: { prefix: 'BDL', pad: 3 },
+  discounts: { prefix: 'DSC', pad: 1 },
+  boards: { prefix: 'BRD', pad: 1 },
+  content_pages: { prefix: 'CNT', pad: 1 },
+  inventory_items: { prefix: 'STK', pad: 3 },
+  stock_logs: { prefix: 'LOG', pad: 3 },
+  suppliers: { prefix: 'SUP', pad: 2 },
 }
 
-// Alias for reads — same proxy, just cleaner API
+async function dbCall(body: Record<string, unknown>) {
+  const { action, table, shopId, data, filters, select: sel, order, limit, id } = body as any
+  const needsShopId = !NO_SHOP_ID_TABLES.includes(table)
+
+  if (action === 'select' || action === 'select_single') {
+    let query = supabase.from(table).select(sel || '*')
+    if (needsShopId && shopId) query = query.eq('shop_id', shopId)
+    if (filters) {
+      for (const [key, value] of Object.entries(filters)) {
+        query = query.eq(key, value as string)
+      }
+    }
+    if (order) query = query.order(order.column || 'created_at', { ascending: order.ascending ?? false })
+    if (limit) query = query.limit(limit)
+    if (action === 'select_single') {
+      const { data: row, error } = await query.maybeSingle()
+      if (error) { console.warn('dbCall error:', error.message); return null }
+      return row
+    }
+    const { data: rows, error } = await query
+    if (error) { console.warn('dbCall error:', error.message); return [] }
+    return rows
+  }
+
+  if (action === 'insert') {
+    let insertData = needsShopId ? { shop_id: shopId, ...data } : data
+    // Auto seq_id
+    if (needsShopId && !insertData.seq_id && SEQ_CONFIG[table]) {
+      const { prefix, pad } = SEQ_CONFIG[table]
+      const { data: seqId } = await supabase.rpc('next_seq', { p_shop_id: shopId, p_prefix: prefix, p_pad: pad })
+      if (seqId) insertData = { ...insertData, seq_id: seqId }
+    }
+    const { data: row, error } = await supabase.from(table).insert(insertData).select().single()
+    if (error) { console.warn('dbCall error:', error.message); return null }
+    return row
+  }
+
+  if (action === 'update') {
+    let query = supabase.from(table).update(data).eq('id', id)
+    if (needsShopId && shopId) query = query.eq('shop_id', shopId)
+    const { data: row, error } = await query.select().single()
+    if (error) { console.warn('dbCall error:', error.message); return null }
+    return row
+  }
+
+  if (action === 'upsert') {
+    const upsertData = needsShopId ? { shop_id: shopId, ...data } : data
+    const { data: row, error } = await supabase.from(table).upsert(upsertData, { onConflict: filters?.onConflict || 'id' }).select().single()
+    if (error) { console.warn('dbCall error:', error.message); return null }
+    return row
+  }
+
+  if (action === 'delete') {
+    let query = supabase.from(table).delete().eq('id', id)
+    if (needsShopId && shopId) query = query.eq('shop_id', shopId)
+    const { error } = await query
+    if (error) { console.warn('dbCall error:', error.message); return null }
+    return true
+  }
+
+  if (action === 'rpc') {
+    const { data: result, error } = await supabase.rpc(table, data)
+    if (error) { console.warn('dbCall error:', error.message); return null }
+    return result
+  }
+
+  return null
+}
+
 function dbRead(table: string, shopId: string, options?: {
   filters?: Record<string, unknown>
   select?: string
